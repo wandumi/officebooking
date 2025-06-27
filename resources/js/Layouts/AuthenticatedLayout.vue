@@ -75,6 +75,12 @@ const can = page.props.can || {};
                                     v-if="can['view book extras']"
                                     >Extras</NavLink
                                 >
+
+                                <NavLink
+                                    :href="route('bookingoffices.show')"
+                                    v-if="can['view book extras']"
+                                    >Bookings</NavLink
+                                >
                             </div>
                         </div>
 

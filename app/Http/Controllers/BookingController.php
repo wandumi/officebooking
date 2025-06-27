@@ -97,25 +97,39 @@ class BookingController extends Controller
      */
     public function viewOffice(Office $bookingoffice)
     {
-
         $locations = Location::select('id', 'name')->get();
-        $pricings = OfficePricing::select('id', 'category_name', 'pricing_type', 'rate')
-            ->where('category_name', 'Dedicated Desk')->get();
-        $amenities = Amenity::select('id', 'amenity_name')->get();
-        $categories = Category::select('id', 'name')->where('name', '!=', 'Virtual Office')->get();
 
-        // Fetch daily selected_dates
-        $selectedDates = Booking::where('user_id', auth()->id())
-            ->where('office_id', $bookingoffice->id)
-            ->pluck('selected_dates')
+        $pricings = OfficePricing::select('id', 'category_name', 'pricing_type', 'rate')
+            ->where('category_name', 'Dedicated Desk')
+            ->get();
+
+        $amenities = Amenity::select('id', 'amenity_name')->get();
+
+        $categories = Category::select('id', 'name')
+            ->where('name', '!=', 'Virtual Office')
+            ->get();
+
+        $rawDates = Booking::where('user_id', auth()->id())
+            ->where('office_id', optional($bookingoffice)->id)
+            ->pluck('selected_dates');
+
+        $selectedDates = $rawDates
+            ->map(function ($item) {
+                if (is_string($item)) {
+                    $decoded = json_decode($item, true);
+                    return is_array($decoded) ? $decoded : [];
+                }
+                return is_array($item) ? $item : [];
+            })
             ->flatten()
             ->filter()
             ->unique()
+            ->values()
             ->toArray();
 
-        // Fetch all dates from monthly-type bookings
+        // 🗓️ Convert start_date → end_date ranges into individual dates
         $rangeDates = Booking::where('user_id', auth()->id())
-            ->where('office_id', $bookingoffice->id)
+            ->where('office_id', optional($bookingoffice)->id)
             ->whereNotNull('start_date')
             ->whereNotNull('end_date')
             ->get()
@@ -132,6 +146,7 @@ class BookingController extends Controller
             ->unique()
             ->toArray();
 
+        // 🧠 Merge daily + range dates
         $allBookedDates = collect([...$selectedDates, ...$rangeDates])
             ->unique()
             ->values();
@@ -260,9 +275,55 @@ class BookingController extends Controller
 
     public function showOffices(Request $request)
     {
+        $user = auth()->user();
 
+        if ($user->hasRole('admin') || $user->hasRole('super admin')) {
+            $bookings = Booking::with(['user', 'office.location'])
+                ->latest()
+                ->paginate(10);
+        } else {
+            $bookings = Booking::with('office.location')
+                ->where('user_id', $user->id)
+                ->latest()
+                ->paginate(10);
+        }
+
+        return Inertia::render('Bookings/ShowOffices', [
+            'bookings' => $bookings,
+        ]);
     }
 
+
+    public function approve(Booking $booking)
+    {
+        // dd($booking);
+        $booking->update([
+            'status' => 'approved',
+        ]);
+
+        // Optional: Log action or notify user
+        return back()->with('success', 'Booking approved successfully.');
+    }
+
+    public function reject(Request $request, Booking $booking)
+    {
+        $booking->update([
+            'status' => 'rejected',
+        ]);
+
+        // Optional: store $request->note, trigger notification
+        return back()->with('success', 'Booking rejected.');
+    }
+
+    public function cancel(Request $request, Booking $booking)
+    {
+        $booking->update([
+            'status' => 'cancelled',
+        ]);
+
+        // Optional: store $request->note if super admin
+        return back()->with('success', 'Booking cancelled.');
+    }
 
 
 

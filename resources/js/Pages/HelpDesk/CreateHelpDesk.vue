@@ -99,7 +99,7 @@ const props = defineProps({
                                     <label class="block text-sm font-medium text-gray-700">Duration</label>
                                     <input
                                         v-model="form.duration"
-                                        type="number"
+                                        type="text"
                                         class="w-full px-3 py-2 border rounded" />
                                     <div
                                         v-if="form.errors.duration"

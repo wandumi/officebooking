@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import BookingForm from '@/Components/BookingForm.vue';
 
@@ -79,6 +79,10 @@ function checkAvailability() {
 if (flashMessage) {
     viewMode.value = 'form';
 }
+
+const goToBookings = () => {
+    router.visit(route('bookingoffices.show'));
+};
 </script>
 
 <template>
@@ -166,6 +170,11 @@ if (flashMessage) {
                                 @click="checkAvailability"
                                 class="px-4 py-1 text-sm font-semibold text-white bg-blue-600 rounded hover:bg-blue-700">
                                 Check Availability
+                            </button>
+                            <button
+                                @click="goToBookings"
+                                class="px-4 py-1 text-sm font-semibold text-white bg-indigo-600 rounded hover:bg-indigo-700">
+                                View My Bookings
                             </button>
                         </div>
 

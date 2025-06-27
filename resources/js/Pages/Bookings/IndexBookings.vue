@@ -87,8 +87,8 @@ const filteredHotDesks = computed(() =>
     props.hotDesks.filter(help => selectedLocation.value === 'All' || help.location?.name === selectedLocation.value)
 );
 
-function goToOffice(boardroomId: number) {
-    router.visit(`/booking-offices/${boardroomId}`);
+function goToOffice(officeId: number) {
+    router.visit(`/booking-offices/${officeId}`);
 }
 
 function goToVirtual(Id: number) {

@@ -45,6 +45,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking-boardrooms/{bookedboardroom}', [BookingController::class, 'viewBoardroom'])->name('booking.boardroom_view');
     Route::get('/booking-extras', [BookingController::class, 'extrasIndex'])->name('booking.extras');
   
+    Route::put('/booking-offices/{booking}/approve', [BookingController::class, 'approve'])->name('bookingoffice.approve');
+    Route::put('/booking-offices/{booking}/reject', [BookingController::class, 'reject'])->name('bookingoffice.reject');
+    Route::put('/booking-offices/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookingoffice.cancel');
+
+
 });
 
 require __DIR__.'/auth.php';

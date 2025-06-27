@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     protected $guarded = [];
+    
+    protected $table = 'office_bookings';
 
     protected $casts = [
         'selected_dates' => 'array',

@@ -50,7 +50,7 @@ class HelpDeskController extends Controller
      */
     public function store(Request $request)
     {
-
+   
         $validated = $request->validate([
             'location_id'       => 'required',
             'help_desk_name'    => 'required|string|max:255',

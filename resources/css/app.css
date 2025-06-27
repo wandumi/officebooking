@@ -12,3 +12,7 @@ h5,
 h6 {
     color: #111111;
 }
+
+body {
+    @apply font-sans;
+}
