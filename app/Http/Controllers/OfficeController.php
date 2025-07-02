@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Office;
 use App\Models\Amenity;
@@ -226,21 +227,14 @@ class OfficeController extends Controller
      */
     public function destroy(Office $Office)
     {
-        $this->authorize('delete', User::class);
+        $this->authorize('delete', $Office);
 
         $Office->delete();
 
         return redirect()->back()->with('success', 'Office deleted successfully.');
     }
 
-    public function share(Request $request): array
-    {
-        return array_merge(parent::share($request), [
-            'flash' => [
-                'success' => fn () => $request->session()->get('success'),
-            ],
-        ]);
-    }
+
 
 
 

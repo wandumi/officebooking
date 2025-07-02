@@ -268,7 +268,7 @@ const submit = () => {
         <div>
             <button
                 type="submit"
-                class="px-4 py-1 text-sm text-white bg-pink-600 rounded hover:bg-pink-700">
+                class="px-4 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
                 Book {{ buttonName }}
             </button>
         </div>

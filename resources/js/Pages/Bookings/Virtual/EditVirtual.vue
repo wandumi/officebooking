@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
 import BookingVirtual from '@/Components/BookingVirtual.vue';
 
 interface Location {
@@ -22,10 +22,23 @@ interface Virtual {
     price_standard: number;
 }
 
+interface BookedVirtual {
+    plan: string;
+    selected_dates: string[];
+}
+
 const props = defineProps<{
     virtual: Virtual;
     locations: Location;
+    bookedRanges: BookedVirtual[];
 }>();
+
+const { props: pageProps } = usePage();
+const flash = (pageProps.flash ?? {}) as { success?: string };
+const flashMessage = flash.success ?? null;
+
+// ✅ Create reactive error value
+const bookingError = computed(() => pageProps.errors?.booking_conflict ?? null);
 
 const viewMode = ref<'form' | 'calendar' | null>(null);
 
@@ -38,10 +51,6 @@ const availablePlans = Object.keys(pricingOptions).filter(key => pricingOptions[
 
 function book() {
     viewMode.value = 'form';
-}
-
-function checkAvailability() {
-    viewMode.value = 'calendar';
 }
 </script>
 
@@ -59,10 +68,12 @@ function checkAvailability() {
                     <div class="w-full max-w-2xl p-6 space-y-6 bg-white border rounded-lg shadow-md">
                         <!-- Header -->
                         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-                            <h3 class="text-xl font-semibold">{{ virtual.virtualoffice_name || 'Virtual Office' }}</h3>
+                            <h3 class="text-xl font-semibold">
+                                {{ virtual.virtualoffice_name || 'Virtual Office' }}
+                            </h3>
                             <Link
-                                :href="route('booking.offices')"
-                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white bg-blue-600 rounded md:w-auto hover:bg-blue-700">
+                                :href="route('virtual.home')"
+                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                                 Back
                             </Link>
                         </div>
@@ -93,13 +104,8 @@ function checkAvailability() {
                         <div class="space-x-2">
                             <button
                                 @click="book"
-                                class="px-4 py-1 text-sm font-semibold text-white bg-pink-600 rounded hover:bg-pink-700">
-                                Book {{ virtual.virtualoffice_name || 'Office' }}
-                            </button>
-                            <button
-                                @click="checkAvailability"
-                                class="px-4 py-1 text-sm font-semibold text-white bg-blue-600 rounded hover:bg-blue-700">
-                                Check Availability
+                                class="px-4 py-1 text-sm font-semibold text-white rounded bg-primary hover:bg-bluemain">
+                                Enquire {{ virtual.virtualoffice_name || 'Office' }}
                             </button>
                         </div>
 
@@ -108,22 +114,12 @@ function checkAvailability() {
                             v-if="viewMode === 'form'"
                             class="pt-6 mt-6 border-t border-gray-200">
                             <BookingVirtual
+                                :virtual-Id="virtual.id"
                                 :buttonName="virtual.virtualoffice_name"
-                                :bookable-type="'App\\\\Models\\\\VirtualOffice'"
-                                :bookable-id="virtual.id"
                                 :pricing-options="pricingOptions"
                                 :available-plans="availablePlans"
-                                :selected-plan="availablePlans[0]" />
-                        </div>
-
-                        <!-- Calendar Placeholder -->
-                        <div
-                            v-if="viewMode === 'calendar'"
-                            class="pt-6 mt-6 border-t border-gray-200">
-                            <div class="p-4 text-center text-gray-600 border rounded">
-                                📅 Calendar Placeholder: Show availability for
-                                <strong>{{ virtual.virtualoffice_name }}</strong>
-                            </div>
+                                :selected-plan="availablePlans[0]"
+                                :booked-ranges="bookedRanges" />
                         </div>
                     </div>
                 </div>

@@ -19,7 +19,7 @@ export default {
 
             colors: {
                 primary: '#F2676A',
-                black: '#172139',
+                bluemain: '#172139',
                 slate: '#263859',
                 muted: '#6b778d',
                 silver: '#929291',

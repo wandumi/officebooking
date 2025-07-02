@@ -38,49 +38,72 @@ const can = page.props.can || {};
                                 >
 
                                 <NavLink
-                                    :href="route('admin.offices')"
-                                    v-if="can['view offices']"
+                                    :href="route('booking.offices')"
+                                    v-if="can['view book offices']"
                                     >Offices</NavLink
-                                >
-                                <NavLink
-                                    :href="route('admin.boardrooms')"
-                                    v-if="can['view boardrooms']"
-                                    >Boardroom</NavLink
-                                >
-                                <NavLink
-                                    :href="route('admin.virtual-offices')"
-                                    v-if="can['view virtual offices']"
-                                    >Virtual</NavLink
-                                >
-                                <NavLink
-                                    :href="route('admin.help-desks')"
-                                    v-if="can['view help desks']"
-                                    >Hot Desk</NavLink
                                 >
 
                                 <NavLink
-                                    :href="route('booking.offices')"
-                                    v-if="can['view book offices']"
-                                    >Book Offices</NavLink
+                                    :href="route('virtual.home')"
+                                    v-if="can['view book boardrooms']"
+                                    >Virtual Office</NavLink
                                 >
 
                                 <NavLink
                                     :href="route('booking.boardrooms')"
                                     v-if="can['view book boardrooms']"
-                                    >Book Boardroom</NavLink
+                                    >Boardrooms</NavLink
                                 >
 
-                                <NavLink
+                                <Dropdown
+                                    align="right"
+                                    width="48">
+                                    <template #trigger>
+                                        <button
+                                            class="flex items-center gap-1 text-sm font-medium text-gray-600 transition hover:text-gray-800 focus:outline-none">
+                                            Bookings
+                                            <svg
+                                                class="w-4 h-4"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </template>
+                                    <template #content>
+                                        <DropdownLink
+                                            :href="route('bookingoffices.show')"
+                                            v-if="can['view book extras']"
+                                            >Closed Offices</DropdownLink
+                                        >
+
+                                        <DropdownLink
+                                            :href="route('bookingoffices.show')"
+                                            v-if="can['view book extras']"
+                                            >Dedicated Offices</DropdownLink
+                                        >
+
+                                        <DropdownLink
+                                            :href="route('bookingoffices.show')"
+                                            v-if="can['view book extras']"
+                                            >Hot Desks Offices</DropdownLink
+                                        >
+                                        <DropdownLink
+                                            :href="route('bookingvirtual.show')"
+                                            v-if="can['view book extras']"
+                                            >Virtual Offices</DropdownLink
+                                        >
+                                    </template>
+                                </Dropdown>
+
+                                <!-- <NavLink
                                     :href="route('booking.extras')"
                                     v-if="can['view book extras']"
                                     >Extras</NavLink
-                                >
-
-                                <NavLink
-                                    :href="route('bookingoffices.show')"
-                                    v-if="can['view book extras']"
-                                    >Bookings</NavLink
-                                >
+                                > -->
                             </div>
                         </div>
 
@@ -93,7 +116,51 @@ const can = page.props.can || {};
                                 <template #trigger>
                                     <button
                                         class="flex items-center gap-1 text-sm font-medium text-gray-600 transition hover:text-gray-800 focus:outline-none">
-                                        Settings
+                                        Offices Settings
+                                        <svg
+                                            class="w-4 h-4"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </template>
+
+                                <template #content>
+                                    <DropdownLink
+                                        v-if="can['view offices']"
+                                        :href="route('admin.offices')"
+                                        >Offices</DropdownLink
+                                    >
+                                    <DropdownLink
+                                        v-if="can['view help desks']"
+                                        :href="route('admin.help-desks')"
+                                        >Hot Desks</DropdownLink
+                                    >
+                                    <DropdownLink
+                                        v-if="can['view virtual offices']"
+                                        :href="route('admin.virtual-offices')"
+                                        >Virtual Offices</DropdownLink
+                                    >
+                                    <DropdownLink
+                                        v-if="can['view boardrooms']"
+                                        :href="route('admin.boardrooms')"
+                                        >Boardrooms</DropdownLink
+                                    >
+                                </template>
+                            </Dropdown>
+
+                            <Dropdown
+                                v-if="can['manage settings']"
+                                align="right"
+                                width="48">
+                                <template #trigger>
+                                    <button
+                                        class="flex items-center gap-1 text-sm font-medium text-gray-600 transition hover:text-gray-800 focus:outline-none">
+                                        System Settings
                                         <svg
                                             class="w-4 h-4"
                                             fill="currentColor"

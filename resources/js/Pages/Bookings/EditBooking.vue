@@ -90,7 +90,7 @@ const goToBookings = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Edit Booking</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">View Booking</h2>
         </template>
 
         <div class="py-12">
@@ -102,7 +102,7 @@ const goToBookings = () => {
                             <h3 class="text-xl font-semibold">{{ office.office_name || 'Office' }}</h3>
                             <Link
                                 :href="route('booking.offices')"
-                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white bg-blue-600 rounded md:w-auto hover:bg-blue-700">
+                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                                 Back
                             </Link>
                         </div>
@@ -163,18 +163,8 @@ const goToBookings = () => {
                         <div class="space-x-2">
                             <button
                                 @click="book"
-                                class="px-4 py-1 text-sm font-semibold text-white bg-pink-600 rounded hover:bg-pink-700">
-                                Edit Booking
-                            </button>
-                            <button
-                                @click="checkAvailability"
-                                class="px-4 py-1 text-sm font-semibold text-white bg-blue-600 rounded hover:bg-blue-700">
-                                Check Availability
-                            </button>
-                            <button
-                                @click="goToBookings"
-                                class="px-4 py-1 text-sm font-semibold text-white bg-indigo-600 rounded hover:bg-indigo-700">
-                                View My Bookings
+                                class="px-4 py-1 text-sm font-semibold text-white rounded bg-primary hover:bg-bluemain">
+                                Enquire
                             </button>
                         </div>
 

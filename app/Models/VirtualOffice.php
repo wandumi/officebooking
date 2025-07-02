@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Location;
+use App\Models\VirtualBooking;
 use Illuminate\Database\Eloquent\Model;
 
 class VirtualOffice extends Model
@@ -16,5 +17,10 @@ class VirtualOffice extends Model
     public function location()
     {
         return $this->belongsTo(Location::class);  
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(VirtualBooking::class);
     }
 }

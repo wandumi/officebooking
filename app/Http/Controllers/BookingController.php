@@ -29,16 +29,6 @@ class BookingController extends Controller
                     ])
                     ->select('id', 'location_id', 'category_id', 'office_name', 'seats', 'monthly_rate', 'daily_rate')
                     ->get();
-
-        $boardrooms = Boardroom::with('location','amenities')
-                    ->select('boardroom_name', 'location_id','seats', 'hourly_price', 'daily_price')
-                    ->get();
-
-        $virtualOffices = VirtualOffice::with('location')
-                         ->select('id','location_id', 'virtualoffice_name', 'address', 'discount', 
-                            'phone_number', 'price', 'handling', 'duration', 'price_premium',
-                            'price_standard')
-                        ->get();
         
         $helpDesks = HelpDesk::with('location')
                     ->select(
@@ -50,8 +40,6 @@ class BookingController extends Controller
         
         return Inertia::render('Bookings/IndexBookings', [
             'offices'           => $offices,
-            'boardrooms'        => $boardrooms,
-            'virtualOffices'    => $virtualOffices,
             'hotDesks'          => $helpDesks,
             'locations'         => $locations,
         ]);
@@ -127,7 +115,6 @@ class BookingController extends Controller
             ->values()
             ->toArray();
 
-        // 🗓️ Convert start_date → end_date ranges into individual dates
         $rangeDates = Booking::where('user_id', auth()->id())
             ->where('office_id', optional($bookingoffice)->id)
             ->whereNotNull('start_date')
@@ -146,7 +133,6 @@ class BookingController extends Controller
             ->unique()
             ->toArray();
 
-        // 🧠 Merge daily + range dates
         $allBookedDates = collect([...$selectedDates, ...$rangeDates])
             ->unique()
             ->values();
@@ -161,24 +147,8 @@ class BookingController extends Controller
         ]);
     }
 
-     /**
-     * Display a office of the resource.
-     */
-    public function viewVirtual(VirtualOffice $virtual)
-    {
-
-        $locations = Location::select('id', 'name')->get();
-        $pricings = OfficePricing::select('id','category_name', 'pricing_type','rate')
-                 ->where('category_name', 'Virtual Office')->get();
-
-        return Inertia::render('Bookings/EditVirtual', [
-            'virtual'           => $virtual->load(['location']),
-            'locations'         => $locations,
-            'pricings'          => $pricings
-        ]);
-    }
-
-     /**
+    
+    /**
      * Display a office of the resource.
      */
     public function viewHotDesk(HelpDesk $hotDesk)
@@ -299,6 +269,7 @@ class BookingController extends Controller
         // dd($booking);
         $booking->update([
             'status' => 'approved',
+            
         ]);
 
         // Optional: Log action or notify user

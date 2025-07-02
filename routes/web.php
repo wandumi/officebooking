@@ -20,6 +20,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserAccessController;
 use App\Http\Controllers\OfficePricingController;
 use App\Http\Controllers\VirtualOfficeController;
+use App\Http\Controllers\VirtualBookingController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -38,16 +39,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/bookings-show', [BookingController::class, 'showOffices'])->name('bookingoffices.show');
     Route::get('/booking-offices/{bookingoffice}', [BookingController::class, 'viewOffice'])->name('booking.officeview');
     Route::post('/booking-store', [BookingController::class, 'storeOffice'])->name('bookingoffice.store');
-    
-    Route::get('/booking-virtual/{virtual}', [BookingController::class, 'viewVirtual'])->name('booking.virtual');
-    Route::get('/booking-hotdesk/{hotDesk}', [BookingController::class, 'viewHotDesk'])->name('booking.hotdesk');
-    Route::get('/booking-boardrooms', [BookingController::class, 'boardRoomIndex'])->name('booking.boardrooms');
-    Route::get('/booking-boardrooms/{bookedboardroom}', [BookingController::class, 'viewBoardroom'])->name('booking.boardroom_view');
-    Route::get('/booking-extras', [BookingController::class, 'extrasIndex'])->name('booking.extras');
-  
+
     Route::put('/booking-offices/{booking}/approve', [BookingController::class, 'approve'])->name('bookingoffice.approve');
     Route::put('/booking-offices/{booking}/reject', [BookingController::class, 'reject'])->name('bookingoffice.reject');
     Route::put('/booking-offices/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookingoffice.cancel');
+    
+    Route::get('/virtual-index', [VirtualBookingController::class, 'index'])->name('virtual.home');
+    Route::get('/virtual-booking/{virtual}', [VirtualBookingController::class, 'view'])->name('booking.virtual');
+    Route::post('/virtual-booking', [VirtualBookingController::class, 'store'])->name('bookingvirtual.store');
+    Route::get('/virtual-booking', [VirtualBookingController::class, 'show'])->name('bookingvirtual.show');
+
+    Route::put('/booking-virtual/{virtual}/approve', [VirtualBookingController::class, 'approve'])->name('bookingvirtual.approve');
+    Route::put('/booking-virtual/{virtual}/reject', [VirtualBookingController::class, 'reject'])->name('bookingvirtual.reject');
+    Route::put('/booking-virtual/{virtual}/cancel', [VirtualBookingController::class, 'cancel'])->name('bookingvirtual.cancel');
+
+    Route::get('/booking-hotdesk/{hotDesk}', [BookingController::class, 'viewHotDesk'])->name('booking.hotdesk');
+
+    Route::get('/booking-boardrooms', [BookingController::class, 'boardRoomIndex'])->name('booking.boardrooms');
+    Route::get('/booking-boardrooms/{bookedboardroom}', [BookingController::class, 'viewBoardroom'])->name('booking.boardroom_view');
+
+    Route::get('/booking-extras', [BookingController::class, 'extrasIndex'])->name('booking.extras');
+  
+    
 
 
 });
@@ -80,9 +93,9 @@ Route::middleware(['web', 'auth'])
         Route::get('/offices', [OfficeController::class, 'adminIndex'])->name('offices');
         Route::get('/offices/create', [OfficeController::class, 'create'])->name('offices.create');
         Route::post('/offices', [OfficeController::class, 'store'])->name('offices.store');
-        Route::get('/offices/{office}/edit', [OfficeController::class, 'edit'])->name('offices.edit');
-        Route::put('/offices/{office}', [OfficeController::class, 'update'])->name('offices.update');
-        Route::delete('/offices/{office}', [OfficeController::class, 'destroy'])
+        Route::get('/offices/{Office}/edit', [OfficeController::class, 'edit'])->name('offices.edit');
+        Route::put('/offices/{Office}', [OfficeController::class, 'update'])->name('offices.update');
+        Route::delete('/offices/{Office}', [OfficeController::class, 'destroy'])
             ->name('offices.destroy');
         
         Route::get('/offices_rates', [OfficePricingController::class, 'index'])->name('offices_rates');

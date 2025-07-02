@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\VirtualBooking;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -53,6 +54,17 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function virtualBookings()
+    {
+        return $this->hasMany(VirtualBooking::class);
+    }
+
+
     public function hasRole($role)
     {
         $this->loadMissing('roles');
@@ -64,20 +76,23 @@ class User extends Authenticatable
         return $userRoles->intersect($roles)->isNotEmpty();
     }
 
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class);
-    }
-
     public function hasPermission($permission)
     {
+        $normalized = fn ($name) => strtolower(trim($name));
+
         $rolePermissions = $this->roles
             ->flatMap->permissions
-            ->pluck('name');
+            ->pluck('name')
+            ->map($normalized);
 
-        $directPermissions = $this->permissions->pluck('name');
+        $directPermissions = $this->permissions
+            ->pluck('name')
+            ->map($normalized);
 
-        return $rolePermissions->merge($directPermissions)->contains($permission);
+        return $rolePermissions
+            ->merge($directPermissions)
+            ->unique()
+            ->contains($normalized($permission));
     }
 
     public function scopeActive($query)

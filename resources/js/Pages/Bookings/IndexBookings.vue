@@ -14,18 +14,6 @@ interface Office {
     daily_rate?: number;
 }
 
-interface VirtualOffice {
-    id: number;
-    virtualoffice_name: string;
-    location?: { name: string };
-    price?: number;
-    price_premium?: number;
-    price_standard?: number;
-    phone_number?: string;
-    discount?: number;
-    duration?: number;
-}
-
 interface HotDesk {
     id: number;
     help_desk_name: string;
@@ -36,14 +24,6 @@ interface HotDesk {
     discount?: number;
 }
 
-interface Boardroom {
-    boardroom_name: string;
-    location?: { name: string };
-    seats?: number;
-    hourly_price?: number;
-    daily_price?: number;
-}
-
 interface Location {
     name: string;
     address?: string;
@@ -52,13 +32,11 @@ interface Location {
 
 const props = defineProps<{
     offices: Office[];
-    virtualOffices: VirtualOffice[];
     hotDesks: HotDesk[];
-    boardrooms: Boardroom[];
     locations: Location[];
 }>();
 
-const tabs = ['All', 'Closed Offices', 'Dedicated Desks', 'Virtual Offices', 'Hot Desks'];
+const tabs = ['All', 'Closed Offices', 'Dedicated Desks', 'Hot Desks'];
 const activeTab = ref('All');
 const selectedLocation = ref('All');
 
@@ -79,10 +57,6 @@ const dedicatedDesks = computed(() =>
     )
 );
 
-const filteredVirtualOffices = computed(() =>
-    props.virtualOffices.filter(vo => selectedLocation.value === 'All' || vo.location?.name === selectedLocation.value)
-);
-
 const filteredHotDesks = computed(() =>
     props.hotDesks.filter(help => selectedLocation.value === 'All' || help.location?.name === selectedLocation.value)
 );
@@ -92,7 +66,7 @@ function goToOffice(officeId: number) {
 }
 
 function goToVirtual(Id: number) {
-    router.visit(`/booking-virtual/${Id}`);
+    router.visit(`/virtual-booking/${Id}`);
 }
 
 function goToHotDesk(Id: number) {
@@ -135,9 +109,9 @@ function goToHotDesk(Id: number) {
                                     :key="tab"
                                     @click="activeTab = tab"
                                     :class="[
-                                        'w-full text-left px-4 py-1 text-sm rounded-md transition',
+                                        'w-full text-left px-2 py-1 text-sm rounded-md transition',
                                         activeTab === tab
-                                            ? 'bg-pink-600 text-white'
+                                            ? 'bg-primary text-white'
                                             : 'bg-gray-100 text-gray-800 hover:bg-gray-200',
                                     ]">
                                     {{ tab }}
@@ -180,8 +154,8 @@ function goToHotDesk(Id: number) {
                                             <p class="text-sm text-gray-500">Seats: {{ office.seats }}</p>
                                             <button
                                                 @click="goToOffice(office.id)"
-                                                class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                                Enquire
+                                                class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                                Enquire {{ office.office_name }}
                                             </button>
                                         </div>
                                     </div>
@@ -200,27 +174,8 @@ function goToHotDesk(Id: number) {
 
                                             <button
                                                 @click="goToOffice(desk.id)"
-                                                class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                                Enquire
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div v-if="filteredVirtualOffices.length">
-                                    <h3 class="text-xl font-semibold">🌐 Virtual Offices</h3>
-                                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                        <div
-                                            v-for="vo in filteredVirtualOffices"
-                                            :key="vo.id"
-                                            class="p-4 bg-white rounded shadow">
-                                            <h4 class="font-semibold">{{ vo.virtualoffice_name }}</h4>
-                                            <p class="text-sm text-gray-500">Location: {{ vo.location?.name }}</p>
-                                            <p class="text-sm text-gray-500">Duration: {{ vo.duration }}</p>
-                                            <button
-                                                @click="goToVirtual(vo.id)"
-                                                class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                                Enquire
+                                                class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                                Enquire {{ desk.office_name }}
                                             </button>
                                         </div>
                                     </div>
@@ -247,8 +202,8 @@ function goToHotDesk(Id: number) {
                                             </p>
                                             <button
                                                 @click="goToHotDesk(desk.id)"
-                                                class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                                Enquire
+                                                class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                                Enquire {{ desk.help_desk_name }}
                                             </button>
                                         </div>
                                     </div>
@@ -268,8 +223,8 @@ function goToHotDesk(Id: number) {
                                         <p class="text-sm text-gray-500">Seats: {{ office.seats }}</p>
                                         <button
                                             @click="goToOffice(office.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                            Enquire
+                                            class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                            Enquire {{ office.office_name }}
                                         </button>
                                     </div>
                                 </div>
@@ -288,28 +243,8 @@ function goToHotDesk(Id: number) {
                                         <p class="text-sm text-gray-500">Seats: {{ desk.seats }}</p>
                                         <button
                                             @click="goToOffice(desk.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                            Enquire
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Virtual Offices -->
-                            <div v-else-if="activeTab === 'Virtual Offices'">
-                                <h3 class="mb-4 text-xl font-semibold">🌐 Virtual Offices</h3>
-                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                    <div
-                                        v-for="vo in filteredVirtualOffices"
-                                        :key="vo.id"
-                                        class="p-4 bg-white rounded shadow">
-                                        <h4 class="font-semibold">{{ vo.virtualoffice_name }}</h4>
-                                        <p class="text-sm text-gray-500">Location: {{ vo.location?.name }}</p>
-                                        <p class="text-sm text-gray-500">Duration: {{ vo.duration }}</p>
-                                        <button
-                                            @click="goToVirtual(vo.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                            Enquire
+                                            class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                            Enquire {{ desk.office_name }}
                                         </button>
                                     </div>
                                 </div>
@@ -337,8 +272,8 @@ function goToHotDesk(Id: number) {
                                         </p>
                                         <button
                                             @click="goToHotDesk(desk.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                            Enquire
+                                            class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                            Enquire {{ desk.help_desk_name }}
                                         </button>
                                     </div>
                                 </div>
