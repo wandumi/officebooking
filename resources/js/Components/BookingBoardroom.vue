@@ -1,12 +1,13 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
+import { Inertia } from '@inertiajs/inertia';
 import { watch, computed, ref } from 'vue';
 import Calendar from 'primevue/calendar';
 import { differenceInCalendarMonths, isBefore } from 'date-fns';
+import StatusFeedback from '@/Components/StatusFeedback.vue';
 
 const props = defineProps({
-    bookableType: String,
-    bookableId: Number,
+    boardroomId: Number,
     pricingOptions: Object,
     availablePlans: Array,
     buttonName: String,
@@ -16,21 +17,21 @@ const props = defineProps({
 const dailyPlans = ['daily'];
 const hourlyPlans = ['hourly'];
 const today = new Date();
+const successMessage = ref(null);
+const bookingConflict = ref(null);
+
+const selectedDateTimes = ref({});
 
 const form = useForm({
-    bookable_type: props.bookableType,
-    bookable_id: props.bookableId,
+    boardroom_id: props.boardroomId,
     plan: props.selectedPlan || props.availablePlans[0] || '',
     selected_dates: [],
-    start_date: '',
-    end_date: '',
+    selected_times: {}, // correct structure
     months: 1,
     selected_price: 0,
 });
 
 const unitPrice = computed(() => props.pricingOptions[form.plan] || 0);
-
-const selectedDateTimes = ref({}); // { '2025-06-25': ['06:00', '07:00'] }
 
 const weekdaysCount = computed(() => {
     return form.selected_dates.filter(date => {
@@ -41,13 +42,11 @@ const weekdaysCount = computed(() => {
 
 const calculateMonthCount = (start, end) => {
     if (!start || !end || isBefore(end, start)) return 0;
-
     const sameDay = start.getDate() === end.getDate();
     const fullMonths = differenceInCalendarMonths(end, start);
     return sameDay ? fullMonths || 1 : fullMonths + 1;
 };
 
-// Reset when plan changes
 watch(
     () => form.plan,
     () => {
@@ -60,7 +59,6 @@ watch(
     }
 );
 
-// Pricing logic (deep watch)
 watch(
     () => ({
         plan: form.plan,
@@ -74,30 +72,18 @@ watch(
         if (!form.plan) return;
 
         if (hourlyPlans.includes(form.plan)) {
-            let totalHours = Object.values(selectedDateTimes.value).reduce(
+            const totalHours = Object.values(selectedDateTimes.value).reduce(
                 (sum, slots) => sum + (Array.isArray(slots) ? slots.length : 0),
                 0
             );
             form.selected_price = unitPrice.value * totalHours;
         } else if (dailyPlans.includes(form.plan)) {
             form.selected_price = unitPrice.value * weekdaysCount.value;
-        } else {
-            if (!form.start_date || !form.end_date) return;
-            const start = new Date(form.start_date);
-            const end = new Date(form.end_date);
-            const monthCount = calculateMonthCount(start, end);
-            form.months = monthCount;
-            form.selected_price = unitPrice.value * monthCount;
         }
     },
     { immediate: true, deep: true }
 );
 
-const submit = () => {
-    form.post(route('bookings.store'));
-};
-
-// Time slots: 6AM to 9PM
 const timeSlots = Array.from({ length: 16 }, (_, i) => {
     const hour = i + 6;
     return `${hour.toString().padStart(2, '0')}:00`;
@@ -116,6 +102,24 @@ const toggleTimeSlot = (dateKey, time) => {
     }
 };
 
+const submit = () => {
+    form.selected_times = selectedDateTimes.value;
+    form.post(route('bookingboardroom.store'), {
+        onError: errors => {
+            bookingConflict.value = errors.booking_conflict ?? null;
+        },
+        onSuccess: () => {
+            successMessage.value = 'Hot Desk Booking created successfully!';
+            bookingConflict.value = null;
+
+            setTimeout(() => {
+                successMessage.value = null;
+                Inertia.visit(route('bookingboardroom.show'));
+            }, 1500);
+        },
+    });
+};
+
 const currencyFormatter = new Intl.NumberFormat('en-ZA', {
     style: 'currency',
     currency: 'ZAR',
@@ -123,6 +127,10 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
 </script>
 
 <template>
+    <StatusFeedback
+        :conflict="bookingConflict"
+        :success="successMessage" />
+
     <form
         @submit.prevent="submit"
         class="space-y-4">
@@ -131,8 +139,7 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
             <label class="block font-semibold">Plan</label>
             <select
                 v-model="form.plan"
-                class="w-full px-3 py-2 border rounded"
-                required>
+                class="w-full px-3 py-2 border rounded">
                 <option
                     v-for="plan in availablePlans"
                     :key="plan"
@@ -140,24 +147,39 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
                     {{ plan.charAt(0).toUpperCase() + plan.slice(1) }}
                 </option>
             </select>
+            <span
+                v-if="form.errors.plan"
+                class="text-sm text-red-600">
+                {{ form.errors.plan }}
+            </span>
         </div>
 
-        <!-- HOURLY PLAN -->
-        <div
-            v-if="hourlyPlans.includes(form.plan)"
-            class="space-y-6">
-            <div>
-                <label class="block font-semibold">Select Dates</label>
-                <Calendar
-                    v-model="form.selected_dates"
-                    selectionMode="multiple"
-                    :minDate="today"
-                    :disabledDays="[0, 6]"
-                    :manualInput="false"
-                    dateFormat="dd-mm-yy"
-                    showIcon
-                    class="w-full" />
-            </div>
+        <!-- Selected Dates -->
+        <div>
+            <label class="block font-semibold">Select Dates</label>
+            <Calendar
+                v-model="form.selected_dates"
+                selectionMode="multiple"
+                :minDate="today"
+                :disabledDays="[0, 6]"
+                dateFormat="dd-mm-yy"
+                showIcon
+                class="w-full" />
+            <span
+                v-if="form.errors.selected_dates"
+                class="text-sm text-red-600">
+                {{ form.errors.selected_dates }}
+            </span>
+        </div>
+
+        <!-- Selected Times (Hourly Only) -->
+        <div v-if="hourlyPlans.includes(form.plan)">
+            <label class="block font-semibold">Select Times</label>
+            <span
+                v-if="form.errors.selected_times"
+                class="text-sm text-red-600">
+                {{ form.errors.selected_times }}
+            </span>
 
             <div
                 v-for="date in form.selected_dates"
@@ -185,63 +207,6 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
             </div>
         </div>
 
-        <!-- DAILY PLAN -->
-        <div
-            v-else-if="dailyPlans.includes(form.plan)"
-            class="space-y-4">
-            <div>
-                <label class="block font-semibold">Select Dates</label>
-                <Calendar
-                    v-model="form.selected_dates"
-                    selectionMode="multiple"
-                    :minDate="today"
-                    :disabledDays="[0, 6]"
-                    dateFormat="dd-mm-yy"
-                    showIcon
-                    class="w-full" />
-            </div>
-            <div>
-                <label class="block font-semibold">Weekdays Selected</label>
-                <div class="px-3 py-2 border rounded bg-gray-50">
-                    {{ weekdaysCount }} {{ weekdaysCount === 1 ? 'day' : 'days' }}
-                </div>
-            </div>
-        </div>
-
-        <!-- MONTHLY PLAN -->
-        <div
-            v-else
-            class="space-y-4">
-            <div>
-                <label class="block font-semibold">Start Date</label>
-                <Calendar
-                    v-model="form.start_date"
-                    :minDate="today"
-                    :disabledDays="[0, 6]"
-                    dateFormat="yy-mm-dd"
-                    showIcon
-                    class="w-full" />
-            </div>
-            <div>
-                <label class="block font-semibold">End Date</label>
-                <Calendar
-                    v-model="form.end_date"
-                    :minDate="form.start_date || today"
-                    dateFormat="yy-mm-dd"
-                    showIcon
-                    class="w-full" />
-            </div>
-            <div>
-                <label class="block font-semibold">Months</label>
-                <input
-                    type="number"
-                    v-model="form.months"
-                    min="1"
-                    class="w-full px-3 py-2 border rounded"
-                    readonly />
-            </div>
-        </div>
-
         <!-- PRICE -->
         <div>
             <label class="block font-semibold">Total Price</label>
@@ -252,7 +217,6 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
                 tabindex="-1"
                 @focus="e => e.target.blur()"
                 class="w-full px-3 py-2 bg-gray-100 border-0 rounded cursor-default select-none" />
-
             <input
                 type="hidden"
                 v-model="form.selected_price" />
@@ -262,8 +226,8 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
         <div>
             <button
                 type="submit"
-                class="px-4 py-1 text-sm text-white bg-pink-600 rounded hover:bg-pink-700">
-                Book {{ buttonName }}
+                class="px-4 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
+                Enquire {{ buttonName }}
             </button>
         </div>
     </form>

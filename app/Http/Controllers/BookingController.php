@@ -38,29 +38,9 @@ class BookingController extends Controller
 
         $locations = Location::select('name', 'address', 'city')->get();
         
-        return Inertia::render('Bookings/IndexBookings', [
+        return Inertia::render('Bookings/offices/IndexBookings', [
             'offices'           => $offices,
             'hotDesks'          => $helpDesks,
-            'locations'         => $locations,
-        ]);
-        
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function boardRoomIndex()
-    {
-
-        $boardrooms = Boardroom::with('location','amenities')
-                    ->select('id','boardroom_name', 'location_id','seats', 'hourly_price', 'daily_price')
-                    ->get();
-        
-
-        $locations = Location::select('name', 'address', 'city')->get();
-        
-        return Inertia::render('Bookings/IndexBoardrooms', [
-            'boardrooms'        => $boardrooms,
             'locations'         => $locations,
         ]);
         
@@ -74,7 +54,7 @@ class BookingController extends Controller
 
         $amenities = Amenity::select('id', 'amenity_name', 'description', 'price')->get();
         
-        return Inertia::render('Bookings/IndexExtras', [
+        return Inertia::render('Bookings/offices/IndexExtras', [
             'amenities' => $amenities
         ]);
         
@@ -137,7 +117,7 @@ class BookingController extends Controller
             ->unique()
             ->values();
 
-        return Inertia::render('Bookings/EditBooking', [
+        return Inertia::render('Bookings/offices/EditBooking', [
             'office' => $bookingoffice->load(['location', 'pricing', 'amenities']),
             'locations' => $locations,
             'pricings' => $pricings,
@@ -161,27 +141,6 @@ class BookingController extends Controller
         ]);
 
     }
-
-    /**
-     * Display a boardroom of the resource.
-     */
-    public function viewBoardroom(Boardroom $bookedboardroom)
-    {
-      
-        // $this->authorize('update', $bookedboardroom); 
-
-        $locations = Location::select('id', 'name')->get();
-        $amenities = Amenity::select('id', 'amenity_name')->get();
-
-
-
-        return Inertia::render('Bookings/EditBoardroom', [
-            'boardroom' => $bookedboardroom->load(['location', 'amenities']),
-            'locations' => $locations,
-            'amenities' => $amenities
-        ]);
-    }
-
 
      /**
      * Store offices the resource.
@@ -248,17 +207,50 @@ class BookingController extends Controller
         $user = auth()->user();
 
         if ($user->hasRole('admin') || $user->hasRole('super admin')) {
-            $bookings = Booking::with(['user', 'office.location'])
+            $bookings = Booking::with(['user', 'office.location', 'office.category'])
+                ->whereHas('office.category', function ($query) {
+                    $query->where('name', 'Closed Office');
+                })
                 ->latest()
                 ->paginate(10);
         } else {
-            $bookings = Booking::with('office.location')
+            $bookings = Booking::with(['office.location', 'office.category'])
+                ->whereHas('office.category', function ($query) {
+                    $query->where('name', 'Closed Office');
+                })
                 ->where('user_id', $user->id)
                 ->latest()
                 ->paginate(10);
         }
 
-        return Inertia::render('Bookings/ShowOffices', [
+        return Inertia::render('Bookings/offices/ShowOffices', [
+            'bookings' => $bookings,
+        ]);
+    }
+
+    public function showDedicated(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user->hasRole('admin') || $user->hasRole('super admin')) {
+            $bookings = Booking::with(['user', 'office.location', 'office.category'])
+                ->whereHas('office.category', function ($query) {
+                    $query->where('name', 'Dedicated Desk');
+                })
+                ->latest()
+                ->paginate(10);
+        } else {
+            $bookings = Booking::with(['office.location', 'office.category'])
+                ->whereHas('office.category', function ($query) {
+                    $query->where('name', 'Dedicated Desk');
+                })
+                ->where('user_id', $user->id)
+                ->latest()
+                ->paginate(10);
+        }
+
+
+        return Inertia::render('Bookings/offices/ShowOffices', [
             'bookings' => $bookings,
         ]);
     }

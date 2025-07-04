@@ -68,7 +68,7 @@ function goToBoardroom(boardroomId: number) {
                                 :class="[
                                     'w-full text-left px-4 py-1 rounded-md transition',
                                     activeTab === tab
-                                        ? 'bg-pink-600 text-white'
+                                        ? 'bg-primary text-white'
                                         : 'bg-gray-100 text-gray-800 hover:bg-gray-200',
                                 ]">
                                 {{ tab }}
@@ -108,8 +108,8 @@ function goToBoardroom(boardroomId: number) {
                                         <p class="text-sm text-gray-400">ID: {{ room.id }}</p>
                                         <button
                                             @click="goToBoardroom(room.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                            Enquire
+                                            class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-blueman/60">
+                                            Enquire {{ room.boardroom_name }}
                                         </button>
                                     </div>
                                 </div>
@@ -128,8 +128,8 @@ function goToBoardroom(boardroomId: number) {
                                     <p class="text-sm text-gray-500">Seats: {{ room.seats }}</p>
                                     <button
                                         @click="goToBoardroom(room.id)"
-                                        class="px-4 py-1 mt-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                        Enquire
+                                        class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
+                                        Enquire {{ room.boardroom_name }}
                                     </button>
                                 </div>
                             </div>

@@ -164,7 +164,7 @@ const goToBookings = () => {
                             <button
                                 @click="book"
                                 class="px-4 py-1 text-sm font-semibold text-white rounded bg-primary hover:bg-bluemain">
-                                Enquire
+                                Enquire {{ office.office_name }}
                             </button>
                         </div>
 
@@ -192,18 +192,9 @@ const goToBookings = () => {
                                 :pricing-options="pricingOptions"
                                 :available-plans="availablePlans"
                                 :category-id="category.id"
+                                :category-name="category.name"
                                 :booked-dates="props.bookedDates"
                                 :selected-plan="availablePlans[0]" />
-                        </div>
-
-                        <!-- Calendar Placeholder -->
-                        <div
-                            v-if="viewMode === 'calendar'"
-                            class="pt-6 mt-6 border-t border-gray-200">
-                            <div class="px-4 py-1 text-center text-gray-600 border rounded">
-                                📅 Calendar Placeholder: Show availability for
-                                <strong>{{ office.office_name }}</strong>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Amenity;
 use App\Models\Booking;
 use App\Models\Location;
+use App\Models\BoardroomBooking;
 use Illuminate\Database\Eloquent\Model;
 
 class Boardroom extends Model
@@ -21,8 +22,8 @@ class Boardroom extends Model
         return $this->belongsToMany(Amenity::class, 'boardroom_amenity');
     }
 
-    public function bookings()
+    public function boardroombookings()
     {
-        return $this->morphMany(Booking::class, 'bookable');
+        return $this->hasMany(BoardroomBooking::class);
     }
 }

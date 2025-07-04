@@ -13,6 +13,20 @@ return new class extends Migration
     {
         Schema::create('boardroom_bookings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id'); 
+            $table->unsignedBigInteger('boardroom_id');
+            $table->string('plan'); 
+
+            $table->json('selected_dates')->nullable(); 
+            $table->json('selected_times')->nullable();      
+            $table->integer('months')->default(1);
+
+            $table->decimal('selected_price', 10, 2);
+            $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled', 'paid'])->default('pending');
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('boardroom_id')->references('id')->on('boardrooms')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

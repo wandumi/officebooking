@@ -11,74 +11,9 @@ const props = defineProps({
 
 const page = usePage();
 
-// Flash messages
 const successMessage = ref(null);
-const messageType = ref(null); // 'success', 'rejected', 'cancelled'
-
 const flashMessage = computed(() => page.props?.flash?.success || null);
-
 const showMessage = computed(() => !!(flashMessage.value?.trim?.() || successMessage.value?.trim?.()));
-
-// Watch and reset logic
-watch(showMessage, msg => {
-    if (msg) {
-        setTimeout(() => {
-            successMessage.value = null;
-            messageType.value = null;
-            page.props.flash.success = null;
-        }, 1500);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-});
-
-// Sample mutation usage:
-const approveBooking = id => {
-    if (!id) return;
-    router.put(
-        route('hotdeskbooking.approve', { hotdesk: id }),
-        {},
-        {
-            preserveScroll: true,
-            onSuccess: () => {
-                successMessage.value = 'Booking approved successfully.';
-                messageType.value = 'success';
-                closeViewModal();
-            },
-            onError: () => {
-                successMessage.value = 'Failed to approve booking.';
-                messageType.value = 'rejected';
-            },
-        }
-    );
-};
-
-const rejectBooking = id => {
-    router.put(
-        route('hotdeskbooking.reject', { hotdesk: id }),
-        {},
-        {
-            onSuccess: () => {
-                successMessage.value = 'Booking rejected.';
-                messageType.value = 'rejected';
-                closeViewModal();
-            },
-        }
-    );
-};
-
-const cancelBooking = id => {
-    router.put(
-        route('hotdeskbooking.cancel', { hotdesk: id }),
-        {},
-        {
-            onSuccess: () => {
-                successMessage.value = 'Booking cancelled.';
-                messageType.value = 'cancelled';
-                closeViewModal();
-            },
-        }
-    );
-};
 
 const search = ref(props.filters?.search ?? '');
 const isLoading = ref(false);
@@ -96,14 +31,17 @@ watch(search, value => {
     );
 });
 
-// Delete logic (e.g. Reject)
+watch(showMessage, msg => {
+    if (msg) {
+        setTimeout(() => {
+            successMessage.value = null;
+        }, 1500);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+});
+
 const showModal = ref(false);
 const bookingToDelete = ref(null);
-
-const confirmDelete = id => {
-    showModal.value = true;
-    bookingToDelete.value = id;
-};
 
 const deleteBooking = () => {
     if (bookingToDelete.value) {
@@ -122,13 +60,6 @@ const deleteBooking = () => {
 
 const showViewModal = ref(false);
 const selectedBooking = ref(null);
-const selectedDates = ref(null);
-const showDatesModal = ref(false);
-
-const viewDatesModal = booking => {
-    selectedDates.value = booking;
-    showDatesModal.value = true;
-};
 
 const openViewModal = booking => {
     selectedBooking.value = booking;
@@ -138,19 +69,8 @@ const openViewModal = booking => {
 const closeViewModal = () => {
     showViewModal.value = false;
     selectedBooking.value = null;
-    selectedDates.value = null;
 };
 
-const splitDates = dates => {
-    if (!dates || !Array.isArray(dates)) return [];
-
-    if (dates.length <= 7) return [dates];
-
-    const mid = Math.ceil(dates.length / 2);
-    return [dates.slice(0, mid), dates.slice(mid)];
-};
-
-// Date formatter
 const formatDate = date => {
     if (!date) return '—';
     const d = new Date(date);
@@ -161,53 +81,116 @@ const formatDate = date => {
     });
 };
 
-// Capitalize helper
 const capitalize = text => {
     if (!text) return 'N/A';
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 };
 
-// Pagination label formatter
 const formatLabel = label => {
     if (label === '&laquo; Previous') return 'Prev';
     if (label === 'Next &raquo;') return 'Next';
     return label;
 };
+
+const splitDates = dates => {
+    if (!Array.isArray(dates)) return [[]];
+
+    if (dates.length <= 7) {
+        return [dates];
+    }
+
+    const half = Math.ceil(dates.length / 2);
+    return [dates.slice(0, half), dates.slice(half)];
+};
+
+const approveBooking = id => {
+    if (!id) return;
+
+    router.put(
+        route('bookingoffice.approve', id),
+        {},
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                successMessage.value = 'Booking approved successfully.';
+                closeViewModal();
+            },
+            onError: () => {
+                successMessage.value = 'Failed to approve booking.';
+            },
+        }
+    );
+};
+
+const rejectBooking = id => {
+    if (!id) return;
+
+    if (confirm('Are you sure you want to reject this booking?')) {
+        router.put(
+            route('bookingoffice.reject', id),
+            {},
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    successMessage.value = 'Booking rejected.';
+                    closeViewModal();
+                },
+                onError: () => {
+                    successMessage.value = 'Failed to reject booking.';
+                },
+            }
+        );
+    }
+};
+
+const cancelBooking = id => {
+    if (!id) return;
+
+    if (confirm('Cancel this booking?')) {
+        router.put(
+            route('bookingoffice.cancel', id),
+            {},
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    successMessage.value = 'Booking cancelled.';
+                    closeViewModal();
+                },
+                onError: () => {
+                    successMessage.value = 'Failed to cancel booking.';
+                },
+            }
+        );
+    }
+};
 </script>
 
 <template>
-    <Head title="Hot Desks Bookings" />
+    <Head title="Bookings" />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Booked Hot Desks</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                Booking {{ bookings.data[0]?.office?.category?.name ?? 'Office' }}
+            </h2>
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-5 lg:px-10">
-                <div
-                    v-if="showMessage"
-                    :class="[
-                        'p-3 mb-4 rounded text-sm font-medium',
-                        messageType === 'success'
-                            ? 'bg-green-100 text-green-800'
-                            : messageType === 'rejected'
-                              ? 'bg-red-100 text-red-700'
-                              : messageType === 'cancelled'
-                                ? 'bg-gray-200 text-gray-700'
-                                : 'bg-blue-100 text-blue-800',
-                    ]">
-                    {{ flashMessage || successMessage }}
-                </div>
-
-                <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <Link
-                            :href="route('booking.offices')"
-                            class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
-                            Book
-                        </Link>
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <!-- Success Message -->
+                <template v-if="showMessage">
+                    <div class="p-3 mb-4 text-green-800 bg-green-100 rounded">
+                        {{ successMessage || flashMessage || '✔️ Success' }}
                     </div>
+                </template>
+
+                <!-- Search & Filters -->
+                <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
+                    <Link
+                        :href="route('booking.offices')"
+                        class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
+                        Back
+                    </Link>
                     <input
                         v-model="search"
                         type="text"
@@ -224,25 +207,20 @@ const formatLabel = label => {
                                 <th
                                     v-if="can['manage settings']"
                                     class="px-6 py-3 text-sm font-medium text-left text-gray-700">
-                                    Booked By
+                                    BookedBy
                                 </th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Hot Desk Name</th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Plan</th>
-                                <th
-                                    class="w-1 px-1 py-3 text-sm font-medium text-center text-gray-700 whitespace-nowrap"></th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700"># Days</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Office Name</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Start Date</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">End Date</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Status</th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Booked At</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Actions</th>
                             </tr>
                         </thead>
-
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr
-                                v-for="(booking, index) in bookings.data"
+                                v-for="booking in bookings.data"
                                 :key="booking.id">
-                                <td class="px-6 py-4 text-sm text-gray-800">{{ index + 1 }}</td>
-
+                                <td class="px-6 py-4 text-sm text-gray-800">{{ booking.id }}</td>
                                 <td
                                     v-if="can['manage settings']"
                                     class="px-6 py-4 text-sm text-gray-800">
@@ -250,32 +228,15 @@ const formatLabel = label => {
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ booking.helpdesk?.help_desk_name ?? '—' }}
+                                    {{ booking.office?.office_name ?? '—' }}
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ booking.plan ?? '—' }}
-                                </td>
-
-                                <!-- Icon Button -->
-                                <td class="px-2 py-4 text-sm text-center align-middle">
-                                    <button
-                                        @click="viewDatesModal(booking)"
-                                        class="inline-flex items-center justify-center text-white rounded bg-primary w-7 h-7 hover:bg-bluemain/70"
-                                        title="View Selected Dates">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class="w-4 h-4"
-                                            viewBox="0 0 24 24"
-                                            fill="currentColor">
-                                            <path
-                                                d="M7 10h2v2H7v-2Zm4 0h2v2h-2v-2Zm4 0h2v2h-2v-2ZM5 21a2 2 0 0 1-2-2V7h18v12a2 2 0 0 1-2 2H5ZM5 5V3h2v2h10V3h2v2h-2v2H7V5H5Zm0 4v10h14V9H5Z" />
-                                        </svg>
-                                    </button>
+                                    {{ formatDate(booking.start_date) ?? '—' }}
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ booking.days_count ?? 'N/A' }}
+                                    {{ formatDate(booking.end_date) ?? 'N/A' }}
                                 </td>
 
                                 <td class="px-6 py-4 text-sm">
@@ -292,19 +253,15 @@ const formatLabel = label => {
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ formatDate(booking.created_at) ?? 'N/A' }}
-                                </td>
-
-                                <td class="px-6 py-4 text-sm text-gray-800">
                                     <div class="flex space-x-1 text-center">
                                         <button
                                             @click="openViewModal(booking)"
-                                            class="px-2 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain/60">
+                                            class="px-2 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
                                             View
                                         </button>
                                         <button
                                             v-if="can['edit bookings']"
-                                            @click="openEditModal(booking)"
+                                            @click="openViewModal(booking)"
                                             class="px-2 py-1 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
                                             Edit
                                         </button>
@@ -318,8 +275,11 @@ const formatLabel = label => {
                 <!-- Pagination -->
                 <div class="flex items-center justify-between mt-4">
                     <div class="text-sm text-gray-600">
-                        Showing <span class="font-medium">{{ bookings.from }}</span> to
-                        <span class="font-medium">{{ bookings.to }}</span> of
+                        Showing
+                        <span class="font-medium">{{ bookings.from }}</span>
+                        to
+                        <span class="font-medium">{{ bookings.to }}</span>
+                        of
                         <span class="font-medium">{{ bookings.total }}</span> results
                     </div>
 
@@ -330,8 +290,8 @@ const formatLabel = label => {
                             <Link
                                 v-if="link.url"
                                 :href="link.url"
-                                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-primary hover:text-white"
-                                :class="link.active ? 'bg-primary text-white' : 'text-gray-700'"
+                                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain hover:text-white"
+                                :class="link.active ? 'bg-bluemain text-white' : 'text-gray-700'"
                                 v-html="formatLabel(link.label)" />
                             <span
                                 v-else
@@ -341,44 +301,7 @@ const formatLabel = label => {
                     </div>
                 </div>
 
-                <!-- Selected Dates Modal -->
-                <template v-if="showDatesModal && selectedDates?.selected_dates?.length">
-                    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                        <div
-                            class="w-full max-w-4xl mx-3 p-6 bg-white rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
-                            <!-- Modal Header -->
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-bold text-gray-800">Selected Booking Dates</h2>
-                                <button
-                                    @click="closeViewModal"
-                                    class="text-2xl leading-none text-gray-500 hover:text-gray-700">
-                                    &times;
-                                </button>
-                            </div>
-
-                            <!-- Scrollable Grid -->
-                            <div
-                                class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 max-h-[350px] overflow-y-auto">
-                                <div
-                                    v-for="(date, index) in selectedDates.selected_dates"
-                                    :key="index"
-                                    class="px-3 py-2 text-sm text-center bg-gray-100 border rounded shadow-sm">
-                                    {{ formatDate(date) }}
-                                </div>
-                            </div>
-
-                            <!-- Modal Footer -->
-                            <div class="mt-6 text-right">
-                                <button
-                                    @click="closeViewModal"
-                                    class="px-4 py-2 text-sm text-gray-800 bg-gray-100 rounded hover:bg-gray-200">
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-
+                <!-- Delete Confirmation Modal -->
                 <template v-if="showModal">
                     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div class="w-full max-w-md p-6 bg-white rounded shadow">
@@ -436,8 +359,7 @@ const formatLabel = label => {
                                         <div v-if="can['manage settings']">{{ selectedBooking.user?.name ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Office Name:</strong></div>
-
-                                        <div>{{ selectedBooking.virtual_office?.virtualoffice_name ?? '—' }}</div>
+                                        <div>{{ selectedBooking.office?.office_name ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Start Date:</strong></div>
                                         <div>{{ formatDate(selectedBooking.start_date) }}</div>
@@ -451,15 +373,33 @@ const formatLabel = label => {
                                         <div class="font-medium text-gray-600"><strong>Total Price:</strong></div>
                                         <div>R {{ selectedBooking.total_price ?? '0.00' }}</div>
 
-                                        <div class="font-medium text-gray-600"><strong>Booked Date:</strong></div>
-                                        <div>
-                                            {{ formatDate(selectedBooking.created_at) }}
-                                        </div>
-
                                         <div class="font-medium text-gray-600">Status:</div>
                                         <div class="text-yellow-800 bg-yellow-100">
                                             {{ capitalize(selectedBooking.status) }}
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- Selected Dates Column -->
+                                <div
+                                    v-if="selectedBooking.selected_dates?.length"
+                                    class="space-y-2">
+                                    <p class="font-medium text-gray-600">Selected Dates:</p>
+                                    <div
+                                        :class="{
+                                            'grid grid-cols-1': selectedBooking.selected_dates.length <= 7,
+                                            'grid grid-cols-2 gap-x-6': selectedBooking.selected_dates.length > 7,
+                                        }">
+                                        <ul
+                                            v-for="(col, colIndex) in splitDates(selectedBooking.selected_dates)"
+                                            :key="colIndex"
+                                            class="space-y-1 list-disc list-inside">
+                                            <li
+                                                v-for="(date, index) in col"
+                                                :key="index">
+                                                {{ formatDate(date) }}
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -496,6 +436,6 @@ const formatLabel = label => {
                     </div>
                 </template>
             </div>
-        </div></AuthenticatedLayout
-    >
+        </div>
+    </AuthenticatedLayout>
 </template>

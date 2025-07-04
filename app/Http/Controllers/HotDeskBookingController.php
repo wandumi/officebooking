@@ -107,4 +107,38 @@ class HotDeskBookingController extends Controller
             'bookings' => $bookings,
         ]);
     }
+
+     /**
+     * Approve function
+     *
+     * @param VirtualBooking $virtual
+     * @return void
+     */
+    public function approve(HotDeskBooking $hotdesk)
+    {
+        $hotdesk->update([
+            'status' => 'approved',
+            
+        ]);
+
+        return back()->with('success', 'Booking approved successfully.');
+    }
+
+    public function reject(Request $request, HotDeskBooking $hotdesk)
+    {
+        $hotdesk->update([
+            'status' => 'rejected',
+        ]);
+
+        return back()->with('success', 'Booking rejected.');
+    }
+
+    public function cancel(Request $request, HotDeskBooking $hotdesk)
+    {
+        $hotdesk->update([
+            'status' => 'cancelled',
+        ]);
+
+        return back()->with('success', 'Booking cancelled.');
+    }
 }

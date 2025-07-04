@@ -1,14 +1,17 @@
 <script setup>
 import { useForm, router } from '@inertiajs/vue3';
-import { ref, watch, computed, nextTick } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
+import { ref, watch, computed } from 'vue';
 import Calendar from 'primevue/calendar';
 import { addMonths, addYears, eachDayOfInterval } from 'date-fns';
+import StatusFeedback from '@/Components/StatusFeedback.vue';
 
 const props = defineProps({
     officeId: Number,
     pricingOptions: Object,
     availablePlans: Array,
     buttonName: String,
+    categoryName: String,
     selectedPlan: String,
     categoryId: Number,
     bookedDates: {
@@ -105,6 +108,7 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
     currency: 'ZAR',
 });
 
+console.log(props.categoryName);
 const submit = () => {
     if (dailyPlans.includes(form.plan) && form.selected_dates.length > 0) {
         const sorted = [...form.selected_dates].sort();
@@ -117,6 +121,7 @@ const submit = () => {
     form.post(route('bookingoffice.store'), {
         preserveScroll: true,
         onError: errors => {
+            console.log(errors);
             bookingConflict.value = errors.booking_conflict ?? null;
         },
         onSuccess: () => {
@@ -125,29 +130,28 @@ const submit = () => {
 
             setTimeout(() => {
                 successMessage.value = null;
-            }, 1000); // 5 seconds
+
+                if (props.categoryName === 'Dedicated Desk') {
+                    Inertia.visit(route('bookingdedicated.show'));
+                }
+
+                if (props.categoryName === 'Closed Office') {
+                    Inertia.visit(route('bookingoffices.show'));
+                }
+            }, 1500);
         },
     });
 };
 </script>
 
 <template>
-    <div
-        v-if="successMessage"
-        class="px-4 py-3 mb-4 text-sm text-green-800 bg-green-100 border border-green-300 rounded">
-        {{ successMessage }}
-    </div>
+    <StatusFeedback
+        :conflict="bookingConflict"
+        :success="successMessage" />
 
     <form
         @submit.prevent="submit"
-        class="space-y-4">
-        <!-- Booking Conflict -->
-        <div
-            v-if="bookingConflict"
-            class="px-4 py-3 mb-4 text-sm text-red-700 bg-red-100 border border-red-300 rounded">
-            {{ bookingConflict }}
-        </div>
-
+        class="pt-5 space-y-4">
         <!-- Plan Selector -->
         <div>
             <label class="block font-semibold">Plan</label>
@@ -202,6 +206,11 @@ const submit = () => {
                     showIcon
                     :manualInput="false"
                     class="w-full" />
+                <span
+                    v-if="form.errors.start_date"
+                    class="text-sm text-red-600">
+                    {{ form.errors.start_date }}
+                </span>
             </div>
             <div>
                 <label class="block font-semibold">Duration (Months)</label>
@@ -226,6 +235,11 @@ const submit = () => {
                     readonly
                     tabindex="-1"
                     @focus="e => e.target.blur()" />
+                <span
+                    v-if="form.errors.end_date"
+                    class="text-sm text-red-600">
+                    {{ form.errors.end_date }}
+                </span>
             </div>
         </div>
 

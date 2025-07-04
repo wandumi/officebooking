@@ -24,28 +24,25 @@ interface Virtual {
 }
 
 const props = defineProps<{ virtualOffices: Virtual[] }>();
-
 const selectedLocation = ref<string>('');
 
-// Get all unique locations from data
+// Unique locations
 const locations = computed(() => {
     const names: string[] = [];
-
     for (const vo of props.virtualOffices) {
-        if (vo.location && vo.location.name && !names.includes(vo.location.name)) {
+        if (vo.location?.name && !names.includes(vo.location.name)) {
             names.push(vo.location.name);
         }
     }
-
     return names;
 });
 
-// Set default location
+// Default location
 if (!selectedLocation.value && locations.value.length > 0) {
     selectedLocation.value = locations.value[0];
 }
 
-// Get virtual offices matching the selected location
+// Filtered by location
 const filtered = computed(() => props.virtualOffices.filter(vo => vo.location?.name === selectedLocation.value));
 
 function goToVirtual(id?: number) {
@@ -55,14 +52,15 @@ function goToVirtual(id?: number) {
 
 <template>
     <Head title="Virtual Office Plans" />
+
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">Virtual Office Plans</h2>
         </template>
 
-        <div class="flex gap-8 px-4 py-8 mx-auto max-w-7xl lg:px-8">
+        <div class="flex flex-col gap-6 px-4 py-6 mx-auto max-w-7xl lg:flex-row lg:gap-8 lg:px-8">
             <!-- Sidebar -->
-            <div class="w-full space-y-2 lg:w-1/4">
+            <div class="w-full space-y-2 lg:w-1/4 sm:px-2">
                 <h3 class="text-sm font-medium text-gray-600 uppercase">Locations</h3>
                 <ul class="space-y-1">
                     <li
@@ -87,40 +85,39 @@ function goToVirtual(id?: number) {
                     class="space-y-4">
                     <h3 class="text-lg font-semibold text-gray-800">{{ selectedLocation }} – Available Plans</h3>
 
-                    <div class="grid gap-6 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div
                             v-for="vo in filtered"
                             :key="vo.id"
-                            class="bg-white border border-gray-400 divide-y divide-gray-200 rounded-lg shadow-sm">
+                            class="bg-white border border-gray-300 divide-y divide-gray-200 rounded-lg shadow-sm">
                             <div class="p-6">
                                 <h2 class="text-lg font-semibold text-gray-900">{{ vo.virtualoffice_name }}</h2>
                                 <p class="mt-2 text-sm text-gray-600">{{ vo.location?.address }}</p>
 
-                                <!-- Pricing based on name -->
+                                <!-- Pricing -->
                                 <p
                                     v-if="vo.virtualoffice_name?.toLowerCase().includes('standard')"
                                     class="mt-6">
-                                    <span class="text-4xl font-extrabold text-gray-800">R {{ vo.price_standard }}</span>
-                                    <span class="text-base font-medium text-gray-500"> (Standard)</span>
+                                    <span class="text-3xl font-bold text-gray-800">R {{ vo.price_standard }}</span>
+                                    <span class="text-sm text-gray-500"> (Standard)</span>
                                 </p>
-
                                 <p
                                     v-if="vo.virtualoffice_name?.toLowerCase().includes('premium')"
                                     class="mt-6">
-                                    <span class="text-4xl font-extrabold text-yellow-700"
-                                        >R {{ vo.price_premium }}</span
-                                    >
-                                    <span class="text-base font-medium text-gray-500"> (Premium)</span>
+                                    <span class="text-3xl font-bold text-yellow-700">R {{ vo.price_premium }}</span>
+                                    <span class="text-sm text-gray-500"> (Premium)</span>
                                 </p>
 
-                                <p class="mt-4 text-xs text-gray-600">Duration: {{ vo.duration }} months</p>
-                                <p class="text-xs text-gray-600">Discount: {{ vo.discount }}%</p>
-                                <p class="text-xs text-gray-600">Handling: {{ vo.handling }}</p>
-                                <p class="text-xs text-gray-600">Contact: {{ vo.phone_number }}</p>
+                                <div class="mt-4 space-y-1 text-xs text-gray-600">
+                                    <p>Duration: {{ vo.duration }} months</p>
+                                    <p>Discount: {{ vo.discount }}%</p>
+                                    <p>Handling: {{ vo.handling }}</p>
+                                    <p>Contact: {{ vo.phone_number }}</p>
+                                </div>
 
                                 <button
                                     @click="goToVirtual(vo.id)"
-                                    class="w-full py-1 mt-6 text-sm font-semibold text-white rounded-md bg-bluemain hover:bg-bluemain/90">
+                                    class="w-full py-2 mt-6 text-sm font-semibold text-white rounded-md bg-bluemain hover:bg-bluemain/90 sm:text-base">
                                     Enquire Now
                                 </button>
                             </div>

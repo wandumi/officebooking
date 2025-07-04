@@ -59,7 +59,7 @@ const selectedPlan = ref<string | null>(null);
                             <h3 class="text-xl font-semibold">{{ boardroom.boardroom_name || 'Boardroom' }}</h3>
                             <Link
                                 :href="route('booking.boardrooms')"
-                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white bg-blue-600 rounded md:w-auto hover:bg-blue-700">
+                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded bg-primary md:w-auto hover:bg-bluemain">
                                 Back
                             </Link>
                         </div>
@@ -112,13 +112,8 @@ const selectedPlan = ref<string | null>(null);
                         <div class="space-x-2">
                             <button
                                 @click="viewMode = 'form'"
-                                class="px-4 py-1 text-sm font-semibold text-white bg-pink-600 rounded hover:bg-pink-700">
-                                Book {{ boardroom.boardroom_name || 'Boardroom' }}
-                            </button>
-                            <button
-                                @click="viewMode = 'calendar'"
-                                class="px-4 py-1 text-sm font-semibold text-white bg-blue-600 rounded hover:bg-blue-700">
-                                Check Availability
+                                class="px-4 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
+                                Enquire {{ boardroom.boardroom_name || 'Boardroom' }}
                             </button>
                         </div>
 
@@ -128,21 +123,10 @@ const selectedPlan = ref<string | null>(null);
                             class="pt-6 mt-6 border-t border-gray-200">
                             <BookingBoardroom
                                 :buttonName="boardroom.boardroom_name"
-                                :bookable-type="'App\\\\Models\\\\Boardroom'"
-                                :bookable-id="boardroom.id"
+                                :boardroom-id="boardroom.id"
                                 :pricing-options="pricingOptions"
                                 :available-plans="availablePlans"
                                 :selected-plan="selectedPlan" />
-                        </div>
-
-                        <!-- Calendar Placeholder -->
-                        <div
-                            v-if="viewMode === 'calendar'"
-                            class="pt-6 mt-6 border-t border-gray-200">
-                            <div class="p-4 text-center text-gray-600 border rounded">
-                                📅 Calendar Placeholder: Show availability for
-                                <strong>{{ boardroom.boardroom_name }}</strong>
-                            </div>
                         </div>
                     </div>
                 </div>
