@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { Inertia } from '@inertiajs/inertia';
 import { useForm } from '@inertiajs/vue3';
-import { computed, watch } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import Calendar from 'primevue/calendar';
+import StatusFeedback from '@/Components/StatusFeedback.vue';
 
 const props = defineProps({
-    bookableType: String,
-    bookableId: Number,
+    hotdeskId: Number,
     pricingOptions: Number,
     availablePlans: String,
     selectedDuration: Number,
@@ -13,13 +14,16 @@ const props = defineProps({
 });
 
 const today = new Date();
+const successMessage = ref(null);
+const bookingConflict = ref(null);
 
 const form = useForm({
-    bookable_type: props.bookableType,
-    bookable_id: props.bookableId,
+    hotdesk_id: props.hotdeskId,
     plan: props.availablePlans,
+    is_half_day: props.availablePlans.toLowerCase() === 'halfday',
     selected_dates: [],
     time_slots: {},
+    days_count: 0,
     selected_price: 0,
 });
 
@@ -90,14 +94,34 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
 
 const submit = () => {
     form.selected_price = totalPrice.value;
-    form.post(route('bookings.store'));
+    form.days_count = form.selected_dates.length;
+
+    form.post(route('bookinghotdesk.store'), {
+        preserveScroll: true,
+        onError: errors => {
+            bookingConflict.value = errors.booking_conflict ?? null;
+        },
+        onSuccess: () => {
+            successMessage.value = 'Hot Desk Booking created successfully!';
+            bookingConflict.value = null;
+
+            setTimeout(() => {
+                successMessage.value = null;
+                Inertia.visit(route('bookinghotdesk.show'));
+            }, 1500);
+        },
+    });
 };
 </script>
 
 <template>
+    <StatusFeedback
+        :conflict="bookingConflict"
+        :success="successMessage" />
+
     <form
         @submit.prevent="submit"
-        class="space-y-6">
+        class="pt-5 space-y-6">
         <!-- Plan -->
         <div>
             <label class="block mb-1 font-semibold">Plan</label>
@@ -122,6 +146,11 @@ const submit = () => {
                 dateFormat="yy-mm-dd"
                 showIcon
                 class="w-full" />
+            <div
+                v-if="form.errors.selected_dates"
+                class="mt-1 text-sm text-red-600">
+                {{ form.errors.selected_dates }}
+            </div>
         </div>
 
         <!-- Half Day Slot Picker -->
@@ -153,11 +182,17 @@ const submit = () => {
 
         <!-- Summary -->
         <div>
-            <label class="block text-sm font-medium text-gray-700">Selected Weekdays</label>
-            <p class="px-3 py-2 border rounded bg-gray-50">
-                {{ weekdaysOnly.length }} day(s)
-                <template v-if="isHalfDay">, {{ halfDayCount }} block(s) selected</template>
-            </p>
+            <label class="block text-sm font-medium text-gray-700">Selected Days</label>
+            <p class="px-3 py-2 border rounded bg-gray-50">{{ weekdaysOnly.length }} day(s)</p>
+
+            <input
+                type="hidden"
+                v-model="form.days_count" />
+            <div
+                v-if="form.errors.days_count"
+                class="mt-1 text-sm text-red-600">
+                {{ form.errors.days_count }}
+            </div>
         </div>
 
         <!-- Price -->
@@ -170,6 +205,11 @@ const submit = () => {
                 tabindex="-1"
                 @focus="e => (e.target as HTMLInputElement).blur()"
                 class="w-full px-3 py-2 bg-gray-100 border-0 rounded cursor-default select-none" />
+            <div
+                v-if="form.errors.days_count"
+                class="mt-1 text-sm text-red-600">
+                {{ form.errors.days_count }}
+            </div>
 
             <input
                 type="hidden"
@@ -177,12 +217,11 @@ const submit = () => {
         </div>
 
         <!-- Submit -->
-        <div>
-            <button
-                type="submit"
-                class="px-4 py-1 text-sm text-white bg-pink-600 rounded hover:bg-pink-700">
-                Book {{ props.buttonName }}
-            </button>
-        </div>
+
+        <button
+            type="submit"
+            class="px-4 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
+            Book {{ props.buttonName }}
+        </button>
     </form>
 </template>

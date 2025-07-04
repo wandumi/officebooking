@@ -20,6 +20,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserAccessController;
 use App\Http\Controllers\OfficePricingController;
 use App\Http\Controllers\VirtualOfficeController;
+use App\Http\Controllers\HotDeskBookingController;
 use App\Http\Controllers\VirtualBookingController;
 
 Route::get('/', function () {
@@ -53,7 +54,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/booking-virtual/{virtual}/reject', [VirtualBookingController::class, 'reject'])->name('bookingvirtual.reject');
     Route::put('/booking-virtual/{virtual}/cancel', [VirtualBookingController::class, 'cancel'])->name('bookingvirtual.cancel');
 
-    Route::get('/booking-hotdesk/{hotDesk}', [BookingController::class, 'viewHotDesk'])->name('booking.hotdesk');
+    Route::get('/booking-hotdesk/{hotDesk}', [HotDeskBookingController::class, 'viewHotDesk'])->name('booking.hotdesk');
+    Route::post('/booking-hotdesk', [HotDeskBookingController::class, 'store'])->name('bookinghotdesk.store');
+    Route::get('/hotdesk-booking', [HotDeskBookingController::class, 'show'])->name('bookinghotdesk.show');
+    
+    Route::put('/booking-hotdesk/{hotdesk}/approve', [HotDeskBookingController::class, 'approve'])->name('hotdeskbooking.approve');
+    Route::put('/booking-hotdesk/{hotdesk}/reject', [HotDeskBookingController::class, 'reject'])->name('hotdeskbooking.reject');
+    Route::put('/booking-hotdesk/{hotdesk}/cancel', [HotDeskBookingController::class, 'cancel'])->name('hotdeskbooking.cancel');
+
 
     Route::get('/booking-boardrooms', [BookingController::class, 'boardRoomIndex'])->name('booking.boardrooms');
     Route::get('/booking-boardrooms/{bookedboardroom}', [BookingController::class, 'viewBoardroom'])->name('booking.boardroom_view');

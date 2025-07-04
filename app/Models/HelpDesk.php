@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Location;
+use App\Models\HotDeskBooking;
 use Illuminate\Database\Eloquent\Model;
 
 class HelpDesk extends Model
@@ -12,5 +13,10 @@ class HelpDesk extends Model
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function hotdeskbookings()
+    {
+        return $this->hasMany(HotDeskBooking::class);
     }
 }

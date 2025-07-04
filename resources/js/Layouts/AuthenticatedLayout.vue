@@ -87,7 +87,7 @@ const can = page.props.can || {};
                                         >
 
                                         <DropdownLink
-                                            :href="route('bookingoffices.show')"
+                                            :href="route('bookinghotdesk.show')"
                                             v-if="can['view book extras']"
                                             >Hot Desks Offices</DropdownLink
                                         >

@@ -155,7 +155,7 @@ class BookingController extends Controller
     {
         $locations = Location::select('id', 'name')->get();
 
-        return Inertia::render('Bookings/EditHotDesk',[
+        return Inertia::render('Bookings/HotDesks/EditHotDesk',[
              'helpDesks' => $hotDesk->load(['location']),
              'locations' => $locations,
         ]);

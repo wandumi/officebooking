@@ -13,7 +13,19 @@ return new class extends Migration
     {
         Schema::create('hot_desk_bookings', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('user_id'); 
+            $table->foreignId('helpdesk_id')->constrained()->cascadeOnDelete(); 
+            $table->string('plan');
+            $table->boolean('is_half_day')->default(false);
+            $table->json('selected_dates'); 
+            $table->json('time_slots')->nullable(); 
+            $table->integer('days_count'); 
+            $table->decimal('selected_price', 10, 2); 
+            $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled', 'paid'])->default('pending');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

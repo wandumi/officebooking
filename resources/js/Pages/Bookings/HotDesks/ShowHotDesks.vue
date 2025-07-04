@@ -35,7 +35,7 @@ watch(showMessage, msg => {
 const approveBooking = id => {
     if (!id) return;
     router.put(
-        route('bookingvirtual.approve', { virtual: id }),
+        route('hotdeskbooking.approve', { virtual: id }),
         {},
         {
             preserveScroll: true,
@@ -54,7 +54,7 @@ const approveBooking = id => {
 
 const rejectBooking = id => {
     router.put(
-        route('bookingvirtual.reject', { virtual: id }),
+        route('hotdeskbooking.reject', { virtual: id }),
         {},
         {
             onSuccess: () => {
@@ -68,7 +68,7 @@ const rejectBooking = id => {
 
 const cancelBooking = id => {
     router.put(
-        route('bookingvirtual.cancel', { virtual: id }),
+        route('hotdeskbooking.cancel', { virtual: id }),
         {},
         {
             onSuccess: () => {
@@ -176,11 +176,11 @@ const formatLabel = label => {
 </script>
 
 <template>
-    <Head title="Virtual Bookings" />
+    <Head title="Hot Desks Bookings" />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Booked Virtual Offices</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Booked Hot Desks</h2>
         </template>
 
         <div class="py-12">
@@ -203,7 +203,7 @@ const formatLabel = label => {
                 <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <Link
-                            :href="route('virtual.home')"
+                            :href="route('booking.offices')"
                             class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                             Book
                         </Link>
@@ -226,11 +226,11 @@ const formatLabel = label => {
                                     class="px-6 py-3 text-sm font-medium text-left text-gray-700">
                                     Booked By
                                 </th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Virtual Office</th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Start Date</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Hot Desk Name</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Plan</th>
                                 <th
                                     class="w-1 px-1 py-3 text-sm font-medium text-center text-gray-700 whitespace-nowrap"></th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">End Date</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700"># Days</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Status</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Booked At</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Actions</th>
@@ -250,11 +250,11 @@ const formatLabel = label => {
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ booking.virtual_office?.virtualoffice_name ?? '—' }}
+                                    {{ booking.helpdesk?.help_desk_name ?? '—' }}
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ formatDate(booking.start_date) ?? '—' }}
+                                    {{ booking.plan ?? '—' }}
                                 </td>
 
                                 <!-- Icon Button -->
@@ -275,7 +275,7 @@ const formatLabel = label => {
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ formatDate(booking.end_date) ?? 'N/A' }}
+                                    {{ booking.days_count ?? 'N/A' }}
                                 </td>
 
                                 <td class="px-6 py-4 text-sm">

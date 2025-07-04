@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\HotDeskBooking;
 use App\Models\VirtualBooking;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,6 +65,12 @@ class User extends Authenticatable
         return $this->hasMany(VirtualBooking::class);
     }
 
+    public function HotDesk()
+    {
+        return $this->hasMany(HotDeskBooking::class);
+    }
+
+    
 
     public function hasRole($role)
     {

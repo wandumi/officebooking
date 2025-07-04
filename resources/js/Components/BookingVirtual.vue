@@ -1,8 +1,10 @@
 <script setup>
+import { Inertia } from '@inertiajs/inertia';
 import { useForm } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
 import Calendar from 'primevue/calendar';
 import { format } from 'date-fns';
+import StatusFeedback from '@/Components/StatusFeedback.vue';
 
 const props = defineProps({
     virtualId: Number,
@@ -71,7 +73,6 @@ const disabledDates = computed(() => {
         .map(dateStr => new Date(dateStr));
 });
 
-// Clear conflict error if user changes input
 watch([() => form.start_date, () => form.end_date, () => form.selected_dates, () => form.plan], () => {
     if (bookingConflict.value) {
         bookingConflict.value = null;
@@ -85,12 +86,13 @@ const submit = () => {
             bookingConflict.value = errors.booking_conflict ?? null;
         },
         onSuccess: () => {
-            successMessage.value = 'Booking created successfully!';
+            successMessage.value = 'Virtual Booking created successfully!';
             bookingConflict.value = null;
 
             setTimeout(() => {
                 successMessage.value = null;
-            }, 4000);
+                Inertia.visit(route('bookingvirtual.show'));
+            }, 1500);
         },
     });
 };
@@ -98,22 +100,13 @@ const submit = () => {
 
 <template>
     <!-- Flash Success Message -->
-    <div
-        v-if="successMessage"
-        class="px-4 py-3 mb-4 text-sm text-green-800 bg-green-100 border border-green-300 rounded">
-        {{ successMessage }}
-    </div>
-
-    <!-- Conflict Error -->
-    <div
-        v-if="bookingConflict"
-        class="px-4 py-3 mb-4 text-sm text-red-700 bg-red-100 border border-red-300 rounded">
-        {{ bookingConflict }}
-    </div>
+    <StatusFeedback
+        :conflict="bookingConflict"
+        :success="successMessage" />
 
     <form
         @submit.prevent="submit"
-        class="space-y-4">
+        class="pt-5 space-y-4">
         <!-- Plan Selection -->
         <div>
             <label class="block font-semibold">Plan</label>

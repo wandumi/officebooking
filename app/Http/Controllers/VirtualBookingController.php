@@ -151,6 +151,12 @@ class VirtualBookingController extends Controller
         ]);
     }
 
+    /**
+     * Approve function
+     *
+     * @param VirtualBooking $virtual
+     * @return void
+     */
     public function approve(VirtualBooking $virtual)
     {
         $virtual->update([
