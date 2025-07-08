@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('user_id'); 
-            $table->foreignId('helpdesk_id')->constrained()->cascadeOnDelete(); 
+            $table->unsignedBigInteger('helpdesk_id'); 
             $table->string('plan');
             $table->boolean('is_half_day')->default(false);
             $table->json('selected_dates'); 
@@ -26,6 +26,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('helpdesk_id')->references('id')->on('help_desks')->onDelete('cascade');
         });
     }
 

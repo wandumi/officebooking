@@ -1,7 +1,7 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, router, useForm } from "@inertiajs/vue3";
-import { watch } from "vue";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { watch } from 'vue';
 
 const props = defineProps({
     office_rates: Object,
@@ -15,17 +15,17 @@ const form = useForm({
 });
 
 const capitalizeCategoryName = () => {
-    if (form.category_name.toLowerCase() === "dedicated desk") {
-        form.category_name = "Dedicated Desk";
+    if (form.category_name.toLowerCase() === 'dedicated desk') {
+        form.category_name = 'Dedicated Desk';
     }
 };
 
 watch(() => form.category_name, capitalizeCategoryName);
 
 const submit = () => {
-    form.put(route("admin.offices_rates.update", props.office_rates.id), {
+    form.put(route('admin.offices_rates.update', props.office_rates.id), {
         onSuccess: () => {
-            router.visit(route("admin.offices_rates"));
+            router.visit(route('admin.offices_rates'));
         },
     });
 };
@@ -48,7 +48,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.offices_rates')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-3 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -113,7 +113,7 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+                                class="block w-full px-3 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Office Rates
                             </button>

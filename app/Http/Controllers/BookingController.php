@@ -26,14 +26,9 @@ class BookingController extends Controller
                         'location:id,name',    
                         'category:id,name',  
                         'pricing:id,office_id,premium_price,standard_price' 
-                    ])
-                    ->select('id', 'location_id', 'category_id', 'office_name', 'seats', 'monthly_rate', 'daily_rate')
-                    ->get();
+                    ])->get();
         
-        $helpDesks = HelpDesk::with('location')
-                    ->select(
-                        'id','location_id','help_desk_name', 'price', 'duration','discount', 'desks'
-                    )->get();
+        $helpDesks = HelpDesk::with('location')->get();
 
 
         $locations = Location::select('name', 'address', 'city')->get();

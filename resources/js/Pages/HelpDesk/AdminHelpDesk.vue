@@ -91,7 +91,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create help desks']"
                             :href="route('admin.help-desk.create')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-3 py-1 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add Hot Desk
                         </Link>
                         <div></div>
@@ -100,7 +100,7 @@ const formatLabel = label => {
                             v-model="search"
                             type="text"
                             placeholder="Search..."
-                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-bluemain/60" />
                     </div>
 
                     <!-- Table -->
@@ -134,13 +134,13 @@ const formatLabel = label => {
                                             <button
                                                 v-if="can['edit help desks']"
                                                 @click="$inertia.visit(route('admin.help-desk.edit', helpdesk.id))"
-                                                class="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">
+                                                class="px-2 py-1 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
                                                 Edit
                                             </button>
                                             <button
                                                 v-if="can['delete help desks']"
                                                 @click="confirmDelete(helpdesk.id)"
-                                                class="px-3 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600">
+                                                class="px-2 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600">
                                                 Delete
                                             </button>
                                         </div>
@@ -168,8 +168,8 @@ const formatLabel = label => {
                                 <Link
                                     v-if="link.url"
                                     :href="link.url"
-                                    class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-blue-500 hover:text-white"
-                                    :class="link.active ? 'bg-blue-700 text-white' : 'text-gray-700'"
+                                    class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain/60 bg-bluemain hover:text-white"
+                                    :class="link.active ? 'bg-bluemain-700 text-white' : 'text-gray-700'"
                                     v-html="formatLabel(link.label)" />
                                 <span
                                     v-else

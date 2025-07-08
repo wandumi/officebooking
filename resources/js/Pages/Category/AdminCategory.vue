@@ -93,7 +93,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create categories']"
                             :href="route('admin.categories.create')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             + Add Category
                         </Link>
                         <div></div>
@@ -101,7 +101,7 @@ const formatLabel = label => {
                             v-model="search"
                             type="text"
                             placeholder="Search..."
-                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-bluemain" />
                     </div>
 
                     <!-- Table -->
@@ -127,7 +127,7 @@ const formatLabel = label => {
                                             <button
                                                 v-if="can['edit categories']"
                                                 @click="$inertia.visit(route('admin.categories.edit', category.id))"
-                                                class="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">
+                                                class="px-2 py-1 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
                                                 Edit
                                             </button>
                                             <button

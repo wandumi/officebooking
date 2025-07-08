@@ -91,7 +91,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create locations']"
                             :href="route('admin.location.create')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-3 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             + Add location
                         </Link>
                         <div></div>
@@ -100,7 +100,7 @@ const formatLabel = label => {
                             v-model="search"
                             type="text"
                             placeholder="Search..."
-                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-bluemain-500" />
                     </div>
 
                     <!-- Table -->
@@ -128,7 +128,7 @@ const formatLabel = label => {
                                             <button
                                                 v-if="can['edit locations']"
                                                 @click="$inertia.visit(route('admin.location.edit', location.id))"
-                                                class="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">
+                                                class="px-2 py-1 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
                                                 Edit
                                             </button>
                                             <button
@@ -162,8 +162,8 @@ const formatLabel = label => {
                                 <Link
                                     v-if="link.url"
                                     :href="link.url"
-                                    class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-blue-500 hover:text-white"
-                                    :class="link.active ? 'bg-blue-700 text-white' : 'text-gray-700'"
+                                    class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain bg-bluemain hover:text-white"
+                                    :class="link.active ? 'bg-bluemain text-white' : 'text-gray-700'"
                                     v-html="formatLabel(link.label)" />
                                 <span
                                     v-else

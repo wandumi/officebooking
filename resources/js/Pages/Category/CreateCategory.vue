@@ -23,7 +23,7 @@ const form = useForm({
 
                         <Link
                             :href="route('admin.categories')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-3 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -51,7 +51,7 @@ const form = useForm({
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+                                class="block w-full px-3 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Create Category
                             </button>

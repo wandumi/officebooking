@@ -1,6 +1,6 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, router, useForm } from "@inertiajs/vue3";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     categories: Object,
@@ -11,9 +11,9 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.categories.update", props.categories.id), {
+    form.put(route('admin.categories.update', props.categories.id), {
         onSuccess: () => {
-            router.visit(route("admin.categories"));
+            router.visit(route('admin.categories'));
         },
     });
 };
@@ -36,7 +36,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.categories')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -64,7 +64,7 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+                                class="block w-full px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Category
                             </button>
