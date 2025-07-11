@@ -104,19 +104,19 @@ function getRoleColor(role) {
                         <div class="flex space-x-2">
                             <Link
                                 :href="route('admin.permission.create')"
-                                class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                                 + Add Permissions
                             </Link>
 
                             <Link
                                 :href="route('admin.roles')"
-                                class="inline-block px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded hover:bg-gray-700">
+                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                                 Roles
                             </Link>
 
                             <Link
                                 :href="route('admin.manage.user')"
-                                class="inline-block px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded hover:bg-gray-700">
+                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-muted hover:bg-bluemain/60">
                                 Manage
                             </Link>
                         </div>
@@ -150,16 +150,10 @@ function getRoleColor(role) {
 
                                     <td class="px-6 py-4 text-sm text-gray-800">
                                         <div class="flex space-x-1">
-                                            <!-- <button
-                                                @click="$inertia.visit(route('admin.show.edit', role.id))"
-                                                class="px-3 py-1 text-sm text-white bg-gray-500 rounded hover:bg-gray-600">
-                                                View
-                                            </button> -->
-                                            <!-- {{ can }} -->
                                             <button
                                                 v-if="can['edit permissions'] || can['manage settings']"
                                                 @click="$inertia.visit(route('admin.permission.edit', permission.id))"
-                                                class="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">
+                                                class="px-3 py-1 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
                                                 Edit
                                             </button>
                                             <button
@@ -193,8 +187,8 @@ function getRoleColor(role) {
                                 <Link
                                     v-if="link.url"
                                     :href="link.url"
-                                    class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-blue-500 hover:text-white"
-                                    :class="link.active ? 'bg-blue-700 text-white' : 'text-gray-700'"
+                                    class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain/60 hover:text-white"
+                                    :class="link.active ? 'bg-bluemain text-white' : 'text-gray-700'"
                                     v-html="formatLabel(link.label)" />
                                 <span
                                     v-else

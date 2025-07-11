@@ -21,7 +21,7 @@ class VirtualBookingController extends Controller
 
         $virtualOffices = VirtualOffice::with('location')
                          ->select('id','location_id', 'virtualoffice_name', 'address', 'discount', 
-                            'phone_number', 'price', 'handling', 'duration', 'price_premium',
+                            'price', 'price_premium',
                             'price_standard')
                         ->get();
         

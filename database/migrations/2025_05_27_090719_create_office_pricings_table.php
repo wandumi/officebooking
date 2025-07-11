@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('office_pricings', function (Blueprint $table) {
             $table->id();
             $table->string('category_name');
-            $table->string('pricing_type');  
-            $table->decimal('rate', 8, 2); 
+            $table->string('pricing_type')->nullable();  
+            $table->decimal('rate', 8, 2)->nullable(); 
             $table->timestamps();
 
             

@@ -24,7 +24,7 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Category</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Edit Category</h2>
         </template>
 
         <div class="p-2">
@@ -36,7 +36,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.categories')"
-                            class="inline-block px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -64,7 +64,7 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Category
                             </button>

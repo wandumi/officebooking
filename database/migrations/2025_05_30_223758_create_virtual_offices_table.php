@@ -17,10 +17,7 @@ return new class extends Migration
             $table->string('virtualoffice_name');
             $table->string('address')->nullable();
             $table->integer('discount')->nullable();
-            $table->string('phone_number', 15);
             $table->decimal('price', 8,2);
-            $table->string('handling')->nullable();
-            $table->integer('duration');
             $table->decimal('price_premium', 8, 2)->nullable();
             $table->decimal('price_standard', 8, 2)->nullable();
             $table->timestamps();

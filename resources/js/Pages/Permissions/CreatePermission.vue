@@ -27,7 +27,7 @@ const props = defineProps({
 
                         <Link
                             :href="route('admin.permissions')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -54,7 +54,7 @@ const props = defineProps({
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Create permission
                             </button>

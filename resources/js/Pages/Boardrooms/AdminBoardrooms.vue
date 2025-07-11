@@ -98,7 +98,7 @@ const getPillColor = index => {
                     <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                         <Link
                             :href="route('admin.boardrooms.create')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add boardroom
                         </Link>
 
@@ -106,7 +106,7 @@ const getPillColor = index => {
                             v-model="search"
                             type="text"
                             placeholder="Search..."
-                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-bluemain" />
                     </div>
 
                     <!-- Table -->
@@ -147,36 +147,12 @@ const getPillColor = index => {
                                                 : 'None'
                                         }}
                                     </td>
-                                    <!-- <td class="px-6 py-4 text-sm text-gray-800 amenities-column">
-                                        <div class="flex flex-wrap gap-2">
-                                            <span
-                                                v-for="(amenity, index) in boardroom.amenities"
-                                                :key="amenity.id"
-                                                :class="getPillColor(index)"
-                                                class="inline-block px-1 py-1 text-xs text-white rounded sm:text-sm">
-                                                {{ amenity.amenity_name }}
-                                            </span>
-                                        </div>
-                                    </td> -->
-                                    <!-- <td class="px-6 py-4 text-sm text-gray-800">
-                                        {{ boardroom.start_date }}
-                                        <FormattedDate :date="boardroom.start_date" />
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-800">
-                                        <FormattedDate :date="boardroom.end_date" />
-                                        {{ boardroom.end_date }}
-                                    </td> -->
 
                                     <td class="px-6 py-4 text-sm text-gray-800">
                                         <div class="flex space-x-1">
-                                            <!-- <button
-                                                @click="$inertia.visit(route('admin.show.edit', boardroom.id))"
-                                                class="px-3 py-1 text-sm text-white bg-gray-500 rounded hover:bg-gray-600">
-                                                View
-                                            </button> -->
                                             <button
                                                 @click="$inertia.visit(route('admin.boardrooms.edit', boardroom.id))"
-                                                class="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">
+                                                class="px-3 py-1 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
                                                 Edit
                                             </button>
                                             <button
@@ -209,8 +185,8 @@ const getPillColor = index => {
                                 <Link
                                     v-if="link.url"
                                     :href="link.url"
-                                    class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-blue-500 hover:text-white"
-                                    :class="link.active ? 'bg-blue-700 text-white' : 'text-gray-700'"
+                                    class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain/60 hover:text-white"
+                                    :class="link.active ? 'bg-bluemain text-white' : 'text-gray-700'"
                                     v-html="formatLabel(link.label)" />
                                 <span
                                     v-else

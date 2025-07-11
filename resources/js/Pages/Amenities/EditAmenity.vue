@@ -38,7 +38,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.amenities')"
-                            class="inline-block px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -78,12 +78,12 @@ const submit = () => {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Price</label>
                                 <input
-                                    v-model="form.price"
+                                    v-model.number="form.price"
                                     type="number"
-                                    step="1"
+                                    step="0.01"
                                     min="0"
                                     class="w-full px-3 py-2 border rounded"
-                                    placeholder="e.g. 2" />
+                                    placeholder="e.g. 5.09" />
                                 <div
                                     v-if="form.errors.price"
                                     class="text-sm text-red-600">
@@ -94,7 +94,7 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-3 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Amenity
                             </button>

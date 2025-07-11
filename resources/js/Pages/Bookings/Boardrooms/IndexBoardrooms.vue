@@ -1,4 +1,3 @@
-// In Boardrooms/Index.vue
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
@@ -38,7 +37,7 @@ function goToBoardroom(boardroomId: number) {
 </script>
 
 <template>
-    <Head title="Bookings Admin" />
+    <Head title="Booadrooms Admin" />
 
     <AuthenticatedLayout>
         <template #header>

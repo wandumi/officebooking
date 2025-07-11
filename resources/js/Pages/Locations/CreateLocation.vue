@@ -25,7 +25,7 @@ const form = useForm({
 
                         <Link
                             :href="route('admin.locations')"
-                            class="inline-block px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -79,7 +79,7 @@ const form = useForm({
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Create Location
                             </button>

@@ -173,7 +173,7 @@ const formatLabel = label => {
 </script>
 
 <template>
-    <Head title="Hot Desks Bookings" />
+    <Head title="View Boardrooms Bookings" />
 
     <AuthenticatedLayout>
         <template #header>

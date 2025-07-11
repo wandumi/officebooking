@@ -18,6 +18,8 @@ use App\Http\Controllers\BoardroomController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserAccessController;
+use App\Http\Controllers\ClosedOfficeController;
+use App\Http\Controllers\DedicatedDeskController;
 use App\Http\Controllers\OfficePricingController;
 use App\Http\Controllers\VirtualOfficeController;
 use App\Http\Controllers\HotDeskBookingController;
@@ -25,7 +27,17 @@ use App\Http\Controllers\VirtualBookingController;
 use App\Http\Controllers\BoardroomBookingController;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+//     return Inertia::render('Welcome');
+     return redirect('/login');
+});
+
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    
+    return 'All caches cleared!';
 });
 
 Route::get('/dashboard', function () {
@@ -112,6 +124,22 @@ Route::middleware(['web', 'auth'])
         Route::get('/offices/{Office}/edit', [OfficeController::class, 'edit'])->name('offices.edit');
         Route::put('/offices/{Office}', [OfficeController::class, 'update'])->name('offices.update');
         Route::delete('/offices/{Office}', [OfficeController::class, 'destroy'])
+            ->name('offices.destroy');
+
+        Route::get('/closed-offices', [ClosedOfficeController::class, 'adminIndex'])->name('closedoffices');
+        Route::get('/closed-offices/create', [ClosedOfficeController::class, 'create'])->name('closedoffices.create');
+        Route::post('/closed-offices', [ClosedOfficeController::class, 'store'])->name('closedoffices.store');
+        Route::get('/closed-offices/{Office}/edit', [ClosedOfficeController::class, 'edit'])->name('closedoffices.edit');
+        Route::put('/closed-offices/{Office}', [ClosedOfficeController::class, 'update'])->name('closedoffices.update');
+        Route::delete('/closed-offices/{Office}', [ClosedOfficeController::class, 'destroy'])
+            ->name('closedoffices.destroy');
+
+        Route::get('/dedicated-offices', [DedicatedDeskController::class, 'adminIndex'])->name('dedicateddesk');
+        Route::get('/dedicated-offices/create', [DedicatedDeskController::class, 'create'])->name('dedicateddesk.create');
+        Route::post('/dedicated-offices', [DedicatedDeskController::class, 'store'])->name('dedicateddesk.store');
+        Route::get('/dedicated-offices/{Office}/edit', [DedicatedDeskController::class, 'edit'])->name('dedicateddesk.edit');
+        Route::put('/dedicated-offices/{Office}', [DedicatedDeskController::class, 'update'])->name('dedicateddesk.update');
+        Route::delete('/dedicated-offices/{Office}', [DedicatedDeskController::class, 'destroy'])
             ->name('offices.destroy');
         
         Route::get('/offices_rates', [OfficePricingController::class, 'index'])->name('offices_rates');

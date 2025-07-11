@@ -94,7 +94,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create office rates']"
                             :href="route('admin.offices_rates.create')"
-                            class="inline-block px-3 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add Office Rates
                         </Link>
                         <div></div>
@@ -103,7 +103,7 @@ const formatLabel = label => {
                             v-model="search"
                             type="text"
                             placeholder="Search..."
-                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-blumain" />
                     </div>
 
                     <!-- Table -->
@@ -172,7 +172,7 @@ const formatLabel = label => {
                                     v-if="link.url"
                                     :href="link.url"
                                     class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain/60 bg-bluemain hover:text-white"
-                                    :class="link.active ? 'bg-blue-700 text-white' : 'text-gray-700'"
+                                    :class="link.active ? 'bg-bluemain text-white' : 'text-gray-700'"
                                     v-html="formatLabel(link.label)" />
                                 <span
                                     v-else

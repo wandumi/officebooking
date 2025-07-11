@@ -91,7 +91,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create virtual offices']"
                             :href="route('admin.virtual-office.create')"
-                            class="inline-block px-3 py-1 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain-700">
+                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain-700">
                             + Add Virtual Office
                         </Link>
                         <div></div>
@@ -112,7 +112,6 @@ const formatLabel = label => {
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Name</th>
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Location</th>
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Address</th>
-                                    <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Phone</th>
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Discount</th>
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Price</th>
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Actions</th>
@@ -128,7 +127,6 @@ const formatLabel = label => {
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ virtualoffice.location.name }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ virtualoffice.address }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800">{{ virtualoffice.phone_number }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ virtualoffice.discount }}%</td>
                                     <td class="px-6 py-4 text-sm text-gray-800">
                                         {{
@@ -140,11 +138,6 @@ const formatLabel = label => {
 
                                     <td class="px-6 py-4 text-sm text-gray-800">
                                         <div class="flex space-x-1">
-                                            <!-- <button
-                                                @click="$inertia.visit(route('admin.show.edit', virtualoffice.id))"
-                                                class="px-3 py-1 text-sm text-white bg-gray-500 rounded hover:bg-gray-600">
-                                                View
-                                            </button> -->
                                             <button
                                                 v-if="can['edit virtual offices']"
                                                 @click="

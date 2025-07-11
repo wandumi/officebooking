@@ -58,10 +58,7 @@ class VirtualOfficeController extends Controller
             'location_id'               => 'required|numeric',
             'address'                   => 'required|string|max:255',
             'discount'                  => 'required|numeric',
-            'handling'                  => 'string|max:255',
             'price'                     => 'required|numeric',
-            'phone_number'              => ['required', 'string', 'regex:/^\+?[1-9]\d{1,14}$/'], 
-            'duration'                  => 'required|numeric',
             'pricing_type'        => [
                 'required',
                 'array',
@@ -84,10 +81,7 @@ class VirtualOfficeController extends Controller
             'location_id'               => $validated['location_id'],
             'address'                   => $validated['address'],
             'discount'                  => $validated['discount'],
-            'handling'                  => $validated['handling'],
             'price'                     => $validated['price'],
-            'phone_number'              => $validated['phone_number'], 
-            'duration'                  => $validated['duration'],
             'price_premium'             => $price_premium,
             'price_standard'            => $price_standard
         ]);
@@ -131,10 +125,7 @@ class VirtualOfficeController extends Controller
             'location_id'         => 'required|numeric',
             'address'             => 'required|string|max:255',
             'discount'            => 'required|numeric',
-            'handling'            => 'string|max:255',
             'price'               => 'required|numeric',
-            'phone_number'        => ['required', 'string', 'regex:/^\+?[1-9]\d{1,14}$/'],
-            'duration'            => 'required|numeric',
             'pricing_type'        => [
                 'required',
                 'array',
@@ -157,10 +148,7 @@ class VirtualOfficeController extends Controller
             'location_id'               => $validated['location_id'],
             'address'                   => $validated['address'],
             'discount'                  => $validated['discount'],
-            'handling'                  => $validated['handling'],
             'price'                     => $validated['price'],
-            'phone_number'              => $validated['phone_number'], 
-            'duration'                  => $validated['duration'],
             'price_premium'             => $price_premium,
             'price_standard'            => $price_standard
         ]);
@@ -173,9 +161,9 @@ class VirtualOfficeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(VirtualOffice $virtualOffice)
+    public function destroy(VirtualOffice $virtualoffice)
     {
-        $virtualOffice->delete();
+        $virtualoffice->delete();
 
         return redirect()->route('admin.virtual-offices')->with('success', 'A Virtual Office has been deleted successfully.');
     }

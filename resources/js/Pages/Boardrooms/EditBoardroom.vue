@@ -46,7 +46,7 @@ const submit = () => {
                         <h3 class="inline-block py-2 text-2xl font-medium text-black">Edit boardroom</h3>
                         <Link
                             :href="route('admin.boardrooms')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain">
                             Back
                         </Link>
                     </div>
@@ -165,7 +165,7 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+                                class="block w-full px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain"
                                 :disabled="form.processing">
                                 Update boardroom
                             </button>

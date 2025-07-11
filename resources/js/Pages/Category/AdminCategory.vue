@@ -93,7 +93,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create categories']"
                             :href="route('admin.categories.create')"
-                            class="inline-block px-2 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add Category
                         </Link>
                         <div></div>
@@ -133,7 +133,7 @@ const formatLabel = label => {
                                             <button
                                                 v-if="can['delete categories']"
                                                 @click="confirmDelete(category.id)"
-                                                class="px-3 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600">
+                                                class="px-2 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600">
                                                 Delete
                                             </button>
                                         </div>

@@ -140,7 +140,7 @@ class BoardroomController extends Controller
      */
     public function destroy(Boardroom $boardroom)
     {
-        $this->authorize('delete', Boardroom::class);
+        $this->authorize('delete', $boardroom);
 
         $boardroom->delete();
 

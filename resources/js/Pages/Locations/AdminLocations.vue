@@ -91,7 +91,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create locations']"
                             :href="route('admin.location.create')"
-                            class="inline-block px-3 py-1 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add location
                         </Link>
                         <div></div>

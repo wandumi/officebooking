@@ -14,10 +14,7 @@ interface Virtual {
     virtualoffice_name?: string;
     address?: string;
     discount: number;
-    phone_number: number;
     price: number;
-    handling: string;
-    duration: number;
     price_premium: number;
     price_standard: number;
 }
@@ -73,7 +70,7 @@ function book() {
                             </h3>
                             <Link
                                 :href="route('virtual.home')"
-                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
+                                class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                                 Back
                             </Link>
                         </div>
@@ -83,10 +80,7 @@ function book() {
                             <div class="space-y-2">
                                 <p><strong>Location:</strong> {{ virtual.location?.name || 'N/A' }}</p>
                                 <p><strong>Address:</strong> {{ virtual.address || 'N/A' }}</p>
-                                <p><strong>Phone Number:</strong> {{ virtual.phone_number || 'N/A' }}</p>
                                 <p><strong>Base Price:</strong> R{{ virtual.price || '0.00' }}</p>
-                                <p><strong>Handling:</strong> {{ virtual.handling || 'N/A' }}</p>
-                                <p><strong>Duration:</strong> {{ virtual.duration || 'N/A' }} days</p>
                             </div>
 
                             <div class="space-y-2">
@@ -100,19 +94,8 @@ function book() {
                             </div>
                         </div>
 
-                        <!-- Action Buttons -->
-                        <div class="space-x-2">
-                            <button
-                                @click="book"
-                                class="px-4 py-1 text-sm font-semibold text-white rounded bg-primary hover:bg-bluemain">
-                                Enquire {{ virtual.virtualoffice_name || 'Office' }}
-                            </button>
-                        </div>
-
                         <!-- Booking Form -->
-                        <div
-                            v-if="viewMode === 'form'"
-                            class="pt-6 mt-6 border-t border-gray-200">
+                        <div class="pt-6 mt-6 border-t border-gray-200">
                             <BookingVirtual
                                 :virtual-Id="virtual.id"
                                 :buttonName="virtual.virtualoffice_name"

@@ -1,6 +1,6 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, router, useForm } from "@inertiajs/vue3";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     virtualoffices: Object,
@@ -21,14 +21,14 @@ const form = useForm({
 });
 
 const cleanPricingType = () => {
-    form.pricing_type = form.pricing_type.filter((value) => value !== null);
+    form.pricing_type = form.pricing_type.filter(value => value !== null);
 };
 
 const submit = () => {
     cleanPricingType();
-    form.put(route("admin.virtual-office.update", props.virtualoffices.id), {
+    form.put(route('admin.virtual-office.update', props.virtualoffices.id), {
         onSuccess: () => {
-            router.visit(route("admin.virtual-offices"));
+            router.visit(route('admin.virtual-offices'));
         },
     });
 };
@@ -51,7 +51,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.virtual-offices')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-4 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -95,39 +95,6 @@ const submit = () => {
                                 </div>
                             </div>
 
-                            <!-- Phone -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Phone Number</label>
-                                <input
-                                    v-model="form.phone_number"
-                                    type="tel"
-                                    pattern="^\+?[1-9]\d{1,14}$"
-                                    placeholder="Enter phone number"
-                                    class="w-full px-3 py-2 border rounded" />
-                                <div
-                                    v-if="form.errors.phone_number"
-                                    class="text-sm text-red-600">
-                                    {{ form.errors.phone_number }}
-                                </div>
-                            </div>
-
-                            <!-- Duration -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Duration</label>
-                                <input
-                                    v-model="form.duration"
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
-                                    class="w-full px-3 py-2 border rounded"
-                                    placeholder="e.g. 250.00" />
-                                <div
-                                    v-if="form.errors.duration"
-                                    class="text-sm text-red-600">
-                                    {{ form.errors.duration }}
-                                </div>
-                            </div>
-
                             <!-- Price -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Price</label>
@@ -159,20 +126,6 @@ const submit = () => {
                                     v-if="form.errors.discount"
                                     class="text-sm text-red-600">
                                     {{ form.errors.discount }}
-                                </div>
-                            </div>
-
-                            <!-- Handling -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Handling</label>
-                                <input
-                                    v-model="form.handling"
-                                    type="text"
-                                    class="w-full px-3 py-2 border rounded" />
-                                <div
-                                    v-if="form.errors.handling"
-                                    class="text-sm text-red-600">
-                                    {{ form.errors.handling }}
                                 </div>
                             </div>
 
@@ -211,8 +164,8 @@ const submit = () => {
                                             {{ pricing.category_name }} - {{ pricing.pricing_type }} -
                                             {{
                                                 pricing.rate
-                                                    ? `R ${Number(pricing.rate).toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                                                    : "None"
+                                                    ? `R ${Number(pricing.rate).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                                    : 'None'
                                             }}
                                         </label>
                                     </div>
@@ -227,7 +180,7 @@ const submit = () => {
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+                                class="block w-full px-4 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Virtual Office
                             </button>

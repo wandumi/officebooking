@@ -52,7 +52,7 @@ watch(
 
                         <Link
                             :href="route('admin.manage.user')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -132,8 +132,8 @@ watch(
                                             type="checkbox"
                                             :value="role.name"
                                             v-model="form.roles"
-                                            class="text-indigo-600 border-gray-300 rounded shadow-sm focus:ring-indigo-500" />
-                                        <span class="text-sm text-gray-700">{{ role.name }}</span>
+                                            class="border-gray-300 rounded shadow-sm text-primary focus:ring-bluemain/60" />
+                                        <span class="text-sm text-bluemain">{{ role.name }}</span>
                                     </div>
                                 </div>
                                 <div
@@ -156,8 +156,8 @@ watch(
                                         :value="permission.name"
                                         v-model="form.permissions"
                                         disabled
-                                        class="text-indigo-600 border-gray-300 rounded shadow-sm focus:ring-indigo-500" />
-                                    <span class="text-sm text-gray-700">{{ permission.name }}</span>
+                                        class="border-gray-300 rounded shadow-sm text-primary focus:ring-bluemain/60" />
+                                    <span class="text-sm text-bluemain">{{ permission.name }}</span>
                                 </div>
                             </div>
 
@@ -171,7 +171,7 @@ watch(
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Create User
                             </button>

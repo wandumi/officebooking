@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\OfficePricing;
+use Illuminate\Validation\Rule;
 
 class OfficePricingController extends Controller
 {
@@ -63,7 +64,7 @@ class OfficePricingController extends Controller
         $validated = $request->validate([
             'category_name'    => 'required|string|max:2555',
             'pricing_type'     => 'required|string|max:255',
-            'rate'             => 'required|numeric',
+            'rate'             => 'required|numeric|min:0',
         ]);
 
         $officePricing = OfficePricing::create($validated);
@@ -99,9 +100,11 @@ class OfficePricingController extends Controller
      */
     public function update(Request $request, OfficePricing $officePricing)
     {
-
+        
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:office_pricing,name',
+           'category_name'     => 'required','string','max:255',
+            'pricing_type'     => 'nullable|string|max:255',
+            'rate'             => 'nullable|numeric|min:0',
         ]);
 
         $officePricing->update($validated);
@@ -115,7 +118,6 @@ class OfficePricingController extends Controller
     public function destroy(OfficePricing $officePricing)
     {
     
-        // dd($officePricing);
         $officePricing->delete();
 
         return back()->with('success', 'Pricing deleted successfully.');

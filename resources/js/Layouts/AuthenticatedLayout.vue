@@ -40,7 +40,7 @@ const can = page.props.can || {};
                                 <NavLink
                                     :href="route('booking.offices')"
                                     v-if="can['view book offices']"
-                                    >Offices</NavLink
+                                    >Grit Spaces</NavLink
                                 >
 
                                 <NavLink
@@ -103,12 +103,6 @@ const can = page.props.can || {};
                                         >
                                     </template>
                                 </Dropdown>
-
-                                <!-- <NavLink
-                                    :href="route('booking.extras')"
-                                    v-if="can['view book extras']"
-                                    >Extras</NavLink
-                                > -->
                             </div>
                         </div>
 
@@ -121,7 +115,7 @@ const can = page.props.can || {};
                                 <template #trigger>
                                     <button
                                         class="flex items-center gap-1 text-sm font-medium text-gray-600 transition hover:text-gray-800 focus:outline-none">
-                                        Offices Settings
+                                        Product Settings
                                         <svg
                                             class="w-4 h-4"
                                             fill="currentColor"
@@ -137,8 +131,13 @@ const can = page.props.can || {};
                                 <template #content>
                                     <DropdownLink
                                         v-if="can['view offices']"
-                                        :href="route('admin.offices')"
-                                        >Offices</DropdownLink
+                                        :href="route('admin.closedoffices')"
+                                        >Closed Offices</DropdownLink
+                                    >
+                                    <DropdownLink
+                                        v-if="can['view offices']"
+                                        :href="route('admin.dedicateddesk')"
+                                        >Dedicated Offices</DropdownLink
                                     >
                                     <DropdownLink
                                         v-if="can['view help desks']"

@@ -15,9 +15,7 @@ interface Virtual {
     virtualoffice_name?: string;
     address?: string;
     discount: number;
-    phone_number: number | string;
     price: number;
-    handling: string;
     duration: number;
     price_premium: number;
     price_standard: number;
@@ -109,10 +107,7 @@ function goToVirtual(id?: number) {
                                 </p>
 
                                 <div class="mt-4 space-y-1 text-xs text-gray-600">
-                                    <p>Duration: {{ vo.duration }} months</p>
                                     <p>Discount: {{ vo.discount }}%</p>
-                                    <p>Handling: {{ vo.handling }}</p>
-                                    <p>Contact: {{ vo.phone_number }}</p>
                                 </div>
 
                                 <button

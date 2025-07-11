@@ -4,47 +4,23 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <!-- <div>
-            <Link href="/">
-                <ApplicationLogo class="w-20 h-20 text-gray-500 fill-current" />
-            </Link>
-        </div> -->
-
     <body class="text-gray-800 bg-white">
-        <header class="fixed top-0 z-50 w-full bg-red-500 shadow">
+        <header class="fixed top-0 z-50 hidden w-full shadow">
             <div class="flex items-center justify-between px-6 py-4 mx-auto max-w-7xl">
                 <!-- Left: Logo -->
-                <div class="flex-shrink-0 order-1 md:order-1">
-                    <a href="/">
-                        <img
-                            src="/images/logo.png"
-                            alt="Logo"
-                            class="h-12" />
-                    </a>
-                </div>
+                <Link
+                    :href="route('dashboard')"
+                    class="flex items-center">
+                    <ApplicationLogo class="block w-auto text-gray-800 fill-current h-9" />
+                </Link>
 
                 <!-- Center: Navigation -->
                 <nav class="absolute order-2 hidden space-x-6 text-gray-300 -translate-x-1/2 md:flex left-1/2">
-                    <a
+                    <!-- <a
                         href="/about"
                         class="hover:text-blue-600"
                         >About Us</a
-                    >
-                    <a
-                        href="/offices"
-                        class="font-400"
-                        >Offices</a
-                    >
-                    <a
-                        href="/pricing"
-                        class="font-400"
-                        >Pricing</a
-                    >
-                    <a
-                        href="/contact"
-                        class="hover:text-blue-600"
-                        >Contact</a
-                    >
+                    > -->
                 </nav>
 
                 <!-- Right: Search -->
@@ -52,7 +28,7 @@ import { Link } from '@inertiajs/vue3';
                     <div class="mr-4">
                         <a
                             href="/login"
-                            class="p-2 bg-gray-400 rounded-sm text-warning-700 hover:text-blue-600"
+                            class="p-2 rounded-sm text-warning-700 hover:text-blue-600"
                             >Login</a
                         >
                     </div>
@@ -100,7 +76,7 @@ import { Link } from '@inertiajs/vue3';
             <slot />
         </main>
 
-        <footer class="p-6 mt-10 text-center text-white bg-red-500">
+        <footer class="p-6 mt-5 text-center text-bluemain">
             <p>&copy; 2025 GritSpace</p>
         </footer>
     </body>

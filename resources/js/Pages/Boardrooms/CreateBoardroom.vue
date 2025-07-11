@@ -1,12 +1,12 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
-import DateInput from "../../Components/DateInput.vue";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import DateInput from '../../Components/DateInput.vue';
 
 const form = useForm({
-    boardroom_name: "",
-    location_id: "",
-    seats: "",
+    boardroom_name: '',
+    location_id: '',
+    seats: '',
     hourly_price: null,
     daily_price: null,
     amenities: [],
@@ -20,7 +20,7 @@ const props = defineProps({
 const currentDate = new Date();
 
 const currentYear = currentDate.getFullYear();
-const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
+const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
 
 const minDate = `${currentYear}-${currentMonth}-01`;
 </script>
@@ -41,7 +41,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
 
                         <Link
                             :href="route('admin.boardrooms')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -158,7 +158,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+                                class="block w-full px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain"
                                 :disabled="form.processing">
                                 Create Boardroom
                             </button>
