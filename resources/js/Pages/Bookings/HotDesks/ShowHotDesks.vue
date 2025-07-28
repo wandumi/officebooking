@@ -25,7 +25,6 @@ const confirmDelete = id => {
 };
 
 const viewDatesModal = booking => {
-    console.log(booking);
     selectedDates.value = booking;
     showDatesModal.value = true;
 };
@@ -173,6 +172,26 @@ const formatLabel = label => {
     if (label === '&laquo; Previous') return 'Prev';
     if (label === 'Next &raquo;') return 'Next';
     return label;
+};
+
+const formatFixedDate = date => {
+    if (!date) return '—';
+
+    // Match date portion only — skips time altogether
+    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(date);
+    if (!match) return 'Invalid Date';
+
+    const [_, year, month, day] = match;
+
+    // Create UTC date (no timezone influence)
+    const d = new Date(Date.UTC(year, month - 1, day));
+
+    return d.toLocaleDateString('en-ZA', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+    });
 };
 </script>
 
@@ -349,7 +368,9 @@ const formatLabel = label => {
                             class="w-full max-w-4xl mx-3 p-6 bg-white rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
                             <!-- Modal Header -->
                             <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-bold text-gray-800">Selected Booking Dates</h2>
+                                <h2 class="text-lg font-bold text-gray-800">
+                                    Selected Booking Dates for {{ selectedDates.plan }}
+                                </h2>
                                 <button
                                     @click="closeViewModal"
                                     class="text-2xl leading-none text-gray-500 hover:text-gray-700">
@@ -361,10 +382,20 @@ const formatLabel = label => {
                             <div
                                 class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 max-h-[350px] overflow-y-auto">
                                 <div
-                                    v-for="(date, index) in selectedDates.selected_dates"
-                                    :key="index"
-                                    class="px-3 py-2 text-sm text-center bg-gray-100 border rounded shadow-sm">
-                                    {{ formatDate(date) }}
+                                    v-for="(item, index) in selectedDates.is_half_day === 1
+                                        ? Object.entries(selectedDates.time_slots)
+                                        : selectedDates.selected_dates"
+                                    :key="selectedDates.is_half_day === 1 ? item[0] : index"
+                                    class="flex flex-col px-3 py-2 text-sm text-center bg-gray-100 border rounded shadow-sm">
+                                    <template v-if="selectedDates.is_half_day === 1">
+                                        <div>{{ formatFixedDate(item[0]) }}</div>
+                                        <div class="mt-1 text-xs text-gray-600">
+                                            {{ capitalize(item[1].block) }}
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div>{{ formatFixedDate(item) }}</div>
+                                    </template>
                                 </div>
                             </div>
 
@@ -438,7 +469,12 @@ const formatLabel = label => {
 
                                         <div class="font-medium text-gray-600"><strong>Office Name:</strong></div>
 
-                                        <div>{{ selectedBooking.virtual_office?.virtualoffice_name ?? '—' }}</div>
+                                        <div v-if="can['manage settings']">
+                                            {{ selectedBooking.virtual_office?.virtualoffice_name ?? '—' }}
+                                        </div>
+
+                                        <div class="font-medium text-gray-600"><strong>Plan:</strong></div>
+                                        <div>{{ selectedBooking.plan }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Start Date:</strong></div>
                                         <div>{{ formatDate(selectedBooking.start_date) }}</div>
@@ -447,19 +483,25 @@ const formatLabel = label => {
                                         <div>{{ formatDate(selectedBooking.end_date) }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Number of Days:</strong></div>
-                                        <div>{{ selectedBooking.months ?? '—' }}</div>
+                                        <div>{{ selectedBooking.days_count ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Total Price:</strong></div>
                                         <div>R {{ selectedBooking.total_price ?? '0.00' }}</div>
 
-                                        <div class="font-medium text-gray-600"><strong>Booked Date:</strong></div>
+                                        <div class="font-medium text-gray-600"><strong>Status: </strong></div>
                                         <div>
-                                            {{ formatDate(selectedBooking.created_at) }}
-                                        </div>
-
-                                        <div class="font-medium text-gray-600">Status:</div>
-                                        <div class="text-yellow-800 bg-yellow-100">
-                                            {{ capitalize(selectedBooking.status) }}
+                                            <span
+                                                :class="{
+                                                    'px-2 py-1 rounded text-xs font-semibold capitalize': true,
+                                                    'bg-yellow-100 text-yellow-800':
+                                                        selectedBooking.status === 'pending',
+                                                    'bg-green-100 text-green-800':
+                                                        selectedBooking.status === 'approved',
+                                                    'bg-gray-200 text-gray-700': selectedBooking.status === 'cancelled',
+                                                    'bg-red-100 text-red-700': selectedBooking.status === 'rejected',
+                                                }">
+                                                {{ selectedBooking.status ?? 'N/A' }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

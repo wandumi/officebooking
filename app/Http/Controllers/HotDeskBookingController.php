@@ -32,45 +32,55 @@ class HotDeskBookingController extends Controller
     {
 
         $validated = $request->validate([
-            'hotdesk_id'            => 'required|exists:help_desks,id',
-            'plan'                  => 'required',
-            'is_half_day'           => 'required|boolean',
-            'selected_dates'        => 'required|array|min:1',
-            'selected_dates.*'      => 'date|after_or_equal:today',
-            'time_slots'            => 'nullable|array',
-            'time_slots.*.block'    => 'nullable|string|in:morning,afternoon',
-            'days_count'            => 'required|integer|min:1',
-            'selected_price'        => 'required|numeric|min:1',
+            'hotdesk_id'        => 'required|exists:help_desks,id',
+            'plan'              => 'required',
+            'is_half_day'       => 'required|boolean',
+            'selected_dates'    => 'required|array|min:1',
+            'selected_dates.*'  => 'date|after_or_equal:today',
+            'time_slots'        => 'nullable|array',
+            'days_count'        => 'required|integer|min:1',
+            'selected_price'    => 'required|numeric|min:1',
         ]);
 
-        $helpDesk = HelpDesk::where('id',$validated['hotdesk_id'])->first();
-
-        $conflict = HotDeskBooking::where('user_id', auth()->id())
-                    ->where('helpdesk_id', $validated['hotdesk_id'])
-                    ->where('plan', $validated['plan'])
-                    ->whereIn('status', ['pending', 'approved']) 
-                    ->where(function ($query) use ($validated) {
-                        foreach ($validated['selected_dates'] as $date) {
-                            $query->orWhereJsonContains('selected_dates', $date);
-                        }
-                    })
-                    ->exists();
-
-
-        
-            if ($conflict) {
+        // Manually validate the nested time_slots structure
+        foreach ($validated['time_slots'] ?? [] as $date => $slot) {
+            if (!is_array($slot) || !in_array($slot['block'] ?? null, ['morning', 'afternoon'])) {
                 return back()->withErrors([
-                    'booking_conflict' => 'You already have a booking with this plan type that overlaps the selected dates.',
+                    'time_slots' => "Invalid block for date $date. Must be 'morning' or 'afternoon'."
+                ])->withInput();
+            }
+        }
+
+        // Check for existing overlapping booking
+        $conflict = HotDeskBooking::where('user_id', auth()->id())
+            ->where('helpdesk_id', $validated['hotdesk_id'])
+            ->where('plan', $validated['plan'])
+            ->whereIn('status', ['pending', 'approved'])
+            ->where(function ($query) use ($validated) {
+                foreach ($validated['selected_dates'] as $date) {
+                    $query->orWhereJsonContains('selected_dates', $date);
+                }
+            })
+            ->exists();
+
+        if ($conflict) {
+            return back()->withErrors([
+                'booking_conflict' => 'You already have a booking with this plan type that overlaps the selected dates.',
             ])->withInput();
         }
 
+        if($validated['time_slots']){
+            $half_day = $validated['is_half_day'] = 1;
+        }
+
+        //Store booking
         $hotDesk = HotDeskBooking::create([
             'user_id'         => auth()->id(),
-            'helpdesk_id'    => $validated['hotdesk_id'], 
+            'helpdesk_id'     => $validated['hotdesk_id'],
             'plan'            => $validated['plan'],
-            'is_half_day'     => $validated['is_half_day'],
-            'selected_dates'  => $validated['selected_dates'], 
-            'time_slots'      => $validated['time_slots'] ?? null, 
+            'is_half_day'     => $half_day ?? 0,
+            'selected_dates'  => $validated['selected_dates'],
+            'time_slots'      => $validated['time_slots'] ?? null,
             'days_count'      => $validated['days_count'],
             'selected_price'  => $validated['selected_price'],
             'status'          => 'pending',
@@ -94,6 +104,8 @@ class HotDeskBookingController extends Controller
              $bookings = HotDeskBooking::with(['user', 'helpdesk']) 
                         ->latest()
                         ->paginate(10);
+
+                        //  dd($bookings);
      
         } else {
             $bookings = HotDeskBooking::with('helpDesk.location')
