@@ -91,7 +91,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create help desks']"
                             :href="route('admin.help-desk.create')"
-                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
+                            class="inline-block px-3 py-2 text-lg font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add Hot Desk
                         </Link>
                         <div></div>
@@ -126,7 +126,9 @@ const formatLabel = label => {
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ helpdesk.help_desk_name }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ helpdesk.location.name }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ helpdesk.price }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800">{{ helpdesk.duration }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800">
+                                        {{ helpdesk.duration === '0.5' ? 'Half day' : helpdesk.duration + ' Days' }}
+                                    </td>
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ helpdesk.desks }}</td>
 
                                     <td class="px-6 py-4 text-sm text-gray-800">

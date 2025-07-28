@@ -14,7 +14,7 @@ class Office extends Model
         'office_name',
         'office_type',
         'location_id',
-        'seats',
+        'seats', 
         'monthly_rate',
         'daily_rate',
         'category_id',

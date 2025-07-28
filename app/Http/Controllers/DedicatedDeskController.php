@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Office;
 use App\Models\Amenity;
+use App\Models\Booking;
 use App\Models\Category;
 use App\Models\Location;
 use Illuminate\Http\Request;
@@ -128,7 +129,30 @@ class DedicatedDeskController extends Controller
      */
     public function show(Office $Office)
     {
-        //
+        $user = auth()->user();
+
+        if ($user->hasRole('admin') || $user->hasRole('super admin')) {
+            $bookings = Booking::with(['user', 'office.location', 'office.category'])
+                ->whereHas('office.category', function ($query) {
+                    $query->where('name', 'Dedicated Desk');
+                })
+                ->latest()
+                ->paginate(10);
+                
+        } else {
+            $bookings = Booking::with(['office.location', 'office.category'])
+                ->whereHas('office.category', function ($query) {
+                    $query->where('name', 'Dedicated Desk');
+                })
+                ->where('user_id', $user->id)
+                ->latest()
+                ->paginate(10);
+        }
+
+
+        return Inertia::render('Bookings/Dedicated/ShowDedicated', [
+            'bookings' => $bookings,
+        ]);
     }
 
     /**

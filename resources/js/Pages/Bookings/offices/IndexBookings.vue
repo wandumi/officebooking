@@ -75,11 +75,11 @@ function goToHotDesk(Id: number) {
 </script>
 
 <template>
-    <Head title="Bookings Admin" />
+    <Head title="Grit Spaces Admin" />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Bookings</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Grit Spaces</h2>
         </template>
 
         <div class="py-12">
@@ -154,7 +154,7 @@ function goToHotDesk(Id: number) {
                                             <p class="text-sm text-gray-500">Seats: {{ office.seats }}</p>
                                             <button
                                                 @click="goToOffice(office.id)"
-                                                class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                                class="px-4 py-2 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
                                                 Enquire {{ office.office_name }}
                                             </button>
                                         </div>
@@ -174,7 +174,7 @@ function goToHotDesk(Id: number) {
 
                                             <button
                                                 @click="goToOffice(desk.id)"
-                                                class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                                class="px-4 py-2 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
                                                 Enquire {{ desk.office_name }}
                                             </button>
                                         </div>
@@ -202,7 +202,7 @@ function goToHotDesk(Id: number) {
                                             </p>
                                             <button
                                                 @click="goToHotDesk(desk.id)"
-                                                class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                                class="px-4 py-2 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
                                                 Enquire {{ desk.help_desk_name }}
                                             </button>
                                         </div>
@@ -223,7 +223,7 @@ function goToHotDesk(Id: number) {
                                         <p class="text-sm text-gray-500">Seats: {{ office.seats }}</p>
                                         <button
                                             @click="goToOffice(office.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                            class="px-4 py-2 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
                                             Enquire {{ office.office_name }}
                                         </button>
                                     </div>
@@ -243,7 +243,7 @@ function goToHotDesk(Id: number) {
                                         <p class="text-sm text-gray-500">Seats: {{ desk.seats }}</p>
                                         <button
                                             @click="goToOffice(desk.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                            class="px-4 py-2 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
                                             Enquire {{ desk.office_name }}
                                         </button>
                                     </div>
@@ -272,7 +272,7 @@ function goToHotDesk(Id: number) {
                                         </p>
                                         <button
                                             @click="goToHotDesk(desk.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
+                                            class="px-4 py-2 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/90">
                                             Enquire {{ desk.help_desk_name }}
                                         </button>
                                     </div>

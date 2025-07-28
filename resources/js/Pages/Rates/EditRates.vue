@@ -36,7 +36,7 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Office Rate</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Service Levels</h2>
         </template>
 
         <div class="p-2">
@@ -44,11 +44,11 @@ const submit = () => {
                 <div class="max-w-4xl p-6 mx-auto space-y-6">
                     <!-- Search Filter -->
                     <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                        <h3 class="inline-block py-2 text-2xl font-medium text-black">Edit Rate</h3>
+                        <h3 class="inline-block py-2 text-2xl font-medium text-black">Edit Service Level</h3>
 
                         <Link
                             :href="route('admin.offices_rates')"
-                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-3 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -58,7 +58,7 @@ const submit = () => {
                         class="space-y-6">
                         <!-- Category-->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Category Name</label>
+                            <label class="block text-lg font-medium text-gray-700">Category Name</label>
                             <select
                                 v-model="form.category_name"
                                 class="w-full px-3 py-2 border rounded">
@@ -79,12 +79,20 @@ const submit = () => {
 
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <!-- Pricing Name -->
+
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Pricing Name</label>
-                                <input
+                                <label class="block text-lg font-medium text-gray-700">Level</label>
+                                <select
                                     v-model="form.pricing_type"
-                                    type="text"
-                                    class="w-full px-3 py-2 border rounded" />
+                                    class="w-full px-3 py-2 border rounded">
+                                    <option
+                                        value=""
+                                        disabled>
+                                        Select a level
+                                    </option>
+                                    <option value="Standard">Standard</option>
+                                    <option value="Premium">Premium</option>
+                                </select>
                                 <div
                                     v-if="form.errors.pricing_type"
                                     class="text-sm text-red-600">
@@ -94,7 +102,7 @@ const submit = () => {
 
                             <!-- Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Price</label>
+                                <label class="block text-lg font-medium text-gray-700">Price (Monthly)</label>
                                 <input
                                     v-model="form.rate"
                                     type="number"
@@ -113,9 +121,9 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-3 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
-                                Update Office Rates
+                                Update Service Levels
                             </button>
                         </div>
                     </form>

@@ -76,7 +76,7 @@ const formatLabel = label => {
         <!-- Success Notification -->
 
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Category</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Categories</h2>
         </template>
 
         <div class="py-12">
@@ -93,7 +93,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create categories']"
                             :href="route('admin.categories.create')"
-                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add Category
                         </Link>
                         <div></div>
@@ -111,7 +111,7 @@ const formatLabel = label => {
                                 <tr>
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">ID</th>
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Category Name</th>
-
+                                    <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Levels</th>
                                     <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Actions</th>
                                 </tr>
                             </thead>
@@ -121,7 +121,9 @@ const formatLabel = label => {
                                     :key="category.id">
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ category.id }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ category.name }}</td>
-
+                                    <td class="px-6 py-4 text-sm text-gray-800">
+                                        {{ category.offers_level ? 'Yes' : 'None' }}
+                                    </td>
                                     <td class="px-6 py-4 text-sm text-gray-800">
                                         <div class="flex space-x-1">
                                             <button

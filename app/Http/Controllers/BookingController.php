@@ -197,32 +197,6 @@ class BookingController extends Controller
     }
 
 
-    public function showOffices(Request $request)
-    {
-        $user = auth()->user();
-
-        if ($user->hasRole('admin') || $user->hasRole('super admin')) {
-            $bookings = Booking::with(['user', 'office.location', 'office.category'])
-                ->whereHas('office.category', function ($query) {
-                    $query->where('name', 'Closed Office');
-                })
-                ->latest()
-                ->paginate(10);
-        } else {
-            $bookings = Booking::with(['office.location', 'office.category'])
-                ->whereHas('office.category', function ($query) {
-                    $query->where('name', 'Closed Office');
-                })
-                ->where('user_id', $user->id)
-                ->latest()
-                ->paginate(10);
-        }
-
-        return Inertia::render('Bookings/offices/ShowOffices', [
-            'bookings' => $bookings,
-        ]);
-    }
-
     public function showDedicated(Request $request)
     {
         $user = auth()->user();

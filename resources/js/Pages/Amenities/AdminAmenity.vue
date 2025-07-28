@@ -91,7 +91,7 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create amenities']"
                             :href="route('admin.amenities.create')"
-                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add Amenity
                         </Link>
                         <div></div>

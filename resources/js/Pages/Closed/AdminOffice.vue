@@ -98,7 +98,7 @@ const formatLabel = label => {
                     <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                         <Link
                             :href="route('admin.closedoffices.create')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain">
+                            class="inline-block px-4 py-2 text-lg font-medium text-white rounded bg-primary hover:bg-bluemain">
                             + Add Closed Office
                         </Link>
 

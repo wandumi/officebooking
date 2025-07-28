@@ -220,7 +220,7 @@ const submit = () => {
 
         <button
             type="submit"
-            class="px-4 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
+            class="px-4 py-2 text-sm text-white rounded bg-primary hover:bg-bluemain">
             Book {{ props.buttonName }}
         </button>
     </form>

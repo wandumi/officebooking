@@ -42,7 +42,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.help-desks')"
-                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -53,7 +53,7 @@ const submit = () => {
                         <div class="grid grid-cols-2 gap-6">
                             <!-- Office Name -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Hot Desk Name</label>
+                                <label class="block text-lg font-medium text-gray-700">Hot Desk Name</label>
                                 <input
                                     v-model="form.help_desk_name"
                                     type="text"
@@ -67,7 +67,7 @@ const submit = () => {
 
                             <!-- Location -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Location</label>
+                                <label class="block text-lg font-medium text-gray-700">Location</label>
                                 <select
                                     v-model="form.location_id"
                                     class="w-full px-3 py-2 border rounded">
@@ -88,7 +88,7 @@ const submit = () => {
 
                             <!-- Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Price</label>
+                                <label class="block text-lg font-medium text-gray-700">Price</label>
                                 <input
                                     v-model="form.price"
                                     type="number"
@@ -103,14 +103,22 @@ const submit = () => {
                                 </div>
                             </div>
 
-                            <!-- Office Name -->
+                            <!-- Duration -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Duration</label>
-                                <input
-                                    v-model="form.duration"
-                                    step="1"
-                                    min="0"
-                                    class="w-full px-3 py-2 border rounded" />
+                                <label class="block text-lg font-medium text-gray-700">Duration</label>
+                                <select
+                                    v-model.number="form.duration"
+                                    class="w-full px-3 py-2 border rounded">
+                                    <option
+                                        disabled
+                                        value="">
+                                        Please select a duration
+                                    </option>
+                                    <option :value="0.5">Half Day</option>
+                                    <option :value="5">5 Days</option>
+                                    <option :value="10">10 Days</option>
+                                    <option :value="20">20 Days</option>
+                                </select>
                                 <div
                                     v-if="form.errors.duration"
                                     class="text-sm text-red-600">
@@ -120,7 +128,7 @@ const submit = () => {
 
                             <!-- Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Desks</label>
+                                <label class="block text-lg font-medium text-gray-700">Seats</label>
                                 <input
                                     v-model="form.desks"
                                     type="number"
@@ -137,7 +145,7 @@ const submit = () => {
 
                             <!-- Discount -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Discount</label>
+                                <label class="block text-lg font-medium text-gray-700">Discount</label>
                                 <input
                                     v-model="form.discount"
                                     type="number"
@@ -155,7 +163,7 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-3 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Hot Desk
                             </button>

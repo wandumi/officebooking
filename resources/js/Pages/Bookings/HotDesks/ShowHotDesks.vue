@@ -10,26 +10,48 @@ const props = defineProps({
 });
 
 const page = usePage();
+const showViewModal = ref(false);
+const selectedBooking = ref(null);
+const selectedDates = ref(null);
+const showDatesModal = ref(false);
+
+// Delete logic (e.g. Reject)
+const showModal = ref(false);
+const bookingToDelete = ref(null);
+
+const confirmDelete = id => {
+    showModal.value = true;
+    bookingToDelete.value = id;
+};
+
+const viewDatesModal = booking => {
+    console.log(booking);
+    selectedDates.value = booking;
+    showDatesModal.value = true;
+};
+
+const openViewModal = booking => {
+    selectedBooking.value = booking;
+    showViewModal.value = true;
+};
+
+const closeViewModal = () => {
+    showViewModal.value = false;
+    selectedBooking.value = null;
+    selectedDates.value = null;
+};
 
 // Flash messages
 const successMessage = ref(null);
-const messageType = ref(null); // 'success', 'rejected', 'cancelled'
+const messageType = ref(null);
 
 const flashMessage = computed(() => page.props?.flash?.success || null);
 
 const showMessage = computed(() => !!(flashMessage.value?.trim?.() || successMessage.value?.trim?.()));
 
-// Watch and reset logic
-watch(showMessage, msg => {
-    if (msg) {
-        setTimeout(() => {
-            successMessage.value = null;
-            messageType.value = null;
-            page.props.flash.success = null;
-        }, 1500);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-});
+const search = ref(props.filters?.search ?? '');
+
+const isLoading = ref(false);
 
 // Sample mutation usage:
 const approveBooking = id => {
@@ -80,9 +102,6 @@ const cancelBooking = id => {
     );
 };
 
-const search = ref(props.filters?.search ?? '');
-const isLoading = ref(false);
-
 watch(search, value => {
     router.get(
         route('admin.bookings'),
@@ -96,14 +115,17 @@ watch(search, value => {
     );
 });
 
-// Delete logic (e.g. Reject)
-const showModal = ref(false);
-const bookingToDelete = ref(null);
-
-const confirmDelete = id => {
-    showModal.value = true;
-    bookingToDelete.value = id;
-};
+// Watch and reset logic
+watch(showMessage, msg => {
+    if (msg) {
+        setTimeout(() => {
+            successMessage.value = null;
+            messageType.value = null;
+            page.props.flash.success = null;
+        }, 1500);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+});
 
 const deleteBooking = () => {
     if (bookingToDelete.value) {
@@ -118,27 +140,6 @@ const deleteBooking = () => {
             },
         });
     }
-};
-
-const showViewModal = ref(false);
-const selectedBooking = ref(null);
-const selectedDates = ref(null);
-const showDatesModal = ref(false);
-
-const viewDatesModal = booking => {
-    selectedDates.value = booking;
-    showDatesModal.value = true;
-};
-
-const openViewModal = booking => {
-    selectedBooking.value = booking;
-    showViewModal.value = true;
-};
-
-const closeViewModal = () => {
-    showViewModal.value = false;
-    selectedBooking.value = null;
-    selectedDates.value = null;
 };
 
 const splitDates = dates => {
@@ -204,7 +205,7 @@ const formatLabel = label => {
                     <div>
                         <Link
                             :href="route('booking.offices')"
-                            class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
+                            class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                             Book
                         </Link>
                     </div>
@@ -330,8 +331,8 @@ const formatLabel = label => {
                             <Link
                                 v-if="link.url"
                                 :href="link.url"
-                                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-primary hover:text-white"
-                                :class="link.active ? 'bg-primary text-white' : 'text-gray-700'"
+                                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain/60 hover:text-white"
+                                :class="link.active ? 'bg-bluemain text-white' : 'text-gray-700'"
                                 v-html="formatLabel(link.label)" />
                             <span
                                 v-else

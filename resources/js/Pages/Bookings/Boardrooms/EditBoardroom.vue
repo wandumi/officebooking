@@ -59,7 +59,7 @@ const selectedPlan = ref<string | null>(null);
                             <h3 class="text-xl font-semibold">{{ boardroom.boardroom_name || 'Boardroom' }}</h3>
                             <Link
                                 :href="route('booking.boardrooms')"
-                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded bg-primary md:w-auto hover:bg-bluemain">
+                                class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded bg-primary md:w-auto hover:bg-bluemain">
                                 Back
                             </Link>
                         </div>
@@ -108,19 +108,8 @@ const selectedPlan = ref<string | null>(null);
                             </ul>
                         </div>
 
-                        <!-- Action Buttons -->
-                        <div class="space-x-2">
-                            <button
-                                @click="viewMode = 'form'"
-                                class="px-4 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
-                                Enquire {{ boardroom.boardroom_name || 'Boardroom' }}
-                            </button>
-                        </div>
-
                         <!-- Booking Form -->
-                        <div
-                            v-if="viewMode === 'form'"
-                            class="pt-6 mt-6 border-t border-gray-200">
+                        <div class="pt-6 mt-6 border-t border-gray-200">
                             <BookingBoardroom
                                 :buttonName="boardroom.boardroom_name"
                                 :boardroom-id="boardroom.id"

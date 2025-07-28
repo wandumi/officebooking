@@ -107,7 +107,7 @@ function goToBoardroom(boardroomId: number) {
                                         <p class="text-sm text-gray-400">ID: {{ room.id }}</p>
                                         <button
                                             @click="goToBoardroom(room.id)"
-                                            class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-blueman/60">
+                                            class="px-4 py-2 mt-2 text-sm text-white rounded bg-bluemain hover:bg-blueman/60">
                                             Enquire {{ room.boardroom_name }}
                                         </button>
                                     </div>
@@ -127,7 +127,7 @@ function goToBoardroom(boardroomId: number) {
                                     <p class="text-sm text-gray-500">Seats: {{ room.seats }}</p>
                                     <button
                                         @click="goToBoardroom(room.id)"
-                                        class="px-4 py-1 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
+                                        class="px-4 py-2 mt-2 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
                                         Enquire {{ room.boardroom_name }}
                                     </button>
                                 </div>

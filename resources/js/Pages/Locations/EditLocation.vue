@@ -26,7 +26,7 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Amenity</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Location</h2>
         </template>
 
         <div class="p-2">
@@ -38,7 +38,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.locations')"
-                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-3 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -49,7 +49,7 @@ const submit = () => {
                         <div class="grid grid-cols-1 gap-6">
                             <!-- Office Name -->
                             <div>
-                                <label class="w-full text-sm font-medium text-gray-700">Name</label>
+                                <label class="w-full text-lg font-medium text-gray-700">Location Name</label>
                                 <input
                                     v-model="form.name"
                                     type="text"
@@ -62,7 +62,7 @@ const submit = () => {
                             </div>
                             <!-- Address -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Address</label>
+                                <label class="block text-lg font-medium text-gray-700">Address</label>
                                 <input
                                     v-model="form.address"
                                     type="text"
@@ -76,7 +76,7 @@ const submit = () => {
 
                             <!-- Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">City</label>
+                                <label class="block text-lg font-medium text-gray-700">City</label>
                                 <input
                                     v-model="form.city"
                                     type="text"
@@ -91,7 +91,7 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Location
                             </button>

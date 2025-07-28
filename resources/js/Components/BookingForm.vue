@@ -108,7 +108,6 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
     currency: 'ZAR',
 });
 
-console.log(props.categoryName);
 const submit = () => {
     if (dailyPlans.includes(form.plan) && form.selected_dates.length > 0) {
         const sorted = [...form.selected_dates].sort();
@@ -121,24 +120,23 @@ const submit = () => {
     form.post(route('bookingoffice.store'), {
         preserveScroll: true,
         onError: errors => {
-            console.log(errors);
             bookingConflict.value = errors.booking_conflict ?? null;
         },
         onSuccess: () => {
             successMessage.value = 'Booking created successfully!';
             bookingConflict.value = null;
 
-            setTimeout(() => {
-                successMessage.value = null;
+            // setTimeout(() => {
+            //     successMessage.value = null;
 
-                if (props.categoryName === 'Dedicated Desk') {
-                    Inertia.visit(route('bookingdedicated.show'));
-                }
+            //     if (props.categoryName === 'Dedicated Desk') {
+            //         Inertia.visit(route('bookingdedicated.show'));
+            //     }
 
-                if (props.categoryName === 'Closed Office') {
-                    Inertia.visit(route('bookingoffices.show'));
-                }
-            }, 1500);
+            //     if (props.categoryName === 'Closed Office') {
+            //         Inertia.visit(route('bookingoffices.show'));
+            //     }
+            // }, 1500);
         },
     });
 };
@@ -282,7 +280,7 @@ const submit = () => {
         <div>
             <button
                 type="submit"
-                class="px-4 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
+                class="px-4 py-2 text-sm text-white rounded bg-primary hover:bg-bluemain">
                 Book {{ buttonName }}
             </button>
         </div>

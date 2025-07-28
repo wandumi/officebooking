@@ -50,10 +50,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/booking-offices', [BookingController::class, 'index'])->name('booking.offices');
-    Route::get('/bookings-show', [BookingController::class, 'showOffices'])->name('bookingoffices.show');
     Route::get('/booking-offices/{bookingoffice}', [BookingController::class, 'viewOffice'])->name('booking.officeview');
     Route::post('/booking-store', [BookingController::class, 'storeOffice'])->name('bookingoffice.store');
-    Route::get('/booked-dedicated', [BookingController::class, 'showDedicated'])->name('bookingdedicated.show');
+
+    Route::get('/booked-closed', [ClosedOfficeController::class, 'show'])->name('bookingoffices.show');
+    Route::get('/booked-dedicated', [DedicatedDeskController::class, 'show'])->name('bookingdedicated.show');
 
     Route::put('/booking-offices/{booking}/approve', [BookingController::class, 'approve'])->name('bookingoffice.approve');
     Route::put('/booking-offices/{booking}/reject', [BookingController::class, 'reject'])->name('bookingoffice.reject');

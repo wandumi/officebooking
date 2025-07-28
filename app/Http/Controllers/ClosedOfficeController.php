@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Office;
 use App\Models\Amenity;
+use App\Models\Booking;
 use App\Models\Category;
 use App\Models\Location;
 use Illuminate\Http\Request;
@@ -30,7 +31,6 @@ class ClosedOfficeController extends Controller
 
         $search = $request->input('search');
 
-        // dd($offices);
         $offices = Office::with(['location', 'pricing', 'category'])
             ->when($search, function ($query, $search) {
                 $query->where('office_name', 'like', "%{$search}%");
@@ -59,11 +59,14 @@ class ClosedOfficeController extends Controller
 
         $locations = Location::select('id', 'name')->get();
         $pricing = OfficePricing::select('id','category_name', 'pricing_type','rate')
-                 ->where('category_name', 'Dedicated Desk')->get();
+                   ->where('category_name', 'Dedicated Desk')
+                   ->get();
+
         $amenities = Amenity::all();
+
         $categories = Category::select('id', 'name')
-                ->where('name', 'Closed Office')
-                ->get();
+                    ->where('name', 'Closed Office')
+                    ->get();
 
         return Inertia::render('Closed/CreateOffice', [
             'locations'     => $locations, 
@@ -124,7 +127,28 @@ class ClosedOfficeController extends Controller
      */
     public function show(Office $Office)
     {
-        //
+        $user = auth()->user();
+
+        if ($user->hasRole('admin') || $user->hasRole('super admin')) {
+            $bookings = Booking::with(['user', 'office.location', 'office.category'])
+                ->whereHas('office.category', function ($query) {
+                    $query->where('name', 'Closed Office');
+                })
+                ->latest()
+                ->paginate(10);
+        } else {
+            $bookings = Booking::with(['office.location', 'office.category'])
+                ->whereHas('office.category', function ($query) {
+                    $query->where('name', 'Closed Office');
+                })
+                ->where('user_id', $user->id)
+                ->latest()
+                ->paginate(10);
+        }
+
+        return Inertia::render('Bookings/Closed/ShowClosed', [
+            'bookings' => $bookings,
+        ]);
     }
 
     /**

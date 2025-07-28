@@ -119,21 +119,21 @@ function getRoleColor(permissionName) {
                             <Link
                                 v-if="can['add users']"
                                 :href="route('admin.manage.create')"
-                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
+                                class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                                 + Add User
                             </Link>
 
                             <Link
                                 v-if="can['add roles']"
                                 :href="route('admin.roles')"
-                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-gray-700">
+                                class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-gray-700">
                                 Roles
                             </Link>
 
                             <Link
                                 v-if="can['add permissions']"
                                 :href="route('admin.permissions')"
-                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-muted hover:bg-gray-700">
+                                class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-muted hover:bg-gray-700">
                                 Permissions
                             </Link>
                         </div>

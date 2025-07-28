@@ -8,6 +8,7 @@ const props = defineProps({
 
 const form = useForm({
     name: props.categories.name,
+    offers_level: props.categories.offers_level,
 });
 
 const submit = () => {
@@ -24,7 +25,7 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Edit Category</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Categories</h2>
         </template>
 
         <div class="p-2">
@@ -36,7 +37,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.categories')"
-                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -47,9 +48,7 @@ const submit = () => {
                         <div class="grid grid-cols-1 gap-6">
                             <!-- Office Name -->
                             <div>
-                                <label class="w-full text-sm font-medium text-gray-700"
-                                    >Category Name (Closed / Dedicated)</label
-                                >
+                                <label class="w-full text-lg font-medium text-gray-700">Category Name </label>
                                 <input
                                     v-model="form.name"
                                     type="text"
@@ -61,10 +60,26 @@ const submit = () => {
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            <label class="inline-flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    v-model="form.offers_level"
+                                    class="w-5 h-5 text-primary form-checkbox" />
+                                <span class="text-lg text-gray-700"
+                                    >Offers different service levels (Standard/Premium)</span
+                                >
+                            </label>
+                            <div
+                                v-if="form.errors.offers_level"
+                                class="text-sm text-red-600">
+                                {{ form.errors.offers_level }}
+                            </div>
+                        </div>
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Category
                             </button>

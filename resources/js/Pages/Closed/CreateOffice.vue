@@ -49,11 +49,11 @@ watch(
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="max-w-4xl p-6 mx-auto space-y-6">
                     <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                        <h3 class="inline-block py-2 text-2xl font-medium text-black">Create Closed Office</h3>
+                        <h3 class="inline-block py-2 text-2xl font-medium text-black">Add Closed Office</h3>
 
                         <Link
                             :href="route('admin.closedoffices')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-4 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -63,7 +63,7 @@ watch(
                         class="space-y-6">
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Office Name</label>
+                                <label class="block text-lg font-medium text-gray-700">Office Name</label>
                                 <input
                                     v-model="form.office_name"
                                     type="text"
@@ -76,7 +76,7 @@ watch(
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Categories</label>
+                                <label class="block text-lg font-medium text-gray-700">Category</label>
                                 <select
                                     v-model="form.category_id"
                                     class="w-full px-3 py-2 border rounded">
@@ -96,7 +96,7 @@ watch(
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Location</label>
+                                <label class="block text-lg font-medium text-gray-700">Location</label>
                                 <select
                                     v-model="form.location_id"
                                     class="w-full px-3 py-2 border rounded">
@@ -116,7 +116,7 @@ watch(
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Seats of the Office</label>
+                                <label class="block text-lg font-medium text-gray-700">Seats</label>
                                 <input
                                     v-model="form.seats"
                                     type="number"
@@ -132,7 +132,7 @@ watch(
                             </div>
 
                             <div v-if="!isDedicatedDesk">
-                                <label class="block text-sm font-medium text-gray-700">Monthly Rate</label>
+                                <label class="block text-lg font-medium text-gray-700">Monthly Rate</label>
                                 <input
                                     v-model="form.monthly_rate"
                                     type="number"
@@ -148,7 +148,7 @@ watch(
                             </div>
 
                             <div v-if="isDedicatedDesk">
-                                <label class="block text-sm font-medium text-gray-700">Pricing Type</label>
+                                <label class="block text-lg font-medium text-gray-700">Pricing Type</label>
                                 <div class="flex flex-col space-y-2">
                                     <div
                                         v-for="pricing in pricings"
@@ -180,7 +180,7 @@ watch(
                             </div>
 
                             <div v-if="!isDedicatedDesk">
-                                <label class="block text-sm font-medium text-gray-700">Daily Rate</label>
+                                <label class="block text-lg font-medium text-gray-700">Daily Rate</label>
                                 <input
                                     v-model="form.daily_rate"
                                     type="number"
@@ -196,7 +196,7 @@ watch(
                             </div>
 
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-700">Amenities</label>
+                                <label class="block mb-1 text-lg font-medium text-gray-700">Amenities</label>
                                 <div class="grid grid-cols-2 gap-2">
                                     <label
                                         v-for="amenity in amenities"
@@ -216,9 +216,9 @@ watch(
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-4 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
-                                Create Closed Office
+                                Add Closed Office
                             </button>
                         </div>
                     </form>

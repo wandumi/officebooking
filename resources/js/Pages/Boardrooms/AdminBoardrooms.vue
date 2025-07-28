@@ -98,7 +98,7 @@ const getPillColor = index => {
                     <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                         <Link
                             :href="route('admin.boardrooms.create')"
-                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
+                            class="inline-block px-3 py-2 text-lg font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                             + Add boardroom
                         </Link>
 

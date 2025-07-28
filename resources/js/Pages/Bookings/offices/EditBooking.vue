@@ -102,7 +102,7 @@ const goToBookings = () => {
                             <h3 class="text-xl font-semibold">{{ office.office_name || 'Office' }}</h3>
                             <Link
                                 :href="route('booking.offices')"
-                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
+                                class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                                 Back
                             </Link>
                         </div>
@@ -159,19 +159,8 @@ const goToBookings = () => {
                             </div>
                         </div>
 
-                        <!-- Action Buttons -->
-                        <div class="space-x-2">
-                            <button
-                                @click="book"
-                                class="px-4 py-1 text-sm font-semibold text-white rounded bg-primary hover:bg-bluemain">
-                                Enquire {{ office.office_name }}
-                            </button>
-                        </div>
-
                         <!-- Booking Form -->
-                        <div
-                            v-if="viewMode === 'form'"
-                            class="pt-6 mt-6 border-t border-gray-200">
+                        <div class="pt-6 mt-6 border-t border-gray-200">
                             <!-- Success Flash Message -->
                             <div
                                 v-if="showSuccess && flashMessage"

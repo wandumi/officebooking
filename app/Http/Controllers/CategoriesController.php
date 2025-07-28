@@ -43,8 +43,10 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+       
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
+            'offers_level' => "sometimes|boolean",
         ]);
 
         $category = Category::create($validated);
@@ -77,9 +79,13 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+  
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
+            'offers_level' => "sometimes|boolean",
         ]);
+
+ 
 
         $category = $category->update($validated);
 

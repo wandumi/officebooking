@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->string('plan');
 
-            $table->json('selected_dates')->nullable(); 
+            $table->json('selected_dates'); 
             $table->unsignedTinyInteger('weekdays_count')->nullable();
 
             $table->unsignedTinyInteger('months')->nullable(); 

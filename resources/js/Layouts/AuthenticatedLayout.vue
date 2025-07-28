@@ -25,7 +25,7 @@ const can = page.props.can || {};
                             <Link
                                 :href="route('dashboard')"
                                 class="flex items-center">
-                                <ApplicationLogo class="block w-auto text-gray-800 fill-current h-9" />
+                                <ApplicationLogo class="block w-auto h-12 text-gray-800 fill-current" />
                             </Link>
 
                             <!-- Navigation Links -->
@@ -83,13 +83,13 @@ const can = page.props.can || {};
                                         <DropdownLink
                                             :href="route('bookingdedicated.show')"
                                             v-if="can['view book extras']"
-                                            >Dedicated Offices</DropdownLink
+                                            >Dedicated Desks</DropdownLink
                                         >
 
                                         <DropdownLink
                                             :href="route('bookinghotdesk.show')"
                                             v-if="can['view book extras']"
-                                            >Hot Desks Offices</DropdownLink
+                                            >Hot Desks</DropdownLink
                                         >
                                         <DropdownLink
                                             :href="route('bookingvirtual.show')"
@@ -137,7 +137,7 @@ const can = page.props.can || {};
                                     <DropdownLink
                                         v-if="can['view offices']"
                                         :href="route('admin.dedicateddesk')"
-                                        >Dedicated Offices</DropdownLink
+                                        >Dedicated Desks</DropdownLink
                                     >
                                     <DropdownLink
                                         v-if="can['view help desks']"
@@ -180,7 +180,7 @@ const can = page.props.can || {};
                                 <template #content>
                                     <DropdownLink :href="route('admin.locations')">Locations</DropdownLink>
                                     <DropdownLink :href="route('admin.categories')">Categories</DropdownLink>
-                                    <DropdownLink :href="route('admin.offices_rates')">Office Rates</DropdownLink>
+                                    <DropdownLink :href="route('admin.offices_rates')">Service Levels</DropdownLink>
                                     <DropdownLink :href="route('admin.amenities')">Amenities</DropdownLink>
                                 </template>
                             </Dropdown>
@@ -190,15 +190,15 @@ const can = page.props.can || {};
                                 width="48">
                                 <template #trigger>
                                     <div class="flex items-center space-x-1">
-                                        <div class="text-base font-medium text-gray-800">
+                                        <div class="text-sm font-medium text-primary">
                                             {{ $page.props.auth.user.name }}
                                         </div>
                                         <button
                                             class="flex items-center overflow-hidden transition rounded-full focus:outline-none hover:ring-2 hover:ring-gray-300">
                                             <img
-                                                src="/files_grits/40.jpg"
+                                                src="/files_grits/user.png"
                                                 alt="User Avatar"
-                                                class="object-cover w-8 h-8 rounded-full" />
+                                                class="object-cover w-5 h-5 rounded-full" />
                                         </button>
                                     </div>
                                 </template>
@@ -260,7 +260,7 @@ const can = page.props.can || {};
                                 alt="User Avatar"
                                 class="object-cover w-8 h-8 rounded-full" />
                             <div>
-                                <div class="text-base font-medium text-gray-800">{{ $page.props.auth.user.name }}</div>
+                                <div class="text-base font-medium text-primary">{{ $page.props.auth.user.name }}</div>
                                 <div class="text-sm font-medium text-gray-500">{{ $page.props.auth.user.email }}</div>
                             </div>
                         </div>
@@ -305,7 +305,7 @@ const can = page.props.can || {};
             <header
                 v-if="$slots.header"
                 class="shadow">
-                <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="px-4 py-6 mx-auto text-lg max-w-7xl sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>
             </header>

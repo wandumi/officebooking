@@ -39,7 +39,7 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.roles')"
-                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -50,7 +50,7 @@ const submit = () => {
                         <div class="grid grid-cols-1 gap-3">
                             <!-- Name -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Role Name</label>
+                                <label class="block text-lg font-medium text-gray-700">Role Name</label>
                                 <input
                                     v-model="form.name"
                                     type="text"
@@ -64,7 +64,7 @@ const submit = () => {
                         </div>
                         <!-- Premissions-->
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-700">Assign Permissions</label>
+                            <label class="block mb-2 text-lg font-medium text-gray-700">Assign Permissions</label>
 
                             <!-- Grid container for two columns -->
                             <div class="grid items-center grid-cols-2 gap-2 md:grid-cols-4">
@@ -91,7 +91,7 @@ const submit = () => {
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Role
                             </button>

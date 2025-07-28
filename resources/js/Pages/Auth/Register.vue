@@ -111,7 +111,7 @@ const submit = () => {
                     <div class="flex items-center justify-between pt-2">
                         <Link
                             :href="route('login')"
-                            class="inline-flex items-center px-2 py-1 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out border border-transparent rounded bg-primary hover:bg-bluemain/60 focus:bg-bluemain focus:outline-none focus:ring-2 focus:ring-bluemain focus:ring-offset-2 active:bg-bluemain/60">
+                            class="inline-flex items-center px-2 py-1 text-xs font-normal tracking-widest transition duration-150 ease-in-out border border-transparent text-bluemain round focus:text-bluemain/60">
                             Already registered?
                         </Link>
 

@@ -88,7 +88,7 @@ class OfficePricingController extends Controller
         $officePricing = OfficePricing::findOrFail($id);
 
         $categories = Category::select('id', 'name')->get();
-
+   
         return Inertia::render('Rates/EditRates', [
             'office_rates' => $officePricing,
             'categories' => $categories

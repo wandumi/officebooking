@@ -41,7 +41,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
 
                         <Link
                             :href="route('admin.boardrooms')"
-                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-3 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -52,7 +52,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <!-- Boardroom Name -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Boardroom Name</label>
+                                <label class="block text-lg font-medium text-gray-700">Boardroom Name</label>
                                 <input
                                     v-model="form.boardroom_name"
                                     type="text"
@@ -66,7 +66,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
 
                             <!-- Location -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Location</label>
+                                <label class="block text-lg font-medium text-gray-700">Location</label>
                                 <select
                                     v-model="form.location_id"
                                     class="w-full px-3 py-2 border rounded">
@@ -87,7 +87,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
 
                             <!-- Seats -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Seats</label>
+                                <label class="block text-lg font-medium text-gray-700">Seats</label>
                                 <input
                                     v-model="form.seats"
                                     type="number"
@@ -104,7 +104,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
 
                             <!-- Hourly Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Hourly Price</label>
+                                <label class="block text-lg font-medium text-gray-700">Hourly Price</label>
                                 <input
                                     v-model="form.hourly_price"
                                     type="number"
@@ -121,7 +121,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
 
                             <!-- Daily Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Daily Price</label>
+                                <label class="block text-lg font-medium text-gray-700">Daily Price</label>
                                 <input
                                     v-model="form.daily_price"
                                     type="number"
@@ -139,7 +139,7 @@ const minDate = `${currentYear}-${currentMonth}-01`;
 
                         <!-- Amenities -->
                         <div>
-                            <label class="block mb-1 text-sm font-medium text-gray-700">Amenities</label>
+                            <label class="block mb-1 text-lg font-medium text-gray-700">Amenities</label>
                             <div class="grid grid-cols-2 gap-2">
                                 <label
                                     v-for="amenity in amenities"
@@ -158,9 +158,9 @@ const minDate = `${currentYear}-${currentMonth}-01`;
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain"
+                                class="block w-full px-3 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain"
                                 :disabled="form.processing">
-                                Create Boardroom
+                                Add Boardroom
                             </button>
                         </div>
                     </form>

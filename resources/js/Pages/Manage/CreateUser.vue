@@ -48,11 +48,11 @@ watch(
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="max-w-4xl p-6 mx-auto space-y-6">
                     <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                        <h3 class="inline-block py-2 text-2xl font-medium text-black">Create User</h3>
+                        <h3 class="inline-block py-2 text-2xl font-medium text-black">Add User</h3>
 
                         <Link
                             :href="route('admin.manage.user')"
-                            class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -63,7 +63,7 @@ watch(
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <!-- Username -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Username</label>
+                                <label class="block text-lg font-medium text-gray-700">Username</label>
                                 <input
                                     v-model="form.name"
                                     type="text"
@@ -77,7 +77,7 @@ watch(
 
                             <!-- Email -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Email Address</label>
+                                <label class="block text-lg font-medium text-gray-700">Email Address</label>
                                 <input
                                     v-model="form.email"
                                     type="email"
@@ -92,7 +92,7 @@ watch(
 
                             <!-- Password -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Password</label>
+                                <label class="block text-lg font-medium text-gray-700">Password</label>
                                 <input
                                     v-model="form.password"
                                     type="password"
@@ -107,7 +107,7 @@ watch(
 
                             <!-- Confirm Password -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                                <label class="block text-lg font-medium text-gray-700">Confirm Password</label>
                                 <input
                                     v-model="form.password_confirmation"
                                     type="password"
@@ -122,7 +122,7 @@ watch(
 
                             <!-- Roles -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Assign Roles</label>
+                                <label class="block text-lg font-medium text-gray-700">Assign Roles</label>
                                 <div class="flex mt-5 space-x-2">
                                     <div
                                         v-for="role in roles"
@@ -145,7 +145,7 @@ watch(
                         </div>
                         <!-- Permissions -->
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-700">Assign Permissions</label>
+                            <label class="block mb-2 text-lg font-medium text-gray-700">Assign Permissions</label>
                             <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
                                 <div
                                     v-for="permission in permissions"
@@ -171,9 +171,9 @@ watch(
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
-                                Create User
+                                Add User
                             </button>
                         </div>
                     </form>

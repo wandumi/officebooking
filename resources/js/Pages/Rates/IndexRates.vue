@@ -77,7 +77,7 @@ const formatLabel = label => {
         <!-- Success Notification -->
 
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Offices Rates</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Service Levels</h2>
         </template>
 
         <div class="py-12">
@@ -94,8 +94,8 @@ const formatLabel = label => {
                         <Link
                             v-if="can['create office rates']"
                             :href="route('admin.offices_rates.create')"
-                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
-                            + Add Office Rates
+                            class="inline-block px-3 py-2 text-lg font-medium text-white rounded bg-primary hover:bg-bluemain/60">
+                            + Add Service Levels
                         </Link>
                         <div></div>
 

@@ -31,20 +31,19 @@ class HotDeskBookingController extends Controller
     public function store(Request $request)
     {
 
-   
         $validated = $request->validate([
-            'hotdesk_id'     => 'required|exists:help_desks,id',
-            'plan'            => 'required',
-            'is_half_day'     => 'required|boolean',
-            'selected_dates'  => 'required|array|min:1',
-            'selected_dates.*'=> 'date|after_or_equal:today',
-            'time_slots'      => 'nullable|array',
-            'time_slots.*.block' => 'nullable|string|in:morning,afternoon',
-            'days_count'      => 'required|integer|min:1',
-            'selected_price'  => 'required|numeric|min:1',
+            'hotdesk_id'            => 'required|exists:help_desks,id',
+            'plan'                  => 'required',
+            'is_half_day'           => 'required|boolean',
+            'selected_dates'        => 'required|array|min:1',
+            'selected_dates.*'      => 'date|after_or_equal:today',
+            'time_slots'            => 'nullable|array',
+            'time_slots.*.block'    => 'nullable|string|in:morning,afternoon',
+            'days_count'            => 'required|integer|min:1',
+            'selected_price'        => 'required|numeric|min:1',
         ]);
 
-        $office = Office::findOrFail($validated['hotdesk_id']);
+        $helpDesk = HelpDesk::where('id',$validated['hotdesk_id'])->first();
 
         $conflict = HotDeskBooking::where('user_id', auth()->id())
                     ->where('helpdesk_id', $validated['hotdesk_id'])
@@ -58,9 +57,10 @@ class HotDeskBookingController extends Controller
                     ->exists();
 
 
-        if ($conflict) {
-            return back()->withErrors([
-                'booking_conflict' => 'You already have a booking with this plan type that overlaps the selected dates.',
+        
+            if ($conflict) {
+                return back()->withErrors([
+                    'booking_conflict' => 'You already have a booking with this plan type that overlaps the selected dates.',
             ])->withInput();
         }
 
@@ -108,7 +108,7 @@ class HotDeskBookingController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Approve function
      *
      * @param VirtualBooking $virtual

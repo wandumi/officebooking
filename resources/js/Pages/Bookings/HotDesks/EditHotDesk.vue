@@ -55,7 +55,7 @@ function checkAvailability() {
                             <h3 class="text-xl font-semibold">{{ helpDesks.help_desk_name || 'Hot Desk' }}</h3>
                             <Link
                                 :href="route('booking.offices')"
-                                class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
+                                class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                                 Back
                             </Link>
                         </div>
@@ -85,19 +85,8 @@ function checkAvailability() {
                             </div>
                         </div>
 
-                        <!-- Action Buttons -->
-                        <div class="space-x-2">
-                            <button
-                                @click="book"
-                                class="px-4 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain">
-                                Enquire {{ helpDesks.help_desk_name || 'Hot Desk' }}
-                            </button>
-                        </div>
-
                         <!-- Booking Form -->
-                        <div
-                            v-if="viewMode === 'form'"
-                            class="pt-6 mt-6 border-t border-gray-200">
+                        <div class="pt-6 mt-6 border-t border-gray-200">
                             <BookingHotDesk
                                 :buttonName="helpDesks.help_desk_name"
                                 :hotdesk-id="helpDesks.id"

@@ -104,19 +104,19 @@ function getRoleColor(role) {
                         <div class="flex space-x-2">
                             <Link
                                 :href="route('admin.role.create')"
-                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-primary hover:bg-bluemain/60">
+                                class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-primary hover:bg-bluemain/60">
                                 + Add Role
                             </Link>
 
                             <Link
                                 :href="route('admin.permissions')"
-                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                                class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                                 Permissions
                             </Link>
 
                             <Link
                                 :href="route('admin.manage.user')"
-                                class="inline-block px-2 py-2 text-sm font-medium text-white rounded bg-muted hover:bg-bluemain/60">
+                                class="inline-block px-2 py-2 text-lg font-medium text-white rounded bg-muted hover:bg-bluemain/60">
                                 Manage
                             </Link>
                         </div>

@@ -42,7 +42,7 @@ watch(
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Edit User</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">User</h2>
         </template>
 
         <div class="py-2">
@@ -52,7 +52,7 @@ watch(
                         <h3 class="text-2xl font-medium text-black">Edit User</h3>
                         <Link
                             :href="route('admin.manage.user')"
-                            class="px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
@@ -63,7 +63,7 @@ watch(
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <!-- Name -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Name</label>
+                                <label class="block text-lg font-medium text-gray-700">Name</label>
                                 <input
                                     v-model="form.name"
                                     type="text"
@@ -77,7 +77,7 @@ watch(
 
                             <!-- Email -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Email</label>
+                                <label class="block text-lg font-medium text-gray-700">Email</label>
                                 <input
                                     v-model="form.email"
                                     type="email"
@@ -91,7 +91,7 @@ watch(
 
                             <!-- Password -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">New Password (optional)</label>
+                                <label class="block text-lg font-medium text-gray-700">New Password (optional)</label>
                                 <input
                                     v-model="form.password"
                                     type="password"
@@ -105,7 +105,7 @@ watch(
 
                             <!-- Confirm Password -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                                <label class="block text-lg font-medium text-gray-700">Confirm Password</label>
                                 <input
                                     v-model="form.password_confirmation"
                                     type="password"
@@ -119,7 +119,7 @@ watch(
 
                             <!-- Roles -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Assign Roles</label>
+                                <label class="block text-lg font-medium text-gray-700">Assign Roles</label>
                                 <div class="flex mt-5 space-x-2">
                                     <div
                                         v-for="role in roles"
@@ -143,7 +143,7 @@ watch(
 
                         <!-- Permissions (Read-Only Display) -->
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-700">Assign Permissions</label>
+                            <label class="block mb-2 text-lg font-medium text-gray-700">Assign Permissions</label>
                             <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
                                 <div
                                     v-for="permission in permissions"
@@ -163,7 +163,7 @@ watch(
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-2 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-2 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update User
                             </button>

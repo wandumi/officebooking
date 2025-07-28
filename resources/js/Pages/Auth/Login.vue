@@ -100,7 +100,7 @@ const submit = () => {
                         <Link
                             v-if="canResetPassword"
                             :href="route('password.request')"
-                            class="text-sm text-gray-600 hover:text-gray-900">
+                            class="text-sm text-bluemain focus:text-bluemain/60">
                             Forgot your password?
                         </Link>
                     </div>
@@ -109,14 +109,14 @@ const submit = () => {
                     <div class="flex items-center justify-between">
                         <Link
                             :href="route('register')"
-                            class="inline-flex items-center px-2 py-1 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out border border-transparent rounded bg-primary hover:bg-bluemain/60 focus:bg-bluemain focus:outline-none focus:ring-2 focus:ring-bluemain focus:ring-offset-2 active:bg-bluemain/60">
-                            Create an Account
+                            class="items-center px-2 py-1 text-sm text-bluemain focus:text-bluemain/60">
+                            Create an account
                         </Link>
                         <PrimaryButton
                             class="ms-4"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing">
-                            Log in
+                            Log In
                         </PrimaryButton>
                     </div>
                 </form>

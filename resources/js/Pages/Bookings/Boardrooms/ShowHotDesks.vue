@@ -201,7 +201,7 @@ const formatLabel = label => {
                     <div>
                         <Link
                             :href="route('booking.boardrooms')"
-                            class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
+                            class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                             Book
                         </Link>
                     </div>
@@ -324,8 +324,8 @@ const formatLabel = label => {
                             <Link
                                 v-if="link.url"
                                 :href="link.url"
-                                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-primary hover:text-white"
-                                :class="link.active ? 'bg-primary text-white' : 'text-gray-700'"
+                                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain/60 hover:text-white"
+                                :class="link.active ? 'bg-bluemain text-white' : 'text-gray-700'"
                                 v-html="formatLabel(link.label)" />
                             <span
                                 v-else

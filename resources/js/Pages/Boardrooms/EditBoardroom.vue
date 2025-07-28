@@ -46,7 +46,7 @@ const submit = () => {
                         <h3 class="inline-block py-2 text-2xl font-medium text-black">Edit boardroom</h3>
                         <Link
                             :href="route('admin.boardrooms')"
-                            class="inline-block px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain">
+                            class="inline-block px-3 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain">
                             Back
                         </Link>
                     </div>
@@ -58,7 +58,7 @@ const submit = () => {
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <!-- Name -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Boardroom Name</label>
+                                <label class="block text-lg font-medium text-gray-700">Boardroom Name</label>
                                 <input
                                     v-model="form.boardroom_name"
                                     type="text"
@@ -72,7 +72,7 @@ const submit = () => {
 
                             <!-- Location -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Location</label>
+                                <label class="block text-lg font-medium text-gray-700">Location</label>
                                 <select
                                     v-model="form.location_id"
                                     class="w-full px-3 py-2 border rounded">
@@ -93,7 +93,7 @@ const submit = () => {
 
                             <!-- Seats -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Number of Seats</label>
+                                <label class="block text-lg font-medium text-gray-700">Number of Seats</label>
                                 <input
                                     v-model="form.seats"
                                     type="number"
@@ -110,7 +110,7 @@ const submit = () => {
 
                             <!-- Hourly Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Hourly Price</label>
+                                <label class="block text-lg font-medium text-gray-700">Hourly Price</label>
                                 <input
                                     v-model="form.hourly_price"
                                     type="number"
@@ -127,7 +127,7 @@ const submit = () => {
 
                             <!-- Daily Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Daily Price</label>
+                                <label class="block text-lg font-medium text-gray-700">Daily Price</label>
                                 <input
                                     v-model="form.daily_price"
                                     type="number"
@@ -144,7 +144,7 @@ const submit = () => {
 
                             <!-- Amenities -->
                             <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-medium text-gray-700">Amenities</label>
+                                <label class="block mb-1 text-lg font-medium text-gray-700">Amenities</label>
                                 <div class="grid grid-cols-2 gap-2">
                                     <label
                                         v-for="amenity in props.amenities"
@@ -165,7 +165,7 @@ const submit = () => {
                         <div class="w-full pt-2 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-3 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain"
+                                class="block w-full px-3 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain"
                                 :disabled="form.processing">
                                 Update boardroom
                             </button>

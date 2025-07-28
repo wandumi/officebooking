@@ -143,11 +143,6 @@ const formatLabel = label => {
 
                                     <td class="px-6 py-4 text-sm text-gray-800">
                                         <div class="flex space-x-1">
-                                            <!-- <button
-                                                @click="$inertia.visit(route('admin.show.edit', office.id))"
-                                                class="px-3 py-1 text-sm text-white bg-gray-500 rounded hover:bg-gray-600">
-                                                View
-                                            </button> -->
                                             <button
                                                 v-if="can['edit offices']"
                                                 @click="$inertia.visit(route('admin.offices.edit', office.id))"

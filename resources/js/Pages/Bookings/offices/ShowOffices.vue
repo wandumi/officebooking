@@ -166,7 +166,7 @@ const cancelBooking = id => {
 </script>
 
 <template>
-    <Head title="Bookings" />
+    <Head title="Closed Offices Bookings" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -188,7 +188,7 @@ const cancelBooking = id => {
                 <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                     <Link
                         :href="route('booking.offices')"
-                        class="inline-block w-full px-4 py-1 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
+                        class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                         Back
                     </Link>
                     <input
@@ -211,6 +211,7 @@ const cancelBooking = id => {
                                 </th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Office Name</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Start Date</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700"></th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">End Date</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Status</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Actions</th>
@@ -234,6 +235,11 @@ const cancelBooking = id => {
                                 <td class="px-6 py-4 text-sm text-gray-800">
                                     {{ formatDate(booking.start_date) ?? '—' }}
                                 </td>
+
+                                <th
+                                    class="w-1 px-1 py-3 text-sm font-medium text-center text-gray-700 whitespace-nowrap">
+                                    hello
+                                </th>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
                                     {{ formatDate(booking.end_date) ?? 'N/A' }}
@@ -290,7 +296,7 @@ const cancelBooking = id => {
                             <Link
                                 v-if="link.url"
                                 :href="link.url"
-                                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain hover:text-white"
+                                class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-bluemain/60 hover:text-white"
                                 :class="link.active ? 'bg-bluemain text-white' : 'text-gray-700'"
                                 v-html="formatLabel(link.label)" />
                             <span

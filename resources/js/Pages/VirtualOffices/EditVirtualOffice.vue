@@ -51,18 +51,17 @@ const submit = () => {
 
                         <Link
                             :href="route('admin.virtual-offices')"
-                            class="inline-block px-4 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
+                            class="inline-block px-4 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60">
                             Back
                         </Link>
                     </div>
-
                     <form
                         @submit.prevent="submit"
                         class="space-y-6">
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <!-- Name -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Virtual Office Name</label>
+                                <label class="block text-lg font-medium text-gray-700">Virtual Office Name</label>
                                 <input
                                     v-model="form.virtualoffice_name"
                                     type="text"
@@ -76,7 +75,7 @@ const submit = () => {
 
                             <!-- Location -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Location</label>
+                                <label class="block text-lg font-medium text-gray-700">Location</label>
                                 <select
                                     v-model="form.location_id"
                                     class="w-full px-3 py-2 border rounded">
@@ -97,7 +96,7 @@ const submit = () => {
 
                             <!-- Price -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Price</label>
+                                <label class="block text-lg font-medium text-gray-700">Price</label>
                                 <input
                                     v-model="form.price"
                                     type="number"
@@ -114,7 +113,7 @@ const submit = () => {
 
                             <!-- Discount -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Discount</label>
+                                <label class="block text-lg font-medium text-gray-700">Discount</label>
                                 <input
                                     v-model="form.discount"
                                     type="number"
@@ -131,7 +130,7 @@ const submit = () => {
 
                             <!-- Address -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Address</label>
+                                <label class="block text-lg font-medium text-gray-700">Address</label>
                                 <input
                                     v-model="form.address"
                                     type="text"
@@ -145,7 +144,7 @@ const submit = () => {
 
                             <!-- Pricing Type -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Pricing Type</label>
+                                <label class="block text-lg font-medium text-gray-700">Pricing Type</label>
                                 <div class="flex flex-col space-y-2">
                                     <div
                                         v-for="pricing in pricings"
@@ -180,7 +179,7 @@ const submit = () => {
                         <div class="w-full pt-4 md:col-span-2">
                             <button
                                 type="submit"
-                                class="block w-full px-4 py-2 text-sm font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
+                                class="block w-full px-4 py-2 text-lg font-medium text-white rounded bg-bluemain hover:bg-bluemain/60"
                                 :disabled="form.processing">
                                 Update Virtual Office
                             </button>
