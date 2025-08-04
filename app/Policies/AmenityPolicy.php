@@ -13,7 +13,7 @@ class AmenityPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -21,7 +21,7 @@ class AmenityPolicy
      */
     public function view(User $user, Amenity $amenity): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -29,7 +29,7 @@ class AmenityPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -37,7 +37,7 @@ class AmenityPolicy
      */
     public function update(User $user, Amenity $amenity): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -45,7 +45,7 @@ class AmenityPolicy
      */
     public function delete(User $user, Amenity $amenity): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -53,7 +53,7 @@ class AmenityPolicy
      */
     public function restore(User $user, Amenity $amenity): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -61,6 +61,6 @@ class AmenityPolicy
      */
     public function forceDelete(User $user, Amenity $amenity): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 }

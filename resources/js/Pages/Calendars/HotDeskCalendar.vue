@@ -29,30 +29,10 @@ const allBookings = ref(props.events);
                     class="vuecal--blue-theme vuecal"
                     style="height: 800px"
                     default-view="month"
-                    :disable-views="['years', 'week']"
+                    :disable-views="['years']"
                     hide-weekends
                     :events="allBookings" />
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
-
-<style scoped>
-.vuecal__event.default-office {
-    background-color: #e0f7fa;
-    color: #006064;
-}
-
-.vuecal__event.default-hotdesk {
-    background-color: #ffe0b2;
-    color: #ef6c00;
-}
-
-.vuecal__event.office-1 {
-    background-color: #c5e1a5;
-}
-
-.vuecal__event.hotdesk-3 {
-    background-color: #b3e5fc;
-}
-</style>

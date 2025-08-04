@@ -13,7 +13,7 @@ class OfficePricingPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -21,7 +21,7 @@ class OfficePricingPolicy
      */
     public function view(User $user, OfficePricing $officePricing): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -29,7 +29,7 @@ class OfficePricingPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -37,7 +37,7 @@ class OfficePricingPolicy
      */
     public function update(User $user, OfficePricing $officePricing): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -45,7 +45,7 @@ class OfficePricingPolicy
      */
     public function delete(User $user, OfficePricing $officePricing): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -53,7 +53,7 @@ class OfficePricingPolicy
      */
     public function restore(User $user, OfficePricing $officePricing): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 
     /**
@@ -61,6 +61,6 @@ class OfficePricingPolicy
      */
     public function forceDelete(User $user, OfficePricing $officePricing): bool
     {
-        return false;
+        return $user->hasRole(['admin', 'super admin']);
     }
 }
