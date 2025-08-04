@@ -14,10 +14,17 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-         User::create([
+        User::create([
             'name' => 'Super Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('superadmin'), 
+            'is_active' => true
+        ]);
+
+        User::create([
+            'name' => 'User',
+            'email' => 'user@user.com',
+            'password' => Hash::make('userpassword'), 
             'is_active' => true
         ]);
     }

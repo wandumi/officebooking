@@ -48,7 +48,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'view book extras',
             'add users',
             'add roles',
-            'add permissions'
+            'add permissions',
+            'edit bookings',
+            'delete bookings',
         ];
 
         foreach ($customPermissions as $permName) {

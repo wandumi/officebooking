@@ -12,8 +12,6 @@ const props = defineProps({
 const page = usePage();
 const showViewModal = ref(false);
 const selectedBooking = ref(null);
-const selectedDates = ref(null);
-const showDatesModal = ref(false);
 
 // Delete logic (e.g. Reject)
 const showModal = ref(false);
@@ -23,6 +21,9 @@ const confirmDelete = id => {
     showModal.value = true;
     bookingToDelete.value = id;
 };
+
+const selectedDates = ref(null);
+const showDatesModal = ref(false);
 
 const viewDatesModal = booking => {
     selectedDates.value = booking;
@@ -37,6 +38,10 @@ const openViewModal = booking => {
 const closeViewModal = () => {
     showViewModal.value = false;
     selectedBooking.value = null;
+};
+
+const closeDatesModal = () => {
+    showDatesModal.value = false;
     selectedDates.value = null;
 };
 
@@ -128,7 +133,7 @@ watch(showMessage, msg => {
 
 const deleteBooking = () => {
     if (bookingToDelete.value) {
-        router.delete(route('admin.bookings.destroy', bookingToDelete.value), {
+        router.delete(route('hotdesk.destroy', bookingToDelete.value), {
             preserveScroll: true,
             onSuccess: () => {
                 successMessage.value = 'Booking rejected successfully.';
@@ -204,7 +209,7 @@ const formatFixedDate = date => {
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-5 lg:px-10">
+            <div class="max-w-full px-4 mx-auto sm:max-w-xl sm:px-6 lg:max-w-7xl lg:px-8">
                 <div
                     v-if="showMessage"
                     :class="[
@@ -221,18 +226,26 @@ const formatFixedDate = date => {
                 </div>
 
                 <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
+                    <div class="flex flex-col gap-1 sm:flex-row sm:space-x-1">
                         <Link
                             :href="route('booking.offices')"
-                            class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
+                            class="inline-block w-full px-4 py-2 text-xs font-medium text-center text-white rounded bg-primary hover:bg-bluemain sm:w-auto sm:text-sm">
                             Book
                         </Link>
+
+                        <Link
+                            v-if="can['manage settings']"
+                            :href="route('hotdesk.deleted')"
+                            class="inline-block w-full px-4 py-2 text-xs font-medium text-center text-white rounded bg-bluemain hover:bg-bluemain sm:w-auto sm:text-sm">
+                            Deleted
+                        </Link>
                     </div>
+
                     <input
                         v-model="search"
                         type="text"
                         placeholder="Search bookings..."
-                        class="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-sm sm:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full px-4 py-2 text-xs border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-48 sm:text-sm" />
                 </div>
 
                 <!-- Bookings Table -->
@@ -280,7 +293,7 @@ const formatFixedDate = date => {
                                 <!-- Icon Button -->
                                 <td class="px-2 py-4 text-sm text-center align-middle">
                                     <button
-                                        @click="viewDatesModal(booking)"
+                                        @click.stop="viewDatesModal(booking)"
                                         class="inline-flex items-center justify-center text-white rounded bg-primary w-7 h-7 hover:bg-bluemain/70"
                                         title="View Selected Dates">
                                         <svg
@@ -320,13 +333,19 @@ const formatFixedDate = date => {
                                         <button
                                             @click="openViewModal(booking)"
                                             class="px-2 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain/60">
-                                            View
+                                            Action
                                         </button>
                                         <button
                                             v-if="can['edit bookings']"
                                             @click="openEditModal(booking)"
                                             class="px-2 py-1 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
                                             Edit
+                                        </button>
+                                        <button
+                                            v-if="can['delete permissions'] || can['manage settings']"
+                                            @click="confirmDelete(booking.id)"
+                                            class="px-1 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600">
+                                            Delete
                                         </button>
                                     </div>
                                 </td>
@@ -362,7 +381,7 @@ const formatFixedDate = date => {
                 </div>
 
                 <!-- Selected Dates Modal -->
-                <template v-if="showDatesModal && selectedDates?.selected_dates?.length">
+                <template v-if="showDatesModal">
                     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div
                             class="w-full max-w-4xl mx-3 p-6 bg-white rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
@@ -372,7 +391,7 @@ const formatFixedDate = date => {
                                     Selected Booking Dates for {{ selectedDates.plan }}
                                 </h2>
                                 <button
-                                    @click="closeViewModal"
+                                    @click="closeDatesModal"
                                     class="text-2xl leading-none text-gray-500 hover:text-gray-700">
                                     &times;
                                 </button>
@@ -402,7 +421,7 @@ const formatFixedDate = date => {
                             <!-- Modal Footer -->
                             <div class="mt-6 text-right">
                                 <button
-                                    @click="closeViewModal"
+                                    @click="closeDatesModal"
                                     class="px-4 py-2 text-sm text-gray-800 bg-gray-100 rounded hover:bg-gray-200">
                                     Close
                                 </button>
@@ -418,6 +437,21 @@ const formatFixedDate = date => {
                             <p class="mb-6">
                                 Are you sure you want to delete this booking? This action cannot be undone.
                             </p>
+                            <form @submit.prevent>
+                                <div class="mb-4">
+                                    <label
+                                        for="restoreReason"
+                                        class="block mb-1 text-sm font-medium text-gray-700">
+                                        Reason for Delete
+                                    </label>
+                                    <textarea
+                                        id="restoreReason"
+                                        v-model="restoreReason"
+                                        rows="4"
+                                        class="w-full p-3 text-sm border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Enter reason..."></textarea>
+                                </div>
+                            </form>
                             <div class="flex justify-end space-x-3">
                                 <button
                                     @click="showModal = false"
@@ -440,7 +474,9 @@ const formatFixedDate = date => {
                         <div class="w-full max-w-xl p-6 bg-white rounded-lg shadow-lg">
                             <!-- Modal Header -->
                             <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-bold text-gray-800">Booking Details</h2>
+                                <h2 class="text-lg font-bold text-gray-800">
+                                    Booking Details for {{ selectedBooking.plan }}
+                                </h2>
                                 <button
                                     @click="closeViewModal"
                                     class="text-2xl leading-none text-gray-500 hover:text-gray-700">
@@ -456,37 +492,33 @@ const formatFixedDate = date => {
                                         <div
                                             v-if="can['manage settings']"
                                             class="font-medium text-gray-600">
-                                            Booking ID:
+                                            <strong>Booking ID:</strong>
                                         </div>
-                                        <div v-if="can['manage settings']">{{ selectedBooking.id }}</div>
+                                        <div
+                                            v-if="can['manage settings']"
+                                            class="mb-2">
+                                            {{ selectedBooking.id }}
+                                        </div>
 
                                         <div
                                             v-if="can['manage settings']"
                                             class="font-medium text-gray-600">
-                                            User:
+                                            <strong>User:</strong>
                                         </div>
-                                        <div v-if="can['manage settings']">{{ selectedBooking.user?.name ?? '—' }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>Office Name:</strong></div>
-
-                                        <div v-if="can['manage settings']">
-                                            {{ selectedBooking.virtual_office?.virtualoffice_name ?? '—' }}
+                                        <div
+                                            v-if="can['manage settings']"
+                                            class="mb-2">
+                                            {{ selectedBooking.user?.name ?? '—' }}
                                         </div>
 
                                         <div class="font-medium text-gray-600"><strong>Plan:</strong></div>
-                                        <div>{{ selectedBooking.plan }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>Start Date:</strong></div>
-                                        <div>{{ formatDate(selectedBooking.start_date) }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>End Date:</strong></div>
-                                        <div>{{ formatDate(selectedBooking.end_date) }}</div>
+                                        <div class="mb-2">{{ selectedBooking.plan }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Number of Days:</strong></div>
-                                        <div>{{ selectedBooking.days_count ?? '—' }}</div>
+                                        <div class="mb-2">{{ selectedBooking.days_count ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Total Price:</strong></div>
-                                        <div>R {{ selectedBooking.total_price ?? '0.00' }}</div>
+                                        <div class="mb-2">R {{ selectedBooking.selected_price ?? '0.00' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Status: </strong></div>
                                         <div>

@@ -6,12 +6,14 @@ use App\Models\User;
 use App\Models\Boardroom;
 use App\Models\BoardroomBooking;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BoardroomBooking extends Model
 {
     /** @use HasFactory<\Database\Factories\BoardroomBookingFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
 
     protected $guarded = [];
 

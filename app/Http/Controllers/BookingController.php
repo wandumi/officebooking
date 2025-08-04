@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\HelpDesk;
 use App\Models\Location;
 use App\Models\Boardroom;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\OfficePricing;
 use App\Models\VirtualOffice;
@@ -30,7 +31,7 @@ class BookingController extends Controller
         
         $helpDesks = HelpDesk::with('location')->get();
 
-
+ 
         $locations = Location::select('name', 'address', 'city')->get();
         
         return Inertia::render('Bookings/offices/IndexBookings', [
@@ -178,6 +179,8 @@ class BookingController extends Controller
                 'booking_conflict' => 'You already have a booking with this plan type that overlaps the selected dates.',
             ])->withInput();
         }
+
+
 
         $booking = Booking::create([
             'user_id'         => auth()->id(),

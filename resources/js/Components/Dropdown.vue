@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
     align: {
@@ -14,7 +14,13 @@ const props = defineProps({
         type: String,
         default: 'py-1 bg-white',
     },
+    nested: {
+        type: Boolean,
+        default: false, // Indicates if this dropdown is nested inside another
+    },
 });
+
+const open = ref(false);
 
 const closeOnEscape = e => {
     if (open.value && e.key === 'Escape') {
@@ -32,30 +38,34 @@ const widthClass = computed(() => {
 });
 
 const alignmentClasses = computed(() => {
-    if (props.align === 'left') {
-        return 'ltr:origin-top-left rtl:origin-top-right start-0';
-    } else if (props.align === 'right') {
-        return 'ltr:origin-top-right rtl:origin-top-left end-0';
-    } else {
-        return 'origin-top';
+    switch (props.align) {
+        case 'left':
+            return 'start-0';
+        case 'right':
+            return 'end-0';
+        case 'center':
+            return 'left-1/2 -translate-x-1/2';
+        default:
+            return 'origin-top';
     }
 });
-
-const open = ref(false);
 </script>
 
 <template>
     <div class="relative">
-        <div @click="open = !open">
+        <!-- Trigger -->
+        <div @click.stop="open = !open">
             <slot name="trigger" />
         </div>
 
-        <!-- Full Screen Dropdown Overlay -->
+        <!-- Overlay (only for root dropdowns) -->
         <div
+            v-if="!nested"
             v-show="open"
             class="fixed inset-0 z-40"
-            @click="open = false"></div>
+            @click.self="open = false" />
 
+        <!-- Dropdown Panel -->
         <Transition
             enter-active-class="transition duration-200 ease-out"
             enter-from-class="scale-95 opacity-0"
@@ -67,7 +77,7 @@ const open = ref(false);
                 v-show="open"
                 class="absolute z-50 mt-2 rounded-md shadow-lg"
                 :class="[widthClass, alignmentClasses]"
-                @click="open = false">
+                @click.stop>
                 <div
                     class="rounded-md ring-1 ring-black ring-opacity-5"
                     :class="contentClasses">

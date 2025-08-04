@@ -12,6 +12,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\HelpDeskController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\BoardroomController;
@@ -72,7 +73,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking-hotdesk/{hotDesk}', [HotDeskBookingController::class, 'viewHotDesk'])->name('booking.hotdesk');
     Route::post('/booking-hotdesk', [HotDeskBookingController::class, 'store'])->name('bookinghotdesk.store');
     Route::get('/hotdesk-booking', [HotDeskBookingController::class, 'show'])->name('bookinghotdesk.show');
-    
+    Route::get('/deleted-hotdesks', [HotDeskBookingController::class, 'deleted'])->name('hotdesk.deleted');
+    Route::put('/restore-hotdesks/{id}/restore', [HotDeskBookingController::class, 'restore'])->name('hotdesk.restore');
+    Route::delete('/hotdesk/{hotdesk}', [HotDeskBookingController::class, 'destroy'])->name('hotdesk.destroy');
+
     Route::put('/booking-hotdesk/{hotdesk}/approve', [HotDeskBookingController::class, 'approve'])->name('hotdeskbooking.approve');
     Route::put('/booking-hotdesk/{hotdesk}/reject', [HotDeskBookingController::class, 'reject'])->name('hotdeskbooking.reject');
     Route::put('/booking-hotdesk/{hotdesk}/cancel', [HotDeskBookingController::class, 'cancel'])->name('hotdeskbooking.cancel');
@@ -89,7 +93,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/booking-extras', [BookingController::class, 'extrasIndex'])->name('booking.extras');
   
-    
+    Route::get('/hotdesk-calendar', [CalendarController ::class, 'hotdesk'])->name('calendar.hotdesk');
+    Route::get('/closed-calendar', [CalendarController ::class, 'closed'])->name('calendar.closed');
+    Route::get('/dedicated-calendar', [CalendarController ::class, 'dedicated'])->name('calendar.dedicated');
+    Route::get('/boardroom-calendar', [CalendarController ::class, 'boardroom'])->name('calendar.boardroom');
+    Route::get('/virtual-calendar', [CalendarController ::class, 'virtual'])->name('calendar.virtual');
 
 
 });
@@ -110,6 +118,8 @@ Route::middleware(['web', 'auth'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+
+        Route::get('/calendar', [CalendarController ::class, 'index'])->name('calendar.index');
 
         Route::get('/manage', [ManagerController::class, 'index'])->name('manage.user');
         Route::get('/manage/create', [ManagerController::class, 'create'])->name('manage.create');

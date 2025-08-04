@@ -126,17 +126,17 @@ const submit = () => {
             successMessage.value = 'Booking created successfully!';
             bookingConflict.value = null;
 
-            // setTimeout(() => {
-            //     successMessage.value = null;
+            setTimeout(() => {
+                successMessage.value = null;
 
-            //     if (props.categoryName === 'Dedicated Desk') {
-            //         Inertia.visit(route('bookingdedicated.show'));
-            //     }
+                if (props.categoryName === 'Dedicated Desk') {
+                    Inertia.visit(route('bookingdedicated.show'));
+                }
 
-            //     if (props.categoryName === 'Closed Office') {
-            //         Inertia.visit(route('bookingoffices.show'));
-            //     }
-            // }, 1500);
+                if (props.categoryName === 'Closed Office') {
+                    Inertia.visit(route('bookingoffices.show'));
+                }
+            }, 1500);
         },
     });
 };
@@ -163,6 +163,9 @@ const submit = () => {
                     :value="plan">
                     {{ plan.charAt(0).toUpperCase() + plan.slice(1) }}
                 </option>
+                {{
+                    availablePlans
+                }}
             </select>
         </div>
 

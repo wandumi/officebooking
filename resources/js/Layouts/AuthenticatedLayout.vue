@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, usePage } from '@inertiajs/vue3';
@@ -54,6 +55,60 @@ const can = page.props.can || {};
                                     v-if="can['view book boardrooms']"
                                     >Boardrooms</NavLink
                                 >
+                            </div>
+                        </div>
+
+                        <!-- Right Section: User Avatar -->
+                        <div class="items-center hidden space-x-2 sm:flex">
+                            <div class="items-center hidden space-x-6 sm:flex">
+                                <Dropdown
+                                    align="right"
+                                    width="48">
+                                    <template #trigger>
+                                        <button
+                                            class="flex items-center gap-1 text-sm font-medium text-gray-600 transition hover:text-gray-800 focus:outline-none">
+                                            Calendars
+                                            <svg
+                                                class="w-4 h-4"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </template>
+                                    <template #content>
+                                        <DropdownLink
+                                            :href="route('calendar.closed')"
+                                            v-if="can['view book extras']"
+                                            >Closed Offices</DropdownLink
+                                        >
+
+                                        <DropdownLink
+                                            :href="route('calendar.dedicated')"
+                                            v-if="can['view book extras']"
+                                            >Dedicated Desks</DropdownLink
+                                        >
+
+                                        <DropdownLink
+                                            :href="route('calendar.hotdesk')"
+                                            v-if="can['view book extras']"
+                                            >Hot Desks</DropdownLink
+                                        >
+                                        <DropdownLink
+                                            :href="route('calendar.virtual')"
+                                            v-if="can['view book extras']"
+                                            >Virtual Offices</DropdownLink
+                                        >
+                                        <DropdownLink
+                                            :href="route('calendar.boardroom')"
+                                            v-if="can['view book extras']"
+                                            >Boardrooms</DropdownLink
+                                        >
+                                    </template>
+                                </Dropdown>
 
                                 <Dropdown
                                     align="right"
@@ -103,121 +158,137 @@ const can = page.props.can || {};
                                         >
                                     </template>
                                 </Dropdown>
-                            </div>
-                        </div>
 
-                        <!-- Right Section: User Avatar -->
-                        <div class="items-center hidden space-x-2 sm:flex">
-                            <Dropdown
-                                v-if="can['manage settings']"
-                                align="right"
-                                width="48">
-                                <template #trigger>
-                                    <button
-                                        class="flex items-center gap-1 text-sm font-medium text-gray-600 transition hover:text-gray-800 focus:outline-none">
-                                        Product Settings
-                                        <svg
-                                            class="w-4 h-4"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20">
-                                            <path
-                                                fill-rule="evenodd"
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </template>
-
-                                <template #content>
-                                    <DropdownLink
-                                        v-if="can['view offices']"
-                                        :href="route('admin.closedoffices')"
-                                        >Closed Offices</DropdownLink
-                                    >
-                                    <DropdownLink
-                                        v-if="can['view offices']"
-                                        :href="route('admin.dedicateddesk')"
-                                        >Dedicated Desks</DropdownLink
-                                    >
-                                    <DropdownLink
-                                        v-if="can['view help desks']"
-                                        :href="route('admin.help-desks')"
-                                        >Hot Desks</DropdownLink
-                                    >
-                                    <DropdownLink
-                                        v-if="can['view virtual offices']"
-                                        :href="route('admin.virtual-offices')"
-                                        >Virtual Offices</DropdownLink
-                                    >
-                                    <DropdownLink
-                                        v-if="can['view boardrooms']"
-                                        :href="route('admin.boardrooms')"
-                                        >Boardrooms</DropdownLink
-                                    >
-                                </template>
-                            </Dropdown>
-
-                            <Dropdown
-                                v-if="can['manage settings']"
-                                align="right"
-                                width="48">
-                                <template #trigger>
-                                    <button
-                                        class="flex items-center gap-1 text-sm font-medium text-gray-600 transition hover:text-gray-800 focus:outline-none">
-                                        System Settings
-                                        <svg
-                                            class="w-4 h-4"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20">
-                                            <path
-                                                fill-rule="evenodd"
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </template>
-
-                                <template #content>
-                                    <DropdownLink :href="route('admin.locations')">Locations</DropdownLink>
-                                    <DropdownLink :href="route('admin.categories')">Categories</DropdownLink>
-                                    <DropdownLink :href="route('admin.offices_rates')">Service Levels</DropdownLink>
-                                    <DropdownLink :href="route('admin.amenities')">Amenities</DropdownLink>
-                                </template>
-                            </Dropdown>
-
-                            <Dropdown
-                                align="right"
-                                width="48">
-                                <template #trigger>
-                                    <div class="flex items-center space-x-1">
-                                        <div class="text-sm font-medium text-primary">
-                                            {{ $page.props.auth.user.name }}
+                                <Dropdown
+                                    align="right"
+                                    width="48">
+                                    <template #trigger>
+                                        <div class="flex items-center space-x-1">
+                                            <div class="text-sm font-medium text-primary">
+                                                {{ $page.props.auth.user.name }}
+                                            </div>
+                                            <button
+                                                class="flex items-center overflow-hidden transition rounded-full focus:outline-none hover:ring-2 hover:ring-gray-300">
+                                                <img
+                                                    src="/files_grits/user.png"
+                                                    alt="User Avatar"
+                                                    class="object-cover w-5 h-5 rounded-full" />
+                                            </button>
                                         </div>
-                                        <button
-                                            class="flex items-center overflow-hidden transition rounded-full focus:outline-none hover:ring-2 hover:ring-gray-300">
-                                            <img
-                                                src="/files_grits/user.png"
-                                                alt="User Avatar"
-                                                class="object-cover w-5 h-5 rounded-full" />
-                                        </button>
-                                    </div>
-                                </template>
+                                    </template>
 
-                                <template #content>
-                                    <DropdownLink
-                                        :href="route('admin.manage.user')"
-                                        v-if="can['manage settings']"
-                                        >Manage</DropdownLink
-                                    >
-                                    <DropdownLink :href="route('profile.edit')">Profile</DropdownLink>
-                                    <DropdownLink
-                                        :href="route('logout')"
-                                        method="post"
-                                        as="button"
-                                        >Log Out</DropdownLink
-                                    >
-                                </template>
-                            </Dropdown>
+                                    <template #content>
+                                        <div class="space-y-1">
+                                            <!-- Product Settings -->
+                                            <template v-if="can['manage settings']">
+                                                <Dropdown
+                                                    nested
+                                                    align="right"
+                                                    width="48">
+                                                    <template #trigger>
+                                                        <div
+                                                            class="flex items-center justify-between w-full px-4 py-2 text-sm text-gray-700 transition cursor-pointer hover:bg-gray-50">
+                                                            Product Settings
+                                                            <svg
+                                                                class="w-4 h-4"
+                                                                fill="currentColor"
+                                                                viewBox="0 0 20 20">
+                                                                <path
+                                                                    fill-rule="evenodd"
+                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                        </div>
+                                                    </template>
+                                                    <template #content>
+                                                        <DropdownLink
+                                                            v-if="can['view offices']"
+                                                            :href="route('admin.closedoffices')"
+                                                            >Closed Offices</DropdownLink
+                                                        >
+                                                        <DropdownLink
+                                                            v-if="can['view offices']"
+                                                            :href="route('admin.dedicateddesk')"
+                                                            >Dedicated Desks</DropdownLink
+                                                        >
+                                                        <DropdownLink
+                                                            v-if="can['view help desks']"
+                                                            :href="route('admin.help-desks')"
+                                                            >Hot Desks</DropdownLink
+                                                        >
+                                                        <DropdownLink
+                                                            v-if="can['view virtual offices']"
+                                                            :href="route('admin.virtual-offices')"
+                                                            >Virtual Offices</DropdownLink
+                                                        >
+                                                        <DropdownLink
+                                                            v-if="can['view boardrooms']"
+                                                            :href="route('admin.boardrooms')"
+                                                            >Boardrooms</DropdownLink
+                                                        >
+                                                    </template>
+                                                </Dropdown>
+                                                <!-- System Settings -->
+                                                <Dropdown
+                                                    nested
+                                                    align="right"
+                                                    width="48">
+                                                    <template #trigger>
+                                                        <div
+                                                            v-if="can['view book extras']"
+                                                            class="flex items-center justify-between w-full px-4 py-2 text-sm text-gray-700 transition cursor-pointer hover:bg-gray-50">
+                                                            System Settings
+                                                            <svg
+                                                                class="w-4 h-4"
+                                                                fill="currentColor"
+                                                                viewBox="0 0 20 20">
+                                                                <path
+                                                                    fill-rule="evenodd"
+                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                        </div>
+                                                    </template>
+                                                    <template #content>
+                                                        <DropdownLink :href="route('admin.locations')"
+                                                            >Locations</DropdownLink
+                                                        >
+                                                        <DropdownLink :href="route('admin.categories')"
+                                                            >Categories</DropdownLink
+                                                        >
+                                                        <DropdownLink :href="route('admin.offices_rates')"
+                                                            >Service Levels</DropdownLink
+                                                        >
+                                                        <DropdownLink :href="route('admin.amenities')"
+                                                            >Amenities</DropdownLink
+                                                        >
+                                                    </template>
+                                                </Dropdown>
+                                            </template>
+
+                                            <!-- Flat Links -->
+                                            <div class="text-sm text-gray-700 transition hover:bg-gray-50">
+                                                <DropdownLink
+                                                    v-if="can['manage settings']"
+                                                    :href="route('admin.manage.user')"
+                                                    >Manage</DropdownLink
+                                                >
+                                            </div>
+                                            <div class="text-sm text-gray-700 transition hover:bg-gray-50">
+                                                <DropdownLink :href="route('profile.edit')">Profile</DropdownLink>
+                                            </div>
+                                            <div class="text-sm text-gray-700 transition hover:bg-gray-50">
+                                                <DropdownLink
+                                                    :href="route('logout')"
+                                                    method="post"
+                                                    as="button"
+                                                    >Log Out</DropdownLink
+                                                >
+                                            </div>
+                                        </div>
+                                    </template>
+                                </Dropdown>
+                            </div>
                         </div>
 
                         <!-- Hamburger Menu (Mobile) -->
@@ -249,54 +320,213 @@ const can = page.props.can || {};
                 </div>
 
                 <!-- Mobile Menu -->
-                <div
-                    :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
-                    class="sm:hidden">
-                    <!-- Mobile User Info -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
-                        <div class="flex items-center px-4 space-x-3">
-                            <img
-                                src="/files_grits/40.jpg"
-                                alt="User Avatar"
-                                class="object-cover w-8 h-8 rounded-full" />
-                            <div>
-                                <div class="text-base font-medium text-primary">{{ $page.props.auth.user.name }}</div>
-                                <div class="text-sm font-medium text-gray-500">{{ $page.props.auth.user.email }}</div>
+                <div :class="[showingNavigationDropdown ? 'block' : 'hidden', 'sm:hidden fixed inset-0 z-50 bg-white']">
+                    <div class="flex flex-col h-screen">
+                        <div class="px-4 py-2 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <!-- Logo Block -->
+                                <Link
+                                    :href="route('dashboard')"
+                                    class="flex items-center">
+                                    <ApplicationLogo class="block w-auto h-12 text-gray-800 fill-current" />
+                                </Link>
+
+                                <!-- Close Button -->
+                                <button
+                                    @click="showingNavigationDropdown = false"
+                                    aria-label="Close menu"
+                                    class="p-2 transition rounded hover:bg-gray-100">
+                                    <img
+                                        src="/files_grits/close-x.svg"
+                                        alt="Close"
+                                        class="w-5 h-5 text-gray-500 hover:text-gray-700" />
+                                </button>
                             </div>
                         </div>
 
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">Profile</ResponsiveNavLink>
+                        <!-- Middle Content (Scrollable Items) -->
+                        <div class="flex-grow px-4 py-4 space-y-3 overflow-y-auto">
                             <ResponsiveNavLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
-                                >Log Out</ResponsiveNavLink
+                                :href="route('dashboard')"
+                                :active="route().current('dashboard')"
+                                >Dashboard</ResponsiveNavLink
                             >
+
+                            <ResponsiveNavLink :href="route('booking.offices')">Grit Spaces</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('booking.boardrooms')">Boardrooms</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('booking.extras')">Virtual Offices</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('calendar.hotdesk')">Calendar</ResponsiveNavLink>
+                            <!-- Product Settings -->
+                            <template v-if="can['manage settings']">
+                                <!-- product settings -->
+                                <Dropdown
+                                    nested
+                                    align="right"
+                                    width="48">
+                                    <template #trigger>
+                                        <div
+                                            class="flex items-center justify-between w-full px-4 py-2 text-base font-medium text-gray-600 transition cursor-pointer text-start hover:bg-gray-50">
+                                            Product Settings
+                                            <svg
+                                                class="w-5 h-5"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </template>
+                                    <template #content>
+                                        <DropdownLink
+                                            v-if="can['view offices']"
+                                            :href="route('admin.closedoffices')"
+                                            >Closed Offices</DropdownLink
+                                        >
+                                        <DropdownLink
+                                            v-if="can['view offices']"
+                                            :href="route('admin.dedicateddesk')"
+                                            >Dedicated Desks</DropdownLink
+                                        >
+                                        <DropdownLink
+                                            v-if="can['view help desks']"
+                                            :href="route('admin.help-desks')"
+                                            >Hot Desks</DropdownLink
+                                        >
+                                        <DropdownLink
+                                            v-if="can['view virtual offices']"
+                                            :href="route('admin.virtual-offices')"
+                                            >Virtual Offices</DropdownLink
+                                        >
+                                        <DropdownLink
+                                            v-if="can['view boardrooms']"
+                                            :href="route('admin.boardrooms')"
+                                            >Boardrooms</DropdownLink
+                                        >
+                                    </template>
+                                </Dropdown>
+                                <!-- System Settings -->
+                                <Dropdown
+                                    nested
+                                    align="right"
+                                    width="48">
+                                    <template #trigger>
+                                        <div
+                                            v-if="can['view book extras']"
+                                            class="flex items-center justify-between w-full px-4 py-2 text-base font-medium text-gray-700 transition cursor-pointer hover:bg-gray-50">
+                                            System Settings
+                                            <svg
+                                                class="w-5 h-5"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </template>
+                                    <template #content>
+                                        <DropdownLink :href="route('admin.locations')">Locations</DropdownLink>
+                                        <DropdownLink :href="route('admin.categories')">Categories</DropdownLink>
+                                        <DropdownLink :href="route('admin.offices_rates')">Service Levels</DropdownLink>
+                                        <DropdownLink :href="route('admin.amenities')">Amenities</DropdownLink>
+                                    </template>
+                                </Dropdown>
+                            </template>
+
+                            <Dropdown
+                                align="right"
+                                width="48">
+                                <template #trigger>
+                                    <div
+                                        class="flex items-center justify-between w-full px-4 py-2 text-base font-medium text-gray-700 transition cursor-pointer hover:bg-gray-50">
+                                        Bookings
+                                        <svg
+                                            class="w-5 h-5"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </template>
+
+                                <template #content>
+                                    <DropdownLink
+                                        :href="route('bookingoffices.show')"
+                                        v-if="can['view book extras']">
+                                        Closed Offices
+                                    </DropdownLink>
+
+                                    <DropdownLink
+                                        :href="route('bookingdedicated.show')"
+                                        v-if="can['view book extras']">
+                                        Dedicated Desks
+                                    </DropdownLink>
+
+                                    <DropdownLink
+                                        :href="route('bookinghotdesk.show')"
+                                        v-if="can['view book extras']">
+                                        Hot Desks
+                                    </DropdownLink>
+
+                                    <DropdownLink
+                                        :href="route('bookingvirtual.show')"
+                                        v-if="can['view book extras']">
+                                        Virtual Offices
+                                    </DropdownLink>
+
+                                    <DropdownLink
+                                        :href="route('bookingboardroom.show')"
+                                        v-if="can['view book extras']">
+                                        Boardrooms
+                                    </DropdownLink>
+                                </template>
+                            </Dropdown>
+
+                            <ResponsiveNavLink
+                                v-if="can['manage settings']"
+                                :href="route('admin.manage.user')"
+                                >Manage</ResponsiveNavLink
+                            >
+
+                            <ResponsiveNavLink :href="route('profile.edit')">Profile</ResponsiveNavLink>
                         </div>
-                    </div>
-                    <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
-                            >Dashboard</ResponsiveNavLink
-                        >
-                        <ResponsiveNavLink :href="route('admin.boardrooms')">Boardroom</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('admin.virtual-offices')">Virtual</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('admin.help-desks')">Help Desk</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('admin.offices')">Offices</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('admin.locations')">Locations</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('admin.categories')">Categories</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('admin.offices_rates')">Office Rates</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('admin.amenities')">Amenities</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('booking.offices')">Book Offices</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('booking.boardrooms')">Book Boardroom</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('booking.extras')">Extras</ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('admin.manage.user')"
-                            v-if="can['manage settings']"
-                            >Manage</ResponsiveNavLink
-                        >
+
+                        <!-- Anchored Bottom Item (Item 3) -->
+                        <div class="px-4 py-1 bg-white border-t border-gray-300">
+                            <div class="text-sm font-medium text-gray-700">
+                                <Dropdown
+                                    align="center"
+                                    width="48">
+                                    <template #trigger>
+                                        <div
+                                            class="flex items-center justify-between w-full px-4 py-1 text-sm font-medium text-gray-700 transition rounded-md cursor-pointer hover:bg-gray-100">
+                                            <div class="flex space-x-2">
+                                                <img
+                                                    src="/files_grits/user.png"
+                                                    alt="User Avatar"
+                                                    class="object-cover w-5 h-5 rounded-full" />
+                                                <span>{{ $page.props.auth.user.name }}</span>
+                                            </div>
+                                            <div class="text-sm text-gray-700 transition hover:bg-gray-50">
+                                                <DropdownLink
+                                                    :href="route('logout')"
+                                                    method="post"
+                                                    as="button"
+                                                    class="inline-flex items-center text-xs font-semibold text-white rounded bg-bluemain hover:bg-bluemain/60 focus:bg-bluemain focus:ring-bluemain focus:ring-offset-2 active:bg-bluemain/60"
+                                                    >Log Out</DropdownLink
+                                                >
+                                            </div>
+                                        </div>
+                                    </template>
+                                </Dropdown>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </nav>

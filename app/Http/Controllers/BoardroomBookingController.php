@@ -53,7 +53,7 @@ class BoardroomBookingController extends Controller
      */
     public function store(Request $request)
     {
-      
+            dd($request);
          $validated = $request->validate([
             'boardroom_id'          => 'required|exists:boardrooms,id',
             'plan'                  => 'required|string|in:hourly,daily,monthly',

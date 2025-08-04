@@ -79,6 +79,13 @@ watch([() => form.start_date, () => form.end_date, () => form.selected_dates, ()
     }
 });
 
+watch(
+    () => form.selected_dates,
+    dates => {
+        form.set({ months: dates.length });
+    }
+);
+
 const submit = () => {
     form.post(route('bookingvirtual.store'), {
         preserveScroll: true,

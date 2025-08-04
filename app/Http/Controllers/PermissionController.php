@@ -81,7 +81,7 @@ class PermissionController extends Controller
     {
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:permissions,name',
+            'name' => 'sometimes|string|max:255|unique:permissions,name,' . $permission->id,
         ]);
 
         $permission->update($validated);

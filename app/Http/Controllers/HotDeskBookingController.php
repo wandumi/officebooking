@@ -11,6 +11,7 @@ use App\Models\HotDeskBooking;
 
 class HotDeskBookingController extends Controller
 {
+    
     /**
      * Display a office of the resource.
     */
@@ -30,7 +31,8 @@ class HotDeskBookingController extends Controller
      */
     public function store(Request $request)
     {
-
+    
+        // dd($request);
         $validated = $request->validate([
             'hotdesk_id'        => 'required|exists:help_desks,id',
             'plan'              => 'required',
@@ -69,10 +71,12 @@ class HotDeskBookingController extends Controller
             ])->withInput();
         }
 
-        if($validated['time_slots']){
+        if(!empty($validated['time_slots'])){
             $half_day = $validated['is_half_day'] = 1;
+            $validated['selected_dates'] = [];
         }
 
+       
         //Store booking
         $hotDesk = HotDeskBooking::create([
             'user_id'         => auth()->id(),
@@ -95,7 +99,7 @@ class HotDeskBookingController extends Controller
      */
     public function show(Request $request)
     {
-
+        
 
         $user = auth()->user();
 
@@ -104,11 +108,9 @@ class HotDeskBookingController extends Controller
              $bookings = HotDeskBooking::with(['user', 'helpdesk']) 
                         ->latest()
                         ->paginate(10);
-
-                        //  dd($bookings);
      
         } else {
-            $bookings = HotDeskBooking::with('helpDesk.location')
+            $bookings = HotDeskBooking::with(['user', 'helpdesk'])
                 ->where('user_id', $user->id)
                 ->latest()
                 ->paginate(10);
@@ -119,6 +121,59 @@ class HotDeskBookingController extends Controller
             'bookings' => $bookings,
         ]);
     }
+
+     /**
+     * Remove the resource from storage.
+     */
+    public function destroy(HotDeskBooking $hotdesk)
+    {
+
+        $hotdesk->delete();
+
+        return back()->with('success', 'A Hot Desks booking has been deleted successfully.');
+    }
+
+    /**
+     * Deleted office of office.
+    */
+    public function deleted(Request $request)
+    {
+        $search = $request->input('search');
+
+        $user = auth()->user();
+
+        if ($user->hasRole('admin') || $user->hasRole('super admin')) {
+           
+             $bookings = HotDeskBooking::with(['user', 'helpdesk'])
+                        ->onlyTrashed() 
+                        ->latest()
+                        ->paginate(10);
+
+                        //  dd($bookings);
+     
+        } 
+
+        return Inertia::render('Bookings/HotDesks/DeletedHotDesks',[
+            'bookings' => $bookings,
+            'filters' => [
+                'search' => $search,
+            ]
+        ]);
+
+    }
+
+    /**
+     * Restore a deleted office.
+    */
+    public function restore($id)
+    {
+        $booking = HotDeskBooking::onlyTrashed()->findOrFail($id);
+      
+        $booking->restore();
+
+        return redirect()->to('/hotdesk-booking')->with('success', 'Booking has been restored successfully.');
+    }
+
 
     /**
      * Approve function
@@ -153,4 +208,6 @@ class HotDeskBookingController extends Controller
 
         return back()->with('success', 'Booking cancelled.');
     }
+
+
 }

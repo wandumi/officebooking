@@ -190,7 +190,7 @@ const cancelBooking = id => {
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="max-w-full px-4 mx-auto sm:max-w-xl sm:px-6 lg:max-w-7xl lg:px-8">
                 <!-- Success Message -->
                 <template v-if="showMessage">
                     <div class="p-3 mb-4 text-green-800 bg-green-100 rounded">

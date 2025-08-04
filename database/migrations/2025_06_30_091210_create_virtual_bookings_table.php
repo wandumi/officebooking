@@ -23,6 +23,8 @@ return new class extends Migration
             $table->json('selected_dates')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled', 'paid'])->default('pending');
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

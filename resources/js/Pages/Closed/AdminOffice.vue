@@ -94,7 +94,7 @@ const formatLabel = label => {
                 </template>
 
                 <div class="p-2">
-                    <!-- Search Filter -->
+                    <!-- main -->
                     <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                         <Link
                             :href="route('admin.closedoffices.create')"
@@ -164,7 +164,7 @@ const formatLabel = label => {
 
                     <!-- Pagination -->
                     <div class="flex items-center justify-between mt-4">
-                        <div class="text-sm text-gray-600">
+                        <div class="hidden text-sm text-gray-600 sm:block">
                             Showing
                             <span class="font-medium">{{ offices.from }}</span>
                             to

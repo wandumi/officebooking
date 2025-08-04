@@ -19,5 +19,11 @@ class Permission extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtolower($value);
+    }
+
+
 
 }

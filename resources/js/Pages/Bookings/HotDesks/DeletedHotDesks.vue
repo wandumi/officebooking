@@ -10,77 +10,41 @@ const props = defineProps({
 });
 
 const page = usePage();
+const showViewModal = ref(false);
+const selectedBooking = ref(null);
+const selectedDates = ref(null);
+const showDatesModal = ref(false);
+
+// Delete logic (e.g. Reject)
+const showModal = ref(false);
+const bookingToDelete = ref(null);
+
+const confirmDelete = id => {
+    showModal.value = true;
+    bookingToDelete.value = id;
+};
+
+const viewDatesModal = booking => {
+    selectedDates.value = booking;
+    showDatesModal.value = true;
+};
+
+const closeViewModal = () => {
+    showViewModal.value = false;
+    selectedBooking.value = null;
+    selectedDates.value = null;
+};
 
 // Flash messages
 const successMessage = ref(null);
-const messageType = ref(null); // 'success', 'rejected', 'cancelled'
+const messageType = ref(null);
 
 const flashMessage = computed(() => page.props?.flash?.success || null);
 
 const showMessage = computed(() => !!(flashMessage.value?.trim?.() || successMessage.value?.trim?.()));
 
-// Watch and reset logic
-watch(showMessage, msg => {
-    if (msg) {
-        setTimeout(() => {
-            successMessage.value = null;
-            messageType.value = null;
-            page.props.flash.success = null;
-        }, 1500);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-});
-
-// Sample mutation usage:
-const approveBooking = id => {
-    if (!id) return;
-    router.put(
-        route('bookingvirtual.approve', { virtual: id }),
-        {},
-        {
-            preserveScroll: true,
-            onSuccess: () => {
-                successMessage.value = 'Booking approved successfully.';
-                messageType.value = 'success';
-                closeViewModal();
-            },
-            onError: () => {
-                successMessage.value = 'Failed to approve booking.';
-                messageType.value = 'rejected';
-            },
-        }
-    );
-};
-
-const rejectBooking = id => {
-    router.put(
-        route('bookingvirtual.reject', { virtual: id }),
-        {},
-        {
-            onSuccess: () => {
-                successMessage.value = 'Booking rejected.';
-                messageType.value = 'rejected';
-                closeViewModal();
-            },
-        }
-    );
-};
-
-const cancelBooking = id => {
-    router.put(
-        route('bookingvirtual.cancel', { virtual: id }),
-        {},
-        {
-            onSuccess: () => {
-                successMessage.value = 'Booking cancelled.';
-                messageType.value = 'cancelled';
-                closeViewModal();
-            },
-        }
-    );
-};
-
 const search = ref(props.filters?.search ?? '');
+
 const isLoading = ref(false);
 
 watch(search, value => {
@@ -96,18 +60,21 @@ watch(search, value => {
     );
 });
 
-// Delete logic (e.g. Reject)
-const showModal = ref(false);
-const bookingToDelete = ref(null);
-
-const confirmDelete = id => {
-    showModal.value = true;
-    bookingToDelete.value = id;
-};
+// Watch and reset logic
+watch(showMessage, msg => {
+    if (msg) {
+        setTimeout(() => {
+            successMessage.value = null;
+            messageType.value = null;
+            page.props.flash.success = null;
+        }, 1500);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+});
 
 const deleteBooking = () => {
     if (bookingToDelete.value) {
-        router.delete(route('admin.bookings.destroy', bookingToDelete.value), {
+        router.put(route('hotdesk.restore', bookingToDelete.value), {
             preserveScroll: true,
             onSuccess: () => {
                 successMessage.value = 'Booking rejected successfully.';
@@ -118,27 +85,6 @@ const deleteBooking = () => {
             },
         });
     }
-};
-
-const showViewModal = ref(false);
-const selectedBooking = ref(null);
-const selectedDates = ref(null);
-const showDatesModal = ref(false);
-
-const viewDatesModal = booking => {
-    selectedDates.value = booking;
-    showDatesModal.value = true;
-};
-
-const openViewModal = booking => {
-    selectedBooking.value = booking;
-    showViewModal.value = true;
-};
-
-const closeViewModal = () => {
-    showViewModal.value = false;
-    selectedBooking.value = null;
-    selectedDates.value = null;
 };
 
 const splitDates = dates => {
@@ -173,14 +119,34 @@ const formatLabel = label => {
     if (label === 'Next &raquo;') return 'Next';
     return label;
 };
+
+const formatFixedDate = date => {
+    if (!date) return '—';
+
+    // Match date portion only — skips time altogether
+    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(date);
+    if (!match) return 'Invalid Date';
+
+    const [_, year, month, day] = match;
+
+    // Create UTC date (no timezone influence)
+    const d = new Date(Date.UTC(year, month - 1, day));
+
+    return d.toLocaleDateString('en-ZA', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+    });
+};
 </script>
 
 <template>
-    <Head title="Virtual Bookings" />
+    <Head title="Hot Desks Bookings" />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Booked Virtual Offices</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Booked Hot Desks</h2>
         </template>
 
         <div class="py-12">
@@ -201,11 +167,18 @@ const formatLabel = label => {
                 </div>
 
                 <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
+                    <div class="space-x-1">
                         <Link
-                            :href="route('virtual.home')"
+                            :href="route('booking.offices')"
                             class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-primary hover:bg-bluemain">
                             Book
+                        </Link>
+
+                        <Link
+                            v-if="can['manage settings']"
+                            :href="route('bookinghotdesk.show')"
+                            class="inline-block w-full px-4 py-2 text-sm font-medium text-center text-white rounded md:w-auto bg-bluemain hover:bg-bluemain">
+                            Booked
                         </Link>
                     </div>
                     <input
@@ -226,11 +199,11 @@ const formatLabel = label => {
                                     class="px-6 py-3 text-sm font-medium text-left text-gray-700">
                                     Booked By
                                 </th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Virtual Office</th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Start Date</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Hot Desk Name</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Plan</th>
                                 <th
                                     class="w-1 px-1 py-3 text-sm font-medium text-center text-gray-700 whitespace-nowrap"></th>
-                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">End Date</th>
+                                <th class="px-6 py-3 text-sm font-medium text-left text-gray-700"># Days</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Status</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Booked At</th>
                                 <th class="px-6 py-3 text-sm font-medium text-left text-gray-700">Actions</th>
@@ -250,11 +223,11 @@ const formatLabel = label => {
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ booking.virtual_office?.virtualoffice_name ?? '—' }}
+                                    {{ booking.helpdesk?.help_desk_name ?? '—' }}
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ formatDate(booking.start_date) ?? '—' }}
+                                    {{ booking.plan ?? '—' }}
                                 </td>
 
                                 <!-- Icon Button -->
@@ -275,7 +248,7 @@ const formatLabel = label => {
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    {{ formatDate(booking.end_date) ?? 'N/A' }}
+                                    {{ booking.days_count ?? 'N/A' }}
                                 </td>
 
                                 <td class="px-6 py-4 text-sm">
@@ -298,15 +271,10 @@ const formatLabel = label => {
                                 <td class="px-6 py-4 text-sm text-gray-800">
                                     <div class="flex space-x-1 text-center">
                                         <button
-                                            @click="openViewModal(booking)"
-                                            class="px-2 py-1 text-sm text-white rounded bg-primary hover:bg-bluemain/60">
-                                            View
-                                        </button>
-                                        <button
-                                            v-if="can['edit bookings']"
-                                            @click="openEditModal(booking)"
-                                            class="px-2 py-1 text-sm text-white rounded bg-bluemain hover:bg-bluemain/60">
-                                            Edit
+                                            v-if="can['delete permissions'] || can['manage settings']"
+                                            @click="confirmDelete(booking.id)"
+                                            class="px-1 py-1 text-sm text-white rounded bg-muted hover:bg-muted/60">
+                                            Restore
                                         </button>
                                     </div>
                                 </td>
@@ -348,7 +316,9 @@ const formatLabel = label => {
                             class="w-full max-w-4xl mx-3 p-6 bg-white rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
                             <!-- Modal Header -->
                             <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-bold text-gray-800">Selected Booking Dates</h2>
+                                <h2 class="text-lg font-bold text-gray-800">
+                                    Selected Booking Dates for {{ selectedDates.plan }}
+                                </h2>
                                 <button
                                     @click="closeViewModal"
                                     class="text-2xl leading-none text-gray-500 hover:text-gray-700">
@@ -360,10 +330,20 @@ const formatLabel = label => {
                             <div
                                 class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 max-h-[350px] overflow-y-auto">
                                 <div
-                                    v-for="(date, index) in selectedDates.selected_dates"
-                                    :key="index"
-                                    class="px-3 py-2 text-sm text-center bg-gray-100 border rounded shadow-sm">
-                                    {{ formatDate(date) }}
+                                    v-for="(item, index) in selectedDates.is_half_day === 1
+                                        ? Object.entries(selectedDates.time_slots)
+                                        : selectedDates.selected_dates"
+                                    :key="selectedDates.is_half_day === 1 ? item[0] : index"
+                                    class="flex flex-col px-3 py-2 text-sm text-center bg-gray-100 border rounded shadow-sm">
+                                    <template v-if="selectedDates.is_half_day === 1">
+                                        <div>{{ formatFixedDate(item[0]) }}</div>
+                                        <div class="mt-1 text-xs text-gray-600">
+                                            {{ capitalize(item[1].block) }}
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div>{{ formatFixedDate(item) }}</div>
+                                    </template>
                                 </div>
                             </div>
 
@@ -381,115 +361,38 @@ const formatLabel = label => {
 
                 <template v-if="showModal">
                     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                        <div class="w-full max-w-md p-6 bg-white rounded shadow">
-                            <h2 class="mb-4 text-lg font-semibold">Confirm Delete</h2>
-                            <p class="mb-6">
-                                Are you sure you want to delete this booking? This action cannot be undone.
-                            </p>
+                        <div class="w-full max-w-md p-6 bg-white rounded shadow-lg">
+                            <h2 class="mb-4 text-xl font-semibold text-gray-800">Restore Booking</h2>
+                            <p class="mb-4 text-sm text-gray-600">Are you sure you want to restore this booking?</p>
+
+                            <form @submit.prevent>
+                                <div class="mb-4">
+                                    <label
+                                        for="restoreReason"
+                                        class="block mb-1 text-sm font-medium text-gray-700">
+                                        Reason for Restore
+                                    </label>
+                                    <textarea
+                                        id="restoreReason"
+                                        v-model="restoreReason"
+                                        rows="4"
+                                        class="w-full p-3 text-sm border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Enter reason..."></textarea>
+                                </div>
+                            </form>
+
                             <div class="flex justify-end space-x-3">
                                 <button
                                     @click="showModal = false"
+                                    type="button"
                                     class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded hover:bg-gray-200">
                                     Cancel
                                 </button>
                                 <button
                                     @click="deleteBooking"
-                                    class="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-
-                <!-- View the Booking -->
-                <template v-if="showViewModal && selectedBooking">
-                    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                        <div class="w-full max-w-xl p-6 bg-white rounded-lg shadow-lg">
-                            <!-- Modal Header -->
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-bold text-gray-800">Booking Details</h2>
-                                <button
-                                    @click="closeViewModal"
-                                    class="text-2xl leading-none text-gray-500 hover:text-gray-700">
-                                    &times;
-                                </button>
-                            </div>
-
-                            <!-- Modal Content -->
-                            <div class="grid grid-cols-1 gap-6 text-sm text-gray-700 sm:grid-cols-2">
-                                <!-- General Info Table Style -->
-                                <div class="space-y-2">
-                                    <div class="grid grid-cols-[140px_1fr] gap-x-2 items-start">
-                                        <div
-                                            v-if="can['manage settings']"
-                                            class="font-medium text-gray-600">
-                                            Booking ID:
-                                        </div>
-                                        <div v-if="can['manage settings']">{{ selectedBooking.id }}</div>
-
-                                        <div
-                                            v-if="can['manage settings']"
-                                            class="font-medium text-gray-600">
-                                            User:
-                                        </div>
-                                        <div v-if="can['manage settings']">{{ selectedBooking.user?.name ?? '—' }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>Office Name:</strong></div>
-
-                                        <div>{{ selectedBooking.virtual_office?.virtualoffice_name ?? '—' }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>Start Date:</strong></div>
-                                        <div>{{ formatDate(selectedBooking.start_date) }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>End Date:</strong></div>
-                                        <div>{{ formatDate(selectedBooking.end_date) }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>Number of Days:</strong></div>
-                                        <div>{{ selectedBooking.months ?? '—' }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>Total Price:</strong></div>
-                                        <div>R {{ selectedBooking.total_price ?? '0.00' }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>Booked Date:</strong></div>
-                                        <div>
-                                            {{ formatDate(selectedBooking.created_at) }}
-                                        </div>
-
-                                        <div class="font-medium text-gray-600">Status:</div>
-                                        <div class="text-yellow-800 bg-yellow-100">
-                                            {{ capitalize(selectedBooking.status) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal Footer -->
-                            <div class="flex flex-col gap-3 mt-6 sm:flex-row sm:justify-between sm:gap-4">
-                                <button
-                                    v-if="can['manage settings']"
-                                    @click="approveBooking(selectedBooking.id)"
-                                    class="flex-1 px-4 py-1 text-xs text-white bg-green-600 rounded hover:bg-green-700">
-                                    Approve
-                                </button>
-
-                                <button
-                                    v-if="can['manage settings']"
-                                    @click="rejectBooking(selectedBooking.id)"
-                                    class="flex-1 px-4 py-1 text-xs text-white bg-red-600 rounded hover:bg-red-700">
-                                    Reject
-                                </button>
-
-                                <button
-                                    @click="cancelBooking(selectedBooking.id)"
-                                    class="flex-1 px-2 py-1 text-xs text-white bg-gray-600 rounded hover:bg-gray-700">
-                                    Cancel
-                                </button>
-
-                                <button
-                                    @click="closeViewModal"
-                                    class="flex-1 px-4 py-2 text-sm text-gray-800 bg-gray-100 rounded hover:bg-gray-200">
-                                    Close
+                                    type="button"
+                                    class="px-1 py-2 text-sm text-white rounded bg-muted hover:bg-muted/60">
+                                    Restore
                                 </button>
                             </div>
                         </div>

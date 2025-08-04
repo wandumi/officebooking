@@ -28,6 +28,8 @@ return new class extends Migration
             $table->foreign('boardroom_id')->references('id')->on('boardrooms')->onDelete('cascade');
 
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

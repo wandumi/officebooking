@@ -30,6 +30,7 @@
         "@vuepic/vue-datepicker": "^11.0.2",
         "primeflex": "^4.0.0",
         "primeicons": "^7.0.0",
-        "primevue": "^4.3.5"
+        "primevue": "^4.3.5",
+        "vue-cal": "^4.10.2"
     }
 }

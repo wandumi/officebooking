@@ -98,11 +98,6 @@ watch(search, value => {
 const showModal = ref(false);
 const bookingToDelete = ref(null);
 
-const confirmDelete = id => {
-    showModal.value = true;
-    bookingToDelete.value = id;
-};
-
 const deleteBooking = () => {
     if (bookingToDelete.value) {
         router.delete(route('admin.bookings.destroy', bookingToDelete.value), {
@@ -139,15 +134,6 @@ const closeViewModal = () => {
     selectedDates.value = null;
 };
 
-const splitDates = dates => {
-    if (!dates || !Array.isArray(dates)) return [];
-
-    if (dates.length <= 7) return [dates];
-
-    const mid = Math.ceil(dates.length / 2);
-    return [dates.slice(0, mid), dates.slice(mid)];
-};
-
 const formatDate = date => {
     if (!date) return '—';
     const d = new Date(date);
@@ -170,6 +156,10 @@ const formatLabel = label => {
     if (label === 'Next &raquo;') return 'Next';
     return label;
 };
+
+const getDateKey = dateStr => {
+    return new Date(dateStr).toISOString().split('T')[0];
+};
 </script>
 
 <template>
@@ -181,7 +171,7 @@ const formatLabel = label => {
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-5 lg:px-10">
+            <div class="max-w-full px-4 mx-auto sm:max-w-xl sm:px-6 lg:max-w-7xl lg:px-8">
                 <div
                     v-if="showMessage"
                     :class="[
@@ -197,6 +187,7 @@ const formatLabel = label => {
                     {{ flashMessage || successMessage }}
                 </div>
 
+                <!-- Search -->
                 <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <Link
@@ -247,7 +238,7 @@ const formatLabel = label => {
                                     {{ booking.user?.name ?? '—' }}
                                 </td>
 
-                                <td class="px-6 py-4 text-sm text-gray-800">
+                                <td class="px-6 py-4 text-xs text-gray-800 sm:text-sm">
                                     {{ booking.boardroom?.boardroom_name ?? '—' }}
                                 </td>
 
@@ -356,8 +347,25 @@ const formatLabel = label => {
                                 <div
                                     v-for="(date, index) in selectedDates.selected_dates"
                                     :key="index"
-                                    class="px-3 py-2 text-sm text-center bg-gray-100 border rounded shadow-sm">
-                                    {{ formatDate(date) }}
+                                    class="px-3 py-2 text-sm bg-gray-100 border rounded shadow-sm">
+                                    <div class="font-medium text-center">
+                                        {{ formatDate(date) }}
+                                    </div>
+
+                                    <div v-if="selectedDates.selected_times[getDateKey(date)]">
+                                        <ul class="mt-2 space-y-1 text-xs text-center">
+                                            <li
+                                                v-for="(time, i) in selectedDates.selected_times[getDateKey(date)]"
+                                                :key="i">
+                                                {{ time }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div
+                                        v-else
+                                        class="mt-2 text-xs text-center text-gray-400">
+                                        No times available
+                                    </div>
                                 </div>
                             </div>
 
@@ -373,6 +381,7 @@ const formatLabel = label => {
                     </div>
                 </template>
 
+                <!-- Delete Modal -->
                 <template v-if="showModal">
                     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div class="w-full max-w-md p-6 bg-white rounded shadow">
@@ -429,21 +438,15 @@ const formatLabel = label => {
                                         </div>
                                         <div v-if="can['manage settings']">{{ selectedBooking.user?.name ?? '—' }}</div>
 
-                                        <div class="font-medium text-gray-600"><strong>Office Name:</strong></div>
+                                        <div class="font-medium text-gray-600"><strong>Plan:</strong></div>
 
-                                        <div>{{ selectedBooking.virtual_office?.virtualoffice_name ?? '—' }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>Start Date:</strong></div>
-                                        <div>{{ formatDate(selectedBooking.start_date) }}</div>
-
-                                        <div class="font-medium text-gray-600"><strong>End Date:</strong></div>
-                                        <div>{{ formatDate(selectedBooking.end_date) }}</div>
+                                        <div>{{ capitalize(selectedBooking.plan) ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Number of Days:</strong></div>
                                         <div>{{ selectedBooking.months ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Total Price:</strong></div>
-                                        <div>R {{ selectedBooking.total_price ?? '0.00' }}</div>
+                                        <div>R {{ selectedBooking.selected_price ?? '0.00' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Booked Date:</strong></div>
                                         <div>

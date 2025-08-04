@@ -190,7 +190,7 @@ const cancelBooking = id => {
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="max-w-full px-4 mx-auto sm:max-w-xl sm:px-6 lg:max-w-7xl lg:px-8">
                 <!-- Success Message -->
                 <template v-if="showMessage">
                     <div class="p-3 mb-4 text-green-800 bg-green-100 rounded">
@@ -358,7 +358,7 @@ const cancelBooking = id => {
 
                 <!-- View the Booking -->
                 <template v-if="showViewModal && selectedBooking">
-                    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 sm:mb-5">
                         <div class="w-full max-w-xl p-6 bg-white rounded-lg shadow-lg">
                             <!-- Modal Header -->
                             <div class="flex items-center justify-between mb-4">
@@ -371,7 +371,7 @@ const cancelBooking = id => {
                             </div>
 
                             <!-- Modal Content -->
-                            <div class="grid grid-cols-1 gap-6 text-sm text-gray-700 sm:grid-cols-2">
+                            <div class="grid grid-cols-1 gap-3 m-5 text-sm text-gray-700">
                                 <!-- General Info Table Style -->
                                 <div class="space-y-2">
                                     <div class="grid grid-cols-[140px_1fr] gap-x-2 items-start">
@@ -390,47 +390,24 @@ const cancelBooking = id => {
                                         <div v-if="can['manage settings']">{{ selectedBooking.user?.name ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Office Name:</strong></div>
-                                        <div>{{ selectedBooking.office?.office_name ?? '—' }}</div>
+                                        <div class="mb-2">{{ selectedBooking.office?.office_name ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Start Date:</strong></div>
-                                        <div>{{ formatDate(selectedBooking.start_date) }}</div>
+                                        <div class="mb-2">{{ formatDate(selectedBooking.start_date) }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>End Date:</strong></div>
-                                        <div>{{ formatDate(selectedBooking.end_date) }}</div>
+                                        <div class="mb-2">{{ formatDate(selectedBooking.end_date) }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Number of Days:</strong></div>
-                                        <div>{{ selectedBooking.months ?? '—' }}</div>
+                                        <div class="mb-2">{{ selectedBooking.months ?? '—' }}</div>
 
                                         <div class="font-medium text-gray-600"><strong>Total Price:</strong></div>
-                                        <div>R {{ selectedBooking.total_price ?? '0.00' }}</div>
+                                        <div class="mb-3">R {{ selectedBooking.total_price ?? '0.00' }}</div>
 
-                                        <div class="font-medium text-gray-600">Status:</div>
-                                        <div class="text-yellow-800 bg-yellow-100">
+                                        <div class="font-medium text-gray-600"><strong>Status:</strong></div>
+                                        <div class="p-1 text-center text-yellow-800 bg-yellow-100">
                                             {{ capitalize(selectedBooking.status) }}
                                         </div>
-                                    </div>
-                                </div>
-
-                                <!-- Selected Dates Column -->
-                                <div
-                                    v-if="selectedBooking.selected_dates?.length"
-                                    class="space-y-2">
-                                    <p class="font-medium text-gray-600">Selected Dates:</p>
-                                    <div
-                                        :class="{
-                                            'grid grid-cols-1': selectedBooking.selected_dates.length <= 7,
-                                            'grid grid-cols-2 gap-x-6': selectedBooking.selected_dates.length > 7,
-                                        }">
-                                        <ul
-                                            v-for="(col, colIndex) in splitDates(selectedBooking.selected_dates)"
-                                            :key="colIndex"
-                                            class="space-y-1 list-disc list-inside">
-                                            <li
-                                                v-for="(date, index) in col"
-                                                :key="index">
-                                                {{ formatDate(date) }}
-                                            </li>
-                                        </ul>
                                     </div>
                                 </div>
                             </div>

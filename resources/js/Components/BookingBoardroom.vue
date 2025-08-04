@@ -27,7 +27,7 @@ const form = useForm({
     plan: props.selectedPlan || props.availablePlans[0] || '',
     selected_dates: [],
     selected_times: {}, // correct structure
-    months: 1,
+    months: 0,
     selected_price: 0,
 });
 
@@ -40,20 +40,13 @@ const weekdaysCount = computed(() => {
     }).length;
 });
 
-const calculateMonthCount = (start, end) => {
-    if (!start || !end || isBefore(end, start)) return 0;
-    const sameDay = start.getDate() === end.getDate();
-    const fullMonths = differenceInCalendarMonths(end, start);
-    return sameDay ? fullMonths || 1 : fullMonths + 1;
-};
-
 watch(
     () => form.plan,
     () => {
         form.selected_dates = [];
         form.start_date = '';
         form.end_date = '';
-        form.months = 1;
+        form.months = 0;
         form.selected_price = 0;
         selectedDateTimes.value = {};
     }
@@ -170,6 +163,16 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
                 class="text-sm text-red-600">
                 {{ form.errors.selected_dates }}
             </span>
+        </div>
+        <!-- Days -->
+        <div>
+            <label class="block font-semibold">Duration (Days)</label>
+            <div class="w-full px-3 py-2 text-gray-700 rounded bg-green-50">
+                {{ weekdaysCount || 'No weekdays selected yet' }}
+            </div>
+            <input
+                type="hidden"
+                v-model="form.months" />
         </div>
 
         <!-- Selected Times (Hourly Only) -->

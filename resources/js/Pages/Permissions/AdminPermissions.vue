@@ -16,6 +16,7 @@ const flashMessage = computed(() => page.props?.flash?.success || null);
 const showMessage = computed(() => {
     return !!(flashMessage.value?.trim?.() || successMessage.value?.trim?.());
 });
+
 const showModal = ref(false);
 const PermissionToDelete = ref(null);
 
@@ -77,6 +78,10 @@ function getRoleColor(role) {
         default:
             return 'bg-gray-100 text-gray-800';
     }
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 </script>
 
@@ -145,7 +150,7 @@ function getRoleColor(role) {
                                     <td class="px-6 py-4 text-sm text-gray-800">{{ permission.id }}</td>
 
                                     <td class="px-6 py-4 text-sm text-gray-800">
-                                        {{ permission.name }}
+                                        {{ capitalize(permission.name) }}
                                     </td>
 
                                     <td class="px-6 py-4 text-sm text-gray-800">

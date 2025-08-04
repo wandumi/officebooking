@@ -28,7 +28,14 @@ const form = useForm({
 });
 
 // Helpers
-const getDateKey = date => new Date(date).toISOString().split('T')[0];
+const getDateKey = date => {
+    const d = new Date(date);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+};
+
 const normalizedPlan = computed(() => props.availablePlans.toLowerCase().replace(/\s+/g, '_'));
 const isHalfDay = computed(() => normalizedPlan.value === 'half_day');
 const isFixedPackage = computed(() => [5, 10, 20].includes(props.selectedDuration));

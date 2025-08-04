@@ -14,13 +14,7 @@ use Illuminate\Validation\Rule;
 
 class ClosedOfficeController extends Controller
 {
-        /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return Inertia::render('Offices/IndexOffices');
-    }
+  
 
      /**
      * Display a listing of the resource.
