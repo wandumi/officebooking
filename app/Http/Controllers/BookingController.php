@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Office;
 use App\Models\Amenity;
@@ -15,6 +16,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\OfficePricing;
 use App\Models\VirtualOffice;
+use App\Notifications\BookingNotification;
+use Illuminate\Support\Facades\Notification;
 
 class BookingController extends Controller
 {
@@ -143,6 +146,7 @@ class BookingController extends Controller
      */
     public function storeOffice(Request $request)
     {
+            
         $validated = $request->validate([
             'office_id'        => 'required|integer|exists:offices,id',
             'plan'             => 'required|string|in:daily,monthly,premium,standard',
@@ -160,7 +164,6 @@ class BookingController extends Controller
         $start = Carbon::parse($validated['start_date'])->startOfDay();
         $end   = Carbon::parse($validated['end_date'])->endOfDay();
 
-        // Check if this user already booked this plan on this office and there's overlap
         $conflict = Booking::where('user_id', auth()->id())
             ->where('office_id', $office->id)
             ->where('plan', $validated['plan']) // same plan only
@@ -195,6 +198,22 @@ class BookingController extends Controller
             'total_price'     => $validated['total_price'],
             'status'          => 'pending',
         ]);
+
+        // nortifications
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->office_name, 
+            'status' => 'pending',
+        ];
+
+        auth()->user()->notify(new BookingNotification($bookingData, 'created'));
+
+        User::withRole('super_admin')->get()
+            ->each(fn ($user) => $user->notify(new BookingNotification($bookingData, 'created')));
+
+        User::withRole('admin')->get()
+            ->each(fn ($user) => $user->notify(new BookingNotification($bookingData, 'created')));
+
 
         return back()->with('success', 'Booking created successfully!');
     }

@@ -106,17 +106,6 @@ const formatLabel = label => {
     return label;
 };
 
-const splitDates = dates => {
-    if (!Array.isArray(dates)) return [[]];
-
-    if (dates.length <= 7) {
-        return [dates];
-    }
-
-    const half = Math.ceil(dates.length / 2);
-    return [dates.slice(0, half), dates.slice(half)];
-};
-
 const approveBooking = id => {
     if (!id) return;
 

@@ -64,7 +64,6 @@ function checkAvailability() {
                         <div class="grid grid-cols-1 gap-6 text-sm text-gray-700 md:grid-cols-2">
                             <div class="space-y-2">
                                 <p><strong>Location:</strong> {{ helpDesks.location?.name || 'N/A' }}</p>
-                                <!-- <p><strong>Discount:</strong> {{ helpDesks.discount || 'N/A' }}%</p> -->
                                 <p>
                                     <strong>Duration:</strong>
                                     {{

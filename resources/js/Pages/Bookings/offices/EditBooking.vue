@@ -68,21 +68,9 @@ if (showSuccess.value) {
     }, 4000);
 }
 
-function book() {
-    viewMode.value = 'form';
-}
-
-function checkAvailability() {
-    viewMode.value = 'calendar';
-}
-
 if (flashMessage) {
     viewMode.value = 'form';
 }
-
-const goToBookings = () => {
-    router.visit(route('bookingoffices.show'));
-};
 </script>
 
 <template>

@@ -14,8 +14,6 @@ use Illuminate\Validation\Rule;
 
 class ClosedOfficeController extends Controller
 {
-  
-
      /**
      * Display a listing of the resource.
      */

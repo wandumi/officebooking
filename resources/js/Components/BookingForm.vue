@@ -279,6 +279,10 @@ const submit = () => {
             type="hidden"
             v-model="form.category_id" />
 
+        <input
+            type="hidden"
+            v-model="form.selected_plan" />
+
         <!-- Submit -->
         <div>
             <button

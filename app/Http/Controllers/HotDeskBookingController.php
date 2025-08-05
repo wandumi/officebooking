@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Office;
 use App\Models\HelpDesk;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Models\HotDeskBooking;
+use App\Notifications\HotDeskBookingNotification;
 
 class HotDeskBookingController extends Controller
 {
@@ -89,6 +91,25 @@ class HotDeskBookingController extends Controller
             'selected_price'  => $validated['selected_price'],
             'status'          => 'pending',
         ]);
+        
+        $office = HelpDesk::findOrFail($validated['hotdesk_id']);
+
+        // dd($office);
+    
+        // nortifications
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->virtualoffice_name, 
+            'status' => 'cancel',
+        ];
+
+        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'created'));
+
+        User::withRole('super_admin')->get()
+            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'created')));
+
+        User::withRole('admin')->get()
+            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'created')));
 
 
         return back()->with('success', 'Booking created successfully!');
@@ -99,8 +120,6 @@ class HotDeskBookingController extends Controller
      */
     public function show(Request $request)
     {
-        
-
         $user = auth()->user();
 
         if ($user->hasRole('admin') || $user->hasRole('super admin')) {
@@ -185,8 +204,24 @@ class HotDeskBookingController extends Controller
     {
         $hotdesk->update([
             'status' => 'approved',
-            
         ]);
+
+        $office = HelpDesk::findOrFail($hotdesk->helpdesk_id);
+    
+        // nortifications
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->help_desk_name, 
+            'status' => 'approved',
+        ];
+
+        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'approved'));
+
+        User::withRole('super_admin')->get()
+            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'approved')));
+
+        User::withRole('admin')->get()
+            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'approved')));
 
         return back()->with('success', 'Booking approved successfully.');
     }
@@ -197,14 +232,49 @@ class HotDeskBookingController extends Controller
             'status' => 'rejected',
         ]);
 
+        $office = HelpDesk::findOrFail($hotdesk->helpdesk_id);
+    
+        // nortifications
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->help_desk_name, 
+            'status' => 'rejected',
+        ];
+
+        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'rejected'));
+
+        User::withRole('super_admin')->get()
+            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'rejected')));
+
+        User::withRole('admin')->get()
+            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'rejected')));
+
         return back()->with('success', 'Booking rejected.');
     }
 
     public function cancel(Request $request, HotDeskBooking $hotdesk)
     {
+
         $hotdesk->update([
             'status' => 'cancelled',
         ]);
+
+        $office = HelpDesk::findOrFail($hotdesk->helpdesk_id);
+
+        // nortifications
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->help_desk_name, 
+            'status' => 'cancelled',
+        ];
+
+        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'cancelled'));
+
+        User::withRole('super_admin')->get()
+            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'cancelled')));
+
+        User::withRole('admin')->get()
+            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'cancelled')));
 
         return back()->with('success', 'Booking cancelled.');
     }

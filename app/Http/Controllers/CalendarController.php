@@ -7,11 +7,12 @@ use Inertia\Inertia;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Models\VirtualOffice;
-use App\Models\HotdeskBooking;
+use App\Models\HotDeskBooking;
 use App\Models\VirtualBooking;
 use App\Models\BoardroomBooking;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+
 
 class CalendarController extends Controller
 {
@@ -101,7 +102,7 @@ class CalendarController extends Controller
                         return collect($times)->flatMap(function ($slots, $date) use ($booking) {
                             return collect($slots)->map(function ($time) use ($date, $booking) {
                                 $start = Carbon::parse("{$date} {$time}:00");
-                                $end = $start->copy()->addHour(); // Assuming each slot is 1 hour long
+                                $end = $start->copy()->addHour(); 
 
                                 return [
                                     'start'   => $start->format('Y-m-d H:i:s'),

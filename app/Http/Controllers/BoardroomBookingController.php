@@ -8,6 +8,7 @@ use App\Models\Location;
 use App\Models\Boardroom;
 use Illuminate\Http\Request;
 use App\Models\BoardroomBooking;
+use App\Notifications\BoardroomBookingNotification;
 
 class BoardroomBookingController extends Controller
 {
@@ -53,7 +54,6 @@ class BoardroomBookingController extends Controller
      */
     public function store(Request $request)
     {
-            dd($request);
          $validated = $request->validate([
             'boardroom_id'          => 'required|exists:boardrooms,id',
             'plan'                  => 'required|string|in:hourly,daily,monthly',
@@ -120,6 +120,21 @@ class BoardroomBookingController extends Controller
             'selected_price'  => $validated['selected_price'],
             'status'          => 'pending',
         ]);
+
+        // nortifications
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->boardroom_name, 
+            'status' => 'pending',
+        ];
+
+        auth()->user()->notify(new BoardroomBookingNotification($bookingData, 'created'));
+
+        User::withRole('super_admin')->get()
+            ->each(fn ($user) => $user->notify(new BoardroomBookingNotification($bookingData, 'created')));
+
+        User::withRole('admin')->get()
+            ->each(fn ($user) => $user->notify(new BoardroomBookingNotification($bookingData, 'created')));
 
 
         return back()->with('success', 'Booking created successfully!');

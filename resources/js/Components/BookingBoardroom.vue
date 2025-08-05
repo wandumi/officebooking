@@ -26,7 +26,7 @@ const form = useForm({
     boardroom_id: props.boardroomId,
     plan: props.selectedPlan || props.availablePlans[0] || '',
     selected_dates: [],
-    selected_times: {}, // correct structure
+    selected_times: {},
     months: 0,
     selected_price: 0,
 });
@@ -198,7 +198,7 @@ const currencyFormatter = new Intl.NumberFormat('en-ZA', {
                         type="button"
                         class="px-2 py-1 text-sm border rounded"
                         :class="{
-                            'bg-blue-600 text-white':
+                            'bg-primary xt-white':
                                 selectedDateTimes[new Date(date).toISOString().split('T')[0]]?.includes(slot),
                             'bg-gray-100':
                                 !selectedDateTimes[new Date(date).toISOString().split('T')[0]]?.includes(slot),

@@ -76,8 +76,6 @@ class User extends Authenticatable
         return $this->hasMany(BoardroomBooking::class);
     }
 
-    
-
     public function hasRole($role)
     {
         $this->loadMissing('roles');
@@ -112,6 +110,15 @@ class User extends Authenticatable
     {
         return $query->where('is_active', true);
     }
+
+    public function scopeWithRole($query, $role)
+    {
+        return $query->whereHas('roles', function ($q) use ($role) {
+            $q->where('name', strtolower($role));
+        });
+    }
+
+
 
 
 }
