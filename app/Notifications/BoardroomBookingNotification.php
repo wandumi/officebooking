@@ -13,21 +13,20 @@ class BoardroomBookingNotification extends Notification
 
     protected array $booking;
     protected string $eventType;
-
+    protected string $recipientType;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($booking, $eventType = 'created')
+    public function __construct(array $booking, string $eventType = 'created', string $recipientType = 'user')
     {
         $this->booking = $booking;
         $this->eventType = $eventType;
+        $this->recipientType = $recipientType;
     }
 
     /**
      * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
      */
     public function via(object $notifiable): array
     {
@@ -39,58 +38,67 @@ class BoardroomBookingNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $type = ucfirst($this->booking['room_type'] ?? 'Office');
-        $statusText = match($this->eventType) {
-            'created' => "Your booking for  $type has been created successfully.",
-            'approved' => "Your booking for  $type has been approved.",
-            'cancelled' => "Your booking for  $type has been cancelled.",
-            'rejected' => "Your booking for  $type has been rejected.",
+        $type = ucfirst($this->booking['room_type'] ?? 'Boardroom');
+
+        $statusText = match ($this->eventType) {
+            'created' => $this->recipientType === 'admin'
+                ? "{$this->booking['user_name']} submitted a new booking for $type."
+                : "Your booking for $type has been created successfully.",
+            'approved' => $this->recipientType === 'admin'
+                ? "The booking for $type by {$this->booking['user_name']} has been marked as approved."
+                : "Your booking for $type has been approved.",
+            'cancelled' => $this->recipientType === 'admin'
+                ? "The booking for $type by {$this->booking['user_name']} has been marked as cancelled."
+                : "Your booking for $type has been cancelled.",
+            'rejected' => $this->recipientType === 'admin'
+                ? "The booking for $type by {$this->booking['user_name']} has been marked as rejected."
+                : "Your booking for $type has been rejected.",
             default => "Booking update.",
         };
 
         return (new MailMessage)
-            ->subject(ucfirst($this->eventType) . ' Booking')
+            ->subject(ucfirst($this->eventType) . ' Boardroom')
             ->line($statusText)
-            ->action('View Booking', url("/boardrooms-booking/{$this->booking['id']}"));
-
-
+            ->action('View Booking', url("/booking-boardrooms/{$this->booking['id']}"));
     }
 
     /**
-     * Database representation of the notification.
+     * Get the database representation of the notification.
      */
-    public function toDatabase($notifiable)
+    public function toDatabase(object $notifiable): array
     {
-        $type = ucfirst($this->booking['room_type']);
-        $statusText = match($this->eventType) {
-            'created' => "A new $type has been created.",
-            'approved' => "Your $type booking was approved.",
-            'cancelled' => "Your $type booking was cancelled.",
-            'rejected' => "Your $type booking was rejected.",
+        $type = ucfirst($this->booking['room_type'] ?? 'Boardroom');
+
+        $statusText = match ($this->eventType) {
+            'created' => $this->recipientType === 'admin'
+                ? "{$this->booking['user_name']} submitted a new $type booking."
+                : "Your $type booking was created.",
+            'approved' => $this->recipientType === 'admin'
+                ? "The $type booking by {$this->booking['user_name']} was marked as approved."
+                : "Your $type booking was approved.",
+            'cancelled' => $this->recipientType === 'admin'
+                ? "The $type booking by {$this->booking['user_name']} was marked as cancelled."
+                : "Your $type booking was cancelled.",
+            'rejected' => $this->recipientType === 'admin'
+                ? "The $type booking by {$this->booking['user_name']} was marked as rejected."
+                : "Your $type booking was rejected.",
             default => "$type booking update.",
         };
 
         return [
-            'title' => ucfirst($this->eventType) . ' Booking',
+            'title' => ucfirst($this->eventType) . ' Boardroom',
             'message' => $statusText,
             'booking_id' => $this->booking['id'],
             'room_type' => $this->booking['room_type'],
             'status' => $this->booking['status'],
         ];
-
-
     }
-
 
     /**
      * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 }

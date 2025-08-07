@@ -95,6 +95,10 @@ const toggleTimeSlot = (dateKey, time) => {
     }
 };
 
+watch(weekdaysCount, count => {
+    form.months = count;
+});
+
 const submit = () => {
     form.selected_times = selectedDateTimes.value;
     form.post(route('bookingboardroom.store'), {

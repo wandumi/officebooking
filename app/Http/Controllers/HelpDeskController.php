@@ -61,6 +61,7 @@ class HelpDeskController extends Controller
         ]);
 
         $HelpDesk = HelpDesk::create($validated);
+        
 
         return redirect()->route('admin.help-desks')->with('success', 'Help Desks created successfully.');
     }

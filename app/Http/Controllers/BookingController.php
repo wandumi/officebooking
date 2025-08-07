@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Role;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Office;
@@ -184,7 +185,6 @@ class BookingController extends Controller
         }
 
 
-
         $booking = Booking::create([
             'user_id'         => auth()->id(),
             'office_id'       => $office->id,
@@ -202,18 +202,21 @@ class BookingController extends Controller
         // nortifications
         $bookingData = [
             'id' => $office->id,
-            'room_type' => $office->office_name, 
-            'status' => 'pending',
+            'room_type' => $office->office_name,
+            'user_name' => auth()->user()->name,
+            'status' => 'created',
         ];
 
-        auth()->user()->notify(new BookingNotification($bookingData, 'created'));
+        // Notify the user who booked
+        auth()->user()->notify(new BookingNotification($bookingData, 'created', 'user'));
 
-        User::withRole('super_admin')->get()
-            ->each(fn ($user) => $user->notify(new BookingNotification($bookingData, 'created')));
+        $admins = User::withRole('Admin')
+            ->get()
+            ->merge(User::withRole('Super dmin')->get())
+            ->unique('id');
 
-        User::withRole('admin')->get()
-            ->each(fn ($user) => $user->notify(new BookingNotification($bookingData, 'created')));
 
+        $admins->each(fn ($user) => $user->notify(new BookingNotification($bookingData, 'created', 'admin')));
 
         return back()->with('success', 'Booking created successfully!');
     }
@@ -249,13 +252,31 @@ class BookingController extends Controller
 
     public function approve(Booking $booking)
     {
-        // dd($booking);
         $booking->update([
             'status' => 'approved',
-            
         ]);
 
-        // Optional: Log action or notify user
+        $office = Office::findOrFail($booking->office_id);
+
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->office_name,
+            'status' => 'approved',
+            'user_name' => auth()->user()->name,
+        ];
+
+        // Notify the booking owner
+        $booking->user->notify(new BookingNotification($bookingData, 'approved', 'user'));
+
+        $admins = User::withRole('Super Admin')
+            ->get()
+            ->merge(User::withRole('Admin')->get())
+            ->unique('id');
+
+        $admins->each(fn ($user) =>
+            $user->notify(new BookingNotification($bookingData, 'approved', 'admin'))
+        );
+
         return back()->with('success', 'Booking approved successfully.');
     }
 
@@ -265,7 +286,27 @@ class BookingController extends Controller
             'status' => 'rejected',
         ]);
 
-        // Optional: store $request->note, trigger notification
+        $office = Office::findOrFail($booking->office_id);
+
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->office_name,
+            'status' => 'rejected',
+            'user_name' => auth()->user()->name,
+        ];
+
+        $booking->user->notify(new BookingNotification($bookingData, 'rejected', 'user'));
+
+        $admins = User::withRole('Super Admin')
+            ->get()
+            ->merge(User::withRole('Admin')->get())
+            ->unique('id');
+
+        $admins->each(fn ($user) =>
+            $user->notify(new BookingNotification($bookingData, 'rejected', 'admin'))
+        );
+
+
         return back()->with('success', 'Booking rejected.');
     }
 
@@ -275,7 +316,27 @@ class BookingController extends Controller
             'status' => 'cancelled',
         ]);
 
-        // Optional: store $request->note if super admin
+        $office = Office::findOrFail($booking->office_id);
+
+        $bookingData = [
+            'id' => $office->id,
+            'room_type' => $office->office_name,
+            'status' => 'cancelled',
+            'user_name' => auth()->user()->name,
+        ];
+
+        $booking->user->notify(new BookingNotification($bookingData, 'cancelled', 'user'));
+
+        $admins = User::withRole('Super Admin')
+            ->get()
+            ->merge(User::withRole('Admin')->get())
+            ->unique('id');
+
+        $admins->each(fn ($user) =>
+            $user->notify(new BookingNotification($bookingData, 'cancelled', 'admin'))
+        );
+
+
         return back()->with('success', 'Booking cancelled.');
     }
 

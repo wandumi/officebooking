@@ -94,24 +94,24 @@ class HotDeskBookingController extends Controller
         
         $office = HelpDesk::findOrFail($validated['hotdesk_id']);
 
-        // dd($office);
-    
         // nortifications
         $bookingData = [
             'id' => $office->id,
-            'room_type' => $office->virtualoffice_name, 
-            'status' => 'cancel',
+            'room_type' => $office->virtualoffice_name,
+            'status' => 'created',
+            'user_name' => auth()->user()->name,
         ];
 
-        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'created'));
+        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'created', 'user'));
 
-        User::withRole('super_admin')->get()
-            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'created')));
+        $admins = User::withRole('Admin')
+            ->get()
+            ->merge(User::withRole('Super Admin')->get())
+            ->unique('id');
 
-        User::withRole('admin')->get()
-            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'created')));
 
-
+        $admins->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'created', 'admin')));
+    
         return back()->with('success', 'Booking created successfully!');
     }
 
@@ -211,44 +211,54 @@ class HotDeskBookingController extends Controller
         // nortifications
         $bookingData = [
             'id' => $office->id,
-            'room_type' => $office->help_desk_name, 
+            'room_type' => $office->virtualoffice_name,
             'status' => 'approved',
+            'user_name' => auth()->user()->name,
         ];
 
-        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'approved'));
+        $hotdesk->user->notify(new HotDeskBookingNotification($bookingData, 'approved', 'user'));
 
-        User::withRole('super_admin')->get()
-            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'approved')));
+        $admins = User::withRole('Admin')
+            ->get()
+            ->merge(User::withRole('Super Admin')->get())
+            ->unique('id');
 
-        User::withRole('admin')->get()
-            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'approved')));
 
+        $admins->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'approved', 'admin')));
+
+              
         return back()->with('success', 'Booking approved successfully.');
     }
 
     public function reject(Request $request, HotDeskBooking $hotdesk)
     {
+        
+
         $hotdesk->update([
             'status' => 'rejected',
         ]);
 
         $office = HelpDesk::findOrFail($hotdesk->helpdesk_id);
-    
+
         // nortifications
         $bookingData = [
             'id' => $office->id,
-            'room_type' => $office->help_desk_name, 
+            'room_type' => $office->virtualoffice_name,
             'status' => 'rejected',
+            'user_name' => auth()->user()->name,
         ];
 
-        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'rejected'));
+        $hotdesk->user->notify(new HotDeskBookingNotification($bookingData, 'rejected', 'user'));
 
-        User::withRole('super_admin')->get()
-            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'rejected')));
+        $admins = User::withRole('Admin')
+            ->get()
+            ->merge(User::withRole('Super Admin')->get())
+            ->unique('id');
 
-        User::withRole('admin')->get()
-            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'rejected')));
 
+        $admins->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'rejected', 'admin')));
+
+              
         return back()->with('success', 'Booking rejected.');
     }
 
@@ -264,17 +274,20 @@ class HotDeskBookingController extends Controller
         // nortifications
         $bookingData = [
             'id' => $office->id,
-            'room_type' => $office->help_desk_name, 
+            'room_type' => $office->virtualoffice_name,
             'status' => 'cancelled',
+            'user_name' => auth()->user()->name,
         ];
 
-        auth()->user()->notify(new HotDeskBookingNotification($bookingData, 'cancelled'));
+        $hotdesk->user->notify(new HotDeskBookingNotification($bookingData, 'cancelled', 'user'));
 
-        User::withRole('super_admin')->get()
-            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'cancelled')));
+        $admins = User::withRole('Admin')
+            ->get()
+            ->merge(User::withRole('Super Admin')->get())
+            ->unique('id');
 
-        User::withRole('admin')->get()
-            ->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'cancelled')));
+
+        $admins->each(fn ($user) => $user->notify(new HotDeskBookingNotification($bookingData, 'cancelled', 'admin')));
 
         return back()->with('success', 'Booking cancelled.');
     }

@@ -39,7 +39,6 @@ const pricingOptions = {
 
 const availablePlans = Object.keys(pricingOptions).filter(key => pricingOptions[key] != null);
 
-const viewMode = ref<'form' | 'calendar' | null>(null);
 const selectedPlan = ref<string | null>(null);
 </script>
 
